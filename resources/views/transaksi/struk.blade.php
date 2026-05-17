@@ -204,15 +204,18 @@
         <div class="kertas" id="strukPaper">
 
             {{-- HEADER TOKO --}}
+            @if ($toko?->logo)
+                <div class="center" style="margin-bottom:4px;">
+                    <img src="{{ asset('storage/' . $toko->logo) }}" alt="Logo"
+                        style="max-width:80px; max-height:60px; object-fit:contain;">
+                </div>
+            @endif
             <div class="center bold lg">{{ $toko->nama_toko ?? 'TOKO TANI MAKMUR' }}</div>
             @if ($toko?->alamat)
                 <div class="center muted sm">{{ $toko->alamat }}</div>
             @endif
             @if ($toko?->telepon)
                 <div class="center muted sm">Telp: {{ $toko->telepon }}</div>
-            @endif
-            @if ($toko?->header_struk)
-                <div class="center sm" style="margin-top:2px;">{{ $toko->header_struk }}</div>
             @endif
 
             <hr>

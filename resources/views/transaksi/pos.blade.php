@@ -1642,6 +1642,15 @@
                     });
             }
 
+            const TOKO = {
+                nama: "{{ $toko->nama_toko ?? 'TOKO' }}",
+                 logo: "{{ $toko->logo ?? '' }}",
+                alamat: "{{ $toko->alamat ?? '' }}",
+                telepon: "{{ $toko->telepon ?? '' }}",
+                header: `{{ $toko->header_struk ?? '' }}`,
+                footer: `{{ $toko->footer_struk ?? '' }}`,
+            };
+
             /* ─── STRUK ──────────────────────────────────────────────────── */
             function tampilkanStruk(data, items, sub, dis, total, bayar) {
                 const kem = Math.max(0, bayar - total);
@@ -1653,38 +1662,49 @@
                 const baris = items.map(c => {
                     const nama = c.nama.length > 18 ? c.nama.slice(0, 18) + '…' : c.nama;
                     return `<div style="margin-bottom:3px;">
-                                    <div style="font-weight:700;">${nama}</div>
-                                    <div class="sk-row"><span class="sk-muted">${c.qty} x ${fmt(c.harga)}</span><span>${fmt(c.harga * c.qty)}</span></div>
-                                </div>`;
+                                <div style="font-weight:700;">${nama}</div>
+                                <div class="sk-row"><span class="sk-muted">${c.qty} x ${fmt(c.harga)}</span><span>${fmt(c.harga * c.qty)}</span></div>
+                            </div>`;
                 }).join('');
 
+                const headerToko = `
+                    ${TOKO.logo ? `<div style="text-align:center;margin-bottom:4px;">
+                        <img src="/storage/${TOKO.logo}" alt="Logo"
+                            style="max-width:80px;max-height:60px;object-fit:contain;">
+                    </div>` : ''}
+                    <div class="sk-center sk-bold" style="font-size:13px;">${TOKO.nama}</div>
+                    ${TOKO.alamat  ? `<div class="sk-center sk-muted" style="font-size:9px;">${TOKO.alamat}</div>`  : ''}
+                    ${TOKO.telepon ? `<div class="sk-center sk-muted" style="font-size:9px;">Telp: ${TOKO.telepon}</div>` : ''}
+                `;
+
+                const footerToko = TOKO.footer
+                    ? TOKO.footer.split('\n').map(l => `<div class="sk-footer">${l}</div>`).join('')
+                    : `<div class="sk-footer">Barang yg dibeli tidak dpt dikembalikan</div>`;
+
                 document.getElementById('strukWrapper').innerHTML = `
-                                <div class="struk-paper" id="strukPaper">
-                                    <div class="sk-center sk-bold" style="font-size:13px;">TOKO TANI MAKMUR</div>
-                                    <div class="sk-center sk-muted">Jl. Raya Pertanian No. 12, Depok</div>
-                                    <div class="sk-center sk-muted">Telp: (0274) 123-456</div>
-                                    <hr class="sk-divider">
-                                    <div class="sk-row"><span>Tgl:</span><span>${tgl}</span></div>
-                                    <div class="sk-row"><span>Pukul:</span><span>${jam}</span></div>
-                                    <div class="sk-row"><span>Kasir:</span><span>${KASIR}</span></div>
-                                    <div style="font-size:9px;">${data.nomor}</div>
-                                    <hr class="sk-divider">
-                                    ${baris}
-                                    <hr class="sk-divider">
-                                    <div class="sk-row"><span>Subtotal</span><span>${fmt(sub)}</span></div>
-                                    ${dis > 0 ? `<div class="sk-row"><span>Diskon</span><span>- ${fmt(dis)}</span></div>` : ''}
-                                    <div class="sk-total"><span>TOTAL</span><span>${fmt(total)}</span></div>
-                                    ${statusBayar !== 'belum_bayar' ? `<div class="sk-row"><span>Bayar</span><span>${fmt(bayar)}</span></div>` : ''}
-                                    ${statusBayar === 'lunas' ? `<div class="sk-row sk-bold"><span>Kembali</span><span>${fmt(kem)}</span></div>` : ''}
-                                    <hr class="sk-divider">
-                                    <div class="sk-center sk-bold" style="letter-spacing:1px;">${sbLabel[statusBayar]}</div>
-                                    <hr class="sk-divider">
-                                    <div class="sk-footer" style="font-size:9px;">${data.nomor}</div>
-                                    <hr class="sk-divider">
-                                    <div class="sk-footer">Terima kasih atas kepercayaan Anda!</div>
-                                    <div class="sk-footer">Barang yg dibeli tidak dpt dikembalikan</div>
-                                    <div style="height:12px;"></div>
-                                </div>`;
+                    <div class="struk-paper" id="strukPaper">
+                        ${headerToko}
+                        <hr class="sk-divider">
+                        <div class="sk-row"><span>Tgl:</span><span>${tgl}</span></div>
+                        <div class="sk-row"><span>Pukul:</span><span>${jam}</span></div>
+                        <div class="sk-row"><span>Kasir:</span><span>${KASIR}</span></div>
+                        <div style="font-size:9px;">${data.nomor}</div>
+                        <hr class="sk-divider">
+                        ${baris}
+                        <hr class="sk-divider">
+                        <div class="sk-row"><span>Subtotal</span><span>${fmt(sub)}</span></div>
+                        ${dis > 0 ? `<div class="sk-row"><span>Diskon</span><span>- ${fmt(dis)}</span></div>` : ''}
+                        <div class="sk-total"><span>TOTAL</span><span>${fmt(total)}</span></div>
+                        ${statusBayar !== 'belum_bayar' ? `<div class="sk-row"><span>Bayar</span><span>${fmt(bayar)}</span></div>` : ''}
+                        ${statusBayar === 'lunas' && kem > 0 ? `<div class="sk-row sk-bold"><span>Kembali</span><span>${fmt(kem)}</span></div>` : ''}
+                        <hr class="sk-divider">
+                        <div class="sk-center sk-bold" style="letter-spacing:1px;">${sbLabel[statusBayar]}</div>
+                        <hr class="sk-divider">
+                        <div class="sk-footer">Terima kasih atas kepercayaan Anda!</div>
+                        ${footerToko}
+                        <div style="height:12px;"></div>
+                    </div>`;
+
                 document.getElementById('strukOverlay').classList.add('open');
             }
 

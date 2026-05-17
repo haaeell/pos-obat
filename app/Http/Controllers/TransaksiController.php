@@ -81,7 +81,9 @@ class TransaksiController extends Controller
             ->orderBy('nama')
             ->get();
 
-        return view('transaksi.pos', compact('produk', 'pelanggan'));
+        $toko = \App\Models\PengaturanToko::instance();
+
+        return view('transaksi.pos', compact('produk', 'pelanggan', 'toko'));
     }
 
     // ─────────────────────────────────────────────

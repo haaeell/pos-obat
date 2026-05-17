@@ -244,10 +244,10 @@
 
                     if (json.success) {
                         previewWrap.innerHTML = `
-                                    <div class="flex flex-col items-center gap-2 text-slate-300">
-                                        <i class="fa-solid fa-store text-4xl"></i>
-                                        <span class="text-xs">Belum ada logo</span>
-                                    </div>`;
+                                        <div class="flex flex-col items-center gap-2 text-slate-300">
+                                            <i class="fa-solid fa-store text-4xl"></i>
+                                            <span class="text-xs">Belum ada logo</span>
+                                        </div>`;
                         btnHapus.remove();
                         Swal.fire({ icon: 'success', title: 'Logo dihapus', timer: 1500, showConfirmButton: false });
                     } else {
