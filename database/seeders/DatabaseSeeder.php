@@ -11,7 +11,8 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        $now = Carbon::now();
+        $now         = Carbon::now();
+        $tanggalAwal = '2025-01-02';
 
         DB::table('pengaturan_toko')->insert([
             'nama_toko'            => 'Toko Obat Tani Makmur Jaya',
@@ -128,17 +129,81 @@ class DatabaseSeeder extends Seeder
             ],
         ]);
 
-        DB::table('produk')->insert([
-            ['kode' => 'PRD-001', 'nama' => 'Confidor 5 WP 100gr',        'kategori_id' => 1, 'supplier_id' => 2, 'satuan' => 'sachet', 'harga_jual' => 35000,  'stok_minimum' => 20, 'stok_saat_ini' => 0, 'foto' => null, 'catatan' => null, 'is_aktif' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['kode' => 'PRD-002', 'nama' => 'Regent 50 SC 100ml',         'kategori_id' => 1, 'supplier_id' => 2, 'satuan' => 'botol',  'harga_jual' => 42000,  'stok_minimum' => 15, 'stok_saat_ini' => 0, 'foto' => null, 'catatan' => null, 'is_aktif' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['kode' => 'PRD-003', 'nama' => 'Antracol 70 WP 250gr',       'kategori_id' => 2, 'supplier_id' => 2, 'satuan' => 'sachet', 'harga_jual' => 38000,  'stok_minimum' => 20, 'stok_saat_ini' => 0, 'foto' => null, 'catatan' => null, 'is_aktif' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['kode' => 'PRD-004', 'nama' => 'Roundup 486 SL 1 Liter',     'kategori_id' => 3, 'supplier_id' => 2, 'satuan' => 'botol',  'harga_jual' => 95000,  'stok_minimum' => 10, 'stok_saat_ini' => 0, 'foto' => null, 'catatan' => null, 'is_aktif' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['kode' => 'PRD-005', 'nama' => 'Klerat RM-B 50gr',           'kategori_id' => 4, 'supplier_id' => 2, 'satuan' => 'sachet', 'harga_jual' => 15000,  'stok_minimum' => 25, 'stok_saat_ini' => 0, 'foto' => null, 'catatan' => null, 'is_aktif' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['kode' => 'PRD-006', 'nama' => 'Pupuk Urea Subsidi 50kg',    'kategori_id' => 5, 'supplier_id' => 1, 'satuan' => 'karung', 'harga_jual' => 115000, 'stok_minimum' => 50, 'stok_saat_ini' => 0, 'foto' => null, 'catatan' => null, 'is_aktif' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['kode' => 'PRD-007', 'nama' => 'Pupuk NPK Phonska 50kg',     'kategori_id' => 5, 'supplier_id' => 1, 'satuan' => 'karung', 'harga_jual' => 130000, 'stok_minimum' => 50, 'stok_saat_ini' => 0, 'foto' => null, 'catatan' => null, 'is_aktif' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['kode' => 'PRD-008', 'nama' => 'NASA POC 500ml',             'kategori_id' => 6, 'supplier_id' => 2, 'satuan' => 'botol',  'harga_jual' => 55000,  'stok_minimum' => 20, 'stok_saat_ini' => 0, 'foto' => null, 'catatan' => null, 'is_aktif' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['kode' => 'PRD-009', 'nama' => 'Benih Padi Ciherang 5kg',    'kategori_id' => 8, 'supplier_id' => 3, 'satuan' => 'kg',     'harga_jual' => 65000,  'stok_minimum' => 20, 'stok_saat_ini' => 0, 'foto' => null, 'catatan' => null, 'is_aktif' => true, 'created_at' => $now, 'updated_at' => $now],
-            ['kode' => 'PRD-010', 'nama' => 'Sprayer Elektrik 16L',       'kategori_id' => 9, 'supplier_id' => 2, 'satuan' => 'unit',   'harga_jual' => 325000, 'stok_minimum' => 5,  'stok_saat_ini' => 0, 'foto' => null, 'catatan' => null, 'is_aktif' => true, 'created_at' => $now, 'updated_at' => $now],
+        $produk = [
+            ['kode' => 'PRD-001', 'nama' => 'Confidor 5 WP 100gr',     'kategori_id' => 1, 'supplier_id' => 2, 'satuan' => 'sachet', 'harga_jual' => 35000,  'stok_minimum' => 20],
+            ['kode' => 'PRD-002', 'nama' => 'Regent 50 SC 100ml',      'kategori_id' => 1, 'supplier_id' => 2, 'satuan' => 'botol',  'harga_jual' => 42000,  'stok_minimum' => 15],
+            ['kode' => 'PRD-003', 'nama' => 'Antracol 70 WP 250gr',    'kategori_id' => 2, 'supplier_id' => 2, 'satuan' => 'sachet', 'harga_jual' => 38000,  'stok_minimum' => 20],
+            ['kode' => 'PRD-004', 'nama' => 'Roundup 486 SL 1 Liter',  'kategori_id' => 3, 'supplier_id' => 2, 'satuan' => 'botol',  'harga_jual' => 95000,  'stok_minimum' => 10],
+            ['kode' => 'PRD-005', 'nama' => 'Klerat RM-B 50gr',        'kategori_id' => 4, 'supplier_id' => 2, 'satuan' => 'sachet', 'harga_jual' => 15000,  'stok_minimum' => 25],
+            ['kode' => 'PRD-006', 'nama' => 'Pupuk Urea Subsidi 50kg', 'kategori_id' => 5, 'supplier_id' => 1, 'satuan' => 'karung', 'harga_jual' => 115000, 'stok_minimum' => 50],
+            ['kode' => 'PRD-007', 'nama' => 'Pupuk NPK Phonska 50kg',  'kategori_id' => 5, 'supplier_id' => 1, 'satuan' => 'karung', 'harga_jual' => 130000, 'stok_minimum' => 50],
+            ['kode' => 'PRD-008', 'nama' => 'NASA POC 500ml',          'kategori_id' => 6, 'supplier_id' => 2, 'satuan' => 'botol',  'harga_jual' => 55000,  'stok_minimum' => 20],
+            ['kode' => 'PRD-009', 'nama' => 'Benih Padi Ciherang 5kg', 'kategori_id' => 8, 'supplier_id' => 3, 'satuan' => 'kg',     'harga_jual' => 65000,  'stok_minimum' => 20],
+            ['kode' => 'PRD-010', 'nama' => 'Sprayer Elektrik 16L',    'kategori_id' => 9, 'supplier_id' => 2, 'satuan' => 'unit',   'harga_jual' => 325000, 'stok_minimum' => 5],
+        ];
+
+        foreach ($produk as $p) {
+            DB::table('produk')->insert([
+                ...$p,
+                'stok_saat_ini' => 0,
+                'foto'          => null,
+                'catatan'       => null,
+                'is_aktif'      => true,
+                'created_at'    => $now,
+                'updated_at'    => $now,
+            ]);
+        }
+
+        // Stok awal: [produk_id, jumlah, harga_modal]
+        $stokAwal = [
+            [1,  50, 25000],
+            [2,  40, 30000],
+            [3,  50, 27500],
+            [4,  25, 70000],
+            [5,  80, 10000],
+            [6,  150, 95000],
+            [7,  150, 108000],
+            [8,  40, 40000],
+            [9,  60, 52000],
+            [10, 10, 250000],
+        ];
+
+        $bmId = DB::table('barang_masuk')->insertGetId([
+            'nomor'                 => 'SA-20250102-001',
+            'jenis'                 => 'stok_awal',
+            'supplier_id'           => null,
+            'user_id'               => 1,
+            'tanggal'               => $tanggalAwal,
+            'nomor_faktur_supplier' => null,
+            'catatan'               => 'Input stok awal saat setup sistem toko',
+            'created_at'            => $now,
+            'updated_at'            => $now,
         ]);
+
+        foreach ($stokAwal as [$produkId, $jumlah, $hargaModal]) {
+            $detailId = DB::table('barang_masuk_detail')->insertGetId([
+                'barang_masuk_id' => $bmId,
+                'produk_id'       => $produkId,
+                'jumlah'          => $jumlah,
+                'harga_modal'     => $hargaModal,
+                'subtotal'        => $jumlah * $hargaModal,
+                'catatan'         => 'Stok awal',
+                'created_at'      => $now,
+                'updated_at'      => $now,
+            ]);
+
+            DB::table('stok_batch')->insert([
+                'produk_id'              => $produkId,
+                'barang_masuk_detail_id' => $detailId,
+                'tanggal_masuk'          => $tanggalAwal,
+                'harga_modal'            => $hargaModal,
+                'jumlah_awal'            => $jumlah,
+                'jumlah_tersisa'         => $jumlah,
+                'created_at'             => $now,
+                'updated_at'             => $now,
+            ]);
+
+            DB::table('produk')->where('id', $produkId)->update(['stok_saat_ini' => $jumlah]);
+        }
     }
 }
