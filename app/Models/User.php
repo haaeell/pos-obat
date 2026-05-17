@@ -2,56 +2,59 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, SoftDeletes;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
-        'name',
+        'nama',
         'email',
         'password',
         'role',
-        'is_active',
+        'is_aktif',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
+            'is_aktif'          => 'boolean',
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'is_active' => 'boolean',
+            'password'          => 'hashed',
         ];
     }
 
-    public function isSuperAdmin(): bool
+    // -------------------------------------------------------
+    // Scopes
+    // -------------------------------------------------------
+
+    public function scopeAktif($query)
     {
-        return $this->role === 'super_admin';
+        return $query->where('is_aktif', true);
+    }
+
+    public function scopeRole($query, string $role)
+    {
+        return $query->where('role', $role);
+    }
+
+    // -------------------------------------------------------
+    // Helpers
+    // -------------------------------------------------------
+
+    public function isOwner(): bool
+    {
+        return $this->role === 'owner';
     }
 
     public function isAdmin(): bool
@@ -59,8 +62,43 @@ class User extends Authenticatable
         return $this->role === 'admin';
     }
 
-    public function hasRole(string|array $roles): bool
+    public function isKasir(): bool
     {
-        return in_array($this->role, (array) $roles);
+        return $this->role === 'kasir';
+    }
+
+    // -------------------------------------------------------
+    // Relasi
+    // -------------------------------------------------------
+
+    public function transaksi(): HasMany
+    {
+        return $this->hasMany(Transaksi::class);
+    }
+
+    public function barangMasuk(): HasMany
+    {
+        return $this->hasMany(BarangMasuk::class);
+    }
+
+    public function piutangPembayaran(): HasMany
+    {
+        return $this->hasMany(PiutangPembayaran::class);
+    }
+
+    public function modalHutang(): HasMany
+    {
+        return $this->hasMany(ModalHutang::class);
+    }
+
+    public function modalHutangCicilan(): HasMany
+    {
+        return $this->hasMany(ModalHutangCicilan::class);
+    }
+
+    /** Transaksi yang dibatalkan oleh user ini */
+    public function transaksiDibatalkan(): HasMany
+    {
+        return $this->hasMany(Transaksi::class, 'dibatalkan_oleh');
     }
 }

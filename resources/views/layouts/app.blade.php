@@ -6,39 +6,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>@yield('title', 'Barokah Computer')</title>
+    <title>@yield('title', 'Pos Kios Tani')</title>
     <link rel="icon" type="image/jpeg" href="{{ asset('logo.jpeg') }}">
     <link rel="apple-touch-icon" href="{{ asset('logo.jpeg') }}">
 
-    <!-- Font -->
-    <link href="https://fonts.bunny.net/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.bunny.net/css?family=Inter:300,400,500,600,700,800" rel="stylesheet">
 
-    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Plugin CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
     <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
         body {
-            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
         }
 
         table.dataTable thead th {
-            background-color: #f8fafc;
+            background-color: #ecfdf5;
+            color: #065f46;
+            font-weight: 600;
         }
 
         .select2-container .select2-selection--single {
-            height: 42px;
-            border-radius: 0.75rem;
-            border: 1px solid #d1d5db;
-            padding: 6px 12px;
+            height: 44px;
+            border-radius: 0.5rem;
+            border: 1.5px solid #d1fae5;
+            padding: 8px 14px;
             display: flex;
             align-items: center;
         }
@@ -52,221 +54,218 @@
         }
 
         .select2-container--default .select2-selection--single:focus {
-            border-color: #2563eb;
+            border-color: #10b981;
             outline: none;
+        }
+
+        .menu-item {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .menu-item:hover {
+            transform: translateX(4px);
+        }
+
+        .menu-active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .modal-blur-overlay {
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
         }
     </style>
 
     @stack('styles')
 </head>
 
-<body class="bg-slate-50 text-slate-700">
+<body class="antialiased">
 
     <div class="flex min-h-screen">
 
-        <!-- Overlay -->
-        <div id="overlay" class="fixed inset-0 bg-black/40 z-30 opacity-0 pointer-events-none transition md:hidden">
+        <div id="overlay-mobile"
+            class="fixed inset-0 bg-gray-900/60 z-30 opacity-0 pointer-events-none transition-opacity duration-300 lg:hidden">
         </div>
 
         @php
-            function isActive($pattern)
+            function menuActive($pattern)
             {
-                return request()->is($pattern)
-                    ? 'bg-gradient-to-r from-indigo-600 to-blue-600 text-white shadow-md'
-                    : 'text-slate-600 hover:bg-slate-100';
+                return request()->is($pattern) ? 'menu-active' : 'text-gray-700 hover:bg-emerald-50';
             }
         @endphp
 
+        <aside id="nav-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-72
+        bg-white/95 backdrop-blur-sm border-r border-emerald-100
+        shadow-xl transform -translate-x-full lg:translate-x-0
+        transition-transform duration-300 flex flex-col">
 
-        <!-- SIDEBAR -->
-        <aside id="sidebar" class="fixed md:static inset-y-0 left-0 z-40 w-64
-        bg-white border-r border-slate-200
-        shadow-sm transform -translate-x-full md:translate-x-0
-        transition-all duration-300 flex flex-col">
-
-            <!-- LOGO -->
-            <div class="h-16 flex items-center px-10 text-sm font-semibold border-b">
-                <img src="/logo.jpeg" class="w-8 h-8" alt=""> Barokah Computer
+            <div
+                class="h-20 flex items-center gap-3 px-6 border-b border-emerald-100 bg-gradient-to-r from-emerald-50 to-green-50">
+                <div
+                    class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
+                    <i class="fa-solid fa-leaf text-white text-xl"></i>
+                </div>
+                <div>
+                    <div class="font-bold text-lg text-gray-800">Pos Kios Tani</div>
+                    <div class="text-xs text-emerald-600 font-medium">Agribisnis System</div>
+                </div>
             </div>
 
-            <nav class="flex-1 px-3 py-4 space-y-1 text-sm">
+            <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
 
-                <!-- Dashboard — semua role -->
                 <a href="/home"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('home') }}">
-                    <i class="fa-solid fa-gauge-high w-5"></i>
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('home') }}">
+                    <i class="fa-solid fa-house w-5"></i>
                     Dashboard
                 </a>
 
-                @if (Auth::user()->isSuperAdmin())
+                <div class="mt-8 mb-3 px-4 text-[11px] font-bold uppercase tracking-widest text-emerald-700">
+                    Master Data
+                </div>
 
-                    <div class="mt-6 pt-4 mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                        Master Data
-                    </div>
+                <a href="/produk"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('produk*') }}">
+                    <i class="fa-solid fa-seedling w-5"></i>
+                    Produk
+                </a>
 
-                    <a href="/categories"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('categories*') }}">
-                        <i class="fa-solid fa-layer-group w-5"></i>
-                        Kategori
-                    </a>
+                <a href="/kategori"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('kategori*') }}">
+                    <i class="fa-solid fa-list w-5"></i>
+                    Kategori
+                </a>
 
-                    <a href="/brands"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('brands*') }}">
-                        <i class="fa-solid fa-tags w-5"></i>
-                        Brand
-                    </a>
+                <a href="/supplier"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('supplier*') }}">
+                    <i class="fa-solid fa-truck-field w-5"></i>
+                    Supplier
+                </a>
 
-                    <a href="/products"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('products*') }}">
-                        <i class="fa-solid fa-box-open w-5"></i>
-                        Produk
-                    </a>
+                <div class="mt-8 mb-3 px-4 text-[11px] font-bold uppercase tracking-widest text-emerald-700">
+                    Inventory
+                </div>
 
-                    <a href="/penjuals"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('penjuals*') }}">
-                        <i class="fa-solid fa-user w-5"></i>
-                        Marketing
-                    </a>
+                <a href="/stock-in"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('stock-in*') }}">
+                    <i class="fa-solid fa-clipboard-list w-5"></i>
+                    Barang Masuk
+                </a>
 
-                    <a href="/employees"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('employees*') }}">
-                        <i class="fa-solid fa-users w-5"></i>
-                        Karyawan
-                    </a>
-
-                @endif
-                {{-- ===================================================== --}}
-
-                <div class="mt-6 pt-4 mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <div class="mt-8 mb-3 px-4 text-[11px] font-bold uppercase tracking-widest text-emerald-700">
                     Transaksi
                 </div>
 
-                <!-- Penjualan — semua role -->
-                <a href="/sales"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('sales') }}">
-                    <i class="fa-solid fa-cash-register w-5"></i>
-                    Penjualan
+                <a href="/transactions/pos"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('sales') }}">
+                    <i class="fa-solid fa-cart-shopping w-5"></i>
+                    Tambah Transaksi
                 </a>
 
-                <a href="/sales/create"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('sales/create') }}">
-                    <i class="fa-solid fa-receipt w-5"></i>
-                    Transaksi Baru
+                <a href="/transactions"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('sales') }}">
+                    <i class="fa-solid fa-history w-5"></i>
+                    Riwayat Transaksi
                 </a>
 
-                <a href="/services"
-                    class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('services*') }}">
-                    <i class="fa-solid fa-screwdriver-wrench w-5"></i>
-                    Service
+                <div class="mt-8 mb-3 px-4 text-[11px] font-bold uppercase tracking-widest text-emerald-700">
+                    Keuangan
+                </div>
+
+                <a href="/capital-debt"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('capital-debt*') }}">
+                    <i class="fa-solid fa-hand-holding-dollar w-5"></i>
+                    Modal & Hutang Toko
                 </a>
 
-                {{-- ===================== ADMIN ONLY ===================== --}}
-                @if (Auth::user()->isSuperAdmin())
+                <a href="/receivables"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('receivables*') }}">
+                    <i class="fa-solid fa-money-bill-transfer w-5"></i>
+                    Kelola Piutang
+                </a>
 
-                    <a href="/expenses"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('expenses') }}">
-                        <i class="fa-solid fa-money-bill-wave w-5"></i>
-                        Pengeluaran
-                    </a>
+                <div class="mt-8 mb-3 px-4 text-[11px] font-bold uppercase tracking-widest text-emerald-700">
+                    Laporan
+                </div>
 
-                    <a href="/modals"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('modals*') }}">
-                        <i class="fa-solid fa-hand-holding-dollar w-5"></i>
-                        Modal / Hutang
-                    </a>
+                <a href="/reports"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('reports*') }}">
+                    <i class="fa-solid fa-chart-bar w-5"></i>
+                    Laporan
+                </a>
 
-                    <a href="/payrolls"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('payrolls*') }}">
-                        <i class="fa-solid fa-coins w-5"></i>
-                        Penggajian
-                    </a>
+                <div class="mt-8 mb-3 px-4 text-[11px] font-bold uppercase tracking-widest text-emerald-700">
+                    Pengaturan
+                </div>
 
-                @endif
+                <a href="/settings"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('settings*') }}">
+                    <i class="fa-solid fa-sliders w-5"></i>
+                    Konfigurasi Toko
+                </a>
 
-
-                {{-- ===================== ADMIN ONLY ===================== --}}
-                @if (Auth::user()->isSuperAdmin())
-
-                    {{-- ===================================================== --}}
-
-                    <div class="mt-6 pt-4 mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                        Laporan
-                    </div>
-
-                    <!-- Laporan — semua role -->
-                    <a href="/reports"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('reports*') }}">
-                        <i class="fa-solid fa-chart-line w-5"></i>
-                        Laporan Penjualan
-                    </a>
-
-                    <div class="mt-6 pt-4 mb-2 px-4 text-xs font-semibold uppercase tracking-wider text-slate-400">
-                        Pengaturan
-                    </div>
-
-                    <a href="/contacts"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('contacts*') }}">
-                        <i class="fa-brands fa-whatsapp w-5"></i>
-                        Nomor WhatsApp
-                    </a>
-
-                    <a href="/settings"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('settings*') }}">
-                        <i class="fa-solid fa-gear w-5"></i>
-                        Setting Toko
-                    </a>
-
-                    <a href="/users"
-                        class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition {{ isActive('users*') }}">
-                        <i class="fa-solid fa-user-shield w-5"></i>
-                        Manajemen User
-                    </a>
-
-                @endif
-                {{-- ===================================================== --}}
+                <a href="/users"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('users*') }}">
+                    <i class="fa-solid fa-users-gear w-5"></i>
+                    User & Preferensi
+                </a>
 
             </nav>
+
+            <div class="p-4 border-t border-emerald-100 bg-gradient-to-r from-emerald-50 to-green-50">
+                <div class="text-xs text-center text-emerald-700 font-medium">
+                    © 2025 Pos Kios Tani
+                </div>
+            </div>
+
         </aside>
 
+        <div class="flex-1 flex flex-col min-h-screen">
 
-        <!-- CONTENT -->
-        <div class="flex-1 flex flex-col">
+            <header
+                class="h-20 bg-white/90 backdrop-blur-md border-b border-emerald-100 shadow-sm flex items-center justify-between px-6 sticky top-0 z-20">
 
-            <!-- HEADER -->
-            <header class="h-16 bg-white border-b shadow-sm flex items-center justify-between px-4 md:px-6">
-
-                <button id="menuBtn" class="p-2 rounded-lg hover:bg-indigo-50 text-indigo-600 md:hidden">
-                    <i class="fa-solid fa-bars"></i>
+                <button id="toggleMenu"
+                    class="p-2.5 rounded-lg hover:bg-emerald-100 text-emerald-700 lg:hidden transition">
+                    <i class="fa-solid fa-bars text-lg"></i>
                 </button>
 
-                <div class="relative ml-auto" id="profileDropdown">
-                    <button type="button" class="flex items-center gap-3 focus:outline-none" id="profileBtn">
+                <div class="hidden lg:block">
+                    <h1 class="text-xl font-bold text-gray-800">@yield('page-title', 'Dashboard')</h1>
+                </div>
+
+                <div class="relative ml-auto" id="userDropdown">
+                    <button type="button"
+                        class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-emerald-50 transition focus:outline-none"
+                        id="userToggle">
 
                         <div class="text-right hidden sm:block">
-                            <div class="text-sm font-semibold">{{ Auth::user()->name }}</div>
-                            <div class="text-xs text-slate-400">Administrator</div>
+                            <div class="text-sm font-semibold text-gray-800">{{ Auth::user()->name }}</div>
+                            <div class="text-xs text-emerald-600">Administrator</div>
                         </div>
 
-                        <img src="https://ui-avatars.com/api/?name={{ Auth::user()->name }}"
-                            class="w-9 h-9 rounded-full border">
+                        <div
+                            class="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-green-600 flex items-center justify-center text-white font-bold shadow-md">
+                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                        </div>
                     </button>
 
-                    <!-- DROPDOWN -->
-                    <div id="profileMenu" class="absolute right-0 mt-3 w-48 bg-white border rounded-xl shadow-lg
-                               opacity-0 invisible transition z-50">
+                    <div id="userMenu" class="absolute right-0 mt-3 w-52 bg-white border border-emerald-100 rounded-xl shadow-2xl
+                               opacity-0 invisible transition-all z-50 overflow-hidden">
 
-                        <a href="{{ route('profile.edit') }}"
-                            class="flex items-center gap-2 px-4 py-3 text-sm hover:bg-slate-100 rounded-t-xl">
-                            <i class="fa-solid fa-user"></i>
-                            Profile
+                        <a href="#"
+                            class="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-emerald-50 transition">
+                            <i class="fa-solid fa-user-circle text-emerald-600"></i>
+                            Profil Saya
                         </a>
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="w-full text-left flex items-center gap-2 px-4 py-3 text-sm
-                                       text-red-600 hover:bg-red-50 rounded-b-xl">
-                                <i class="fa-solid fa-right-from-bracket"></i>
-                                Logout
+                            <button type="submit" class="w-full text-left flex items-center gap-3 px-5 py-3 text-sm
+                                       text-red-600 hover:bg-red-50 transition border-t border-emerald-100">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                Keluar
                             </button>
                         </form>
                     </div>
@@ -274,9 +273,8 @@
 
             </header>
 
-            <!-- MAIN -->
-            <main class="p-4 md:p-6">
-                <div class="bg-white rounded-2xl shadow-sm p-6">
+            <main class="p-6 flex-1">
+                <div class="bg-white/80 rounded-2xl shadow-lg border border-emerald-100 p-8">
                     @yield('content')
                 </div>
             </main>
@@ -284,7 +282,6 @@
         </div>
     </div>
 
-    <!-- JS -->
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
@@ -294,28 +291,42 @@
 
     <script>
         $(function () {
-            const sidebar = $('#sidebar')
-            const overlay = $('#overlay')
+            const navSidebar = $('#nav-sidebar')
+            const overlayMobile = $('#overlay-mobile')
 
-            $('#menuBtn').on('click', function () {
-                sidebar.toggleClass('-translate-x-full')
-                overlay.toggleClass('opacity-0 pointer-events-none')
+            $('#toggleMenu').on('click', function () {
+                navSidebar.toggleClass('-translate-x-full')
+                overlayMobile.toggleClass('opacity-0 pointer-events-none')
             })
 
-            overlay.on('click', function () {
-                sidebar.addClass('-translate-x-full')
-                overlay.addClass('opacity-0 pointer-events-none')
+            overlayMobile.on('click', function () {
+                navSidebar.addClass('-translate-x-full')
+                overlayMobile.addClass('opacity-0 pointer-events-none')
             })
 
-            $('.datatable').DataTable({ responsive: true, pageLength: 10 })
+            $('.datatable').DataTable({
+                responsive: true,
+                pageLength: 10,
+                language: {
+                    search: "Cari:",
+                    lengthMenu: "Tampilkan _MENU_ data",
+                    info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
+                    paginate: {
+                        first: "Pertama",
+                        last: "Terakhir",
+                        next: "Selanjutnya",
+                        previous: "Sebelumnya"
+                    }
+                }
+            })
 
-            $('#profileBtn').on('click', function (e) {
+            $('#userToggle').on('click', function (e) {
                 e.stopPropagation()
-                $('#profileMenu').toggleClass('opacity-0 invisible')
+                $('#userMenu').toggleClass('opacity-0 invisible')
             })
 
             $(document).on('click', function () {
-                $('#profileMenu').addClass('opacity-0 invisible')
+                $('#userMenu').addClass('opacity-0 invisible')
             })
         })
     </script>
@@ -331,8 +342,9 @@
 
             Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
+                title: 'Terjadi Kesalahan',
                 text: errorMessages,
+                confirmButtonColor: '#10b981'
             });
         </script>
     @endif
@@ -346,16 +358,18 @@
                 if (successMessage) {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Success',
+                        title: 'Berhasil',
                         text: successMessage,
+                        confirmButtonColor: '#10b981'
                     });
                 }
 
                 if (errorMessage) {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Error',
+                        title: 'Gagal',
                         text: errorMessage,
+                        confirmButtonColor: '#10b981'
                     });
                 }
             });

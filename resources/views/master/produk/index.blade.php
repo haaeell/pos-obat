@@ -1,0 +1,595 @@
+@extends('layouts.app')
+
+@section('title', 'Produk')@section('page-title', 'Produk')
+
+@push('styles')
+    <style>
+        .input-icon-wrap { position: relative; }
+        .input-icon-wrap i { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 13px; }
+        .input-icon-wrap input,
+        .input-icon-wrap select { padding-left: 36px !important; }
+        .input-icon-wrap.prefix-rp span {
+            position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+            color: #6b7280; font-size: 12px; font-weight: 600;
+        }
+        .input-icon-wrap.prefix-rp input { padding-left: 36px !important; }
+
+        .section-divider {
+            display: flex; align-items: center; gap: 10px;
+            margin: 8px 0 4px;
+        }
+        .section-divider span {
+            font-size: 10px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.08em; color: #059669; white-space: nowrap;
+        }
+        .section-divider::after {
+            content: ''; flex: 1; height: 1px; background: #d1fae5;
+        }
+
+        .stok-awal-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: #ecfdf5; border: 1px solid #a7f3d0;
+            color: #065f46; font-size: 11px; font-weight: 600;
+            padding: 4px 10px; border-radius: 20px;
+        }
+
+        .filter-bar select {
+            border: 1.5px solid #d1fae5;
+            border-radius: 8px;
+            padding: 6px 32px 6px 10px;
+            font-size: 13px;
+            color: #374151;
+            background: white;
+            outline: none;
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+        }
+        .filter-bar select:focus { border-color: #10b981; }
+    </style>
+@endpush
+
+@section('content')
+    <div class="mx-auto bg-white rounded-xl">
+
+        {{-- HEADER --}}
+        <div class="flex flex-wrap justify-between items-start gap-3 mb-5">
+            <div>
+                <h1 class="text-2xl font-semibold text-slate-800">Produk</h1>
+                <nav class="text-sm text-slate-500 mt-1">
+                    <ol class="flex items-center gap-2">
+                        <li><a href="{{ route('home') }}" class="hover:text-emerald-600">Dashboard</a></li>
+                        <li>/</li>
+                        <li class="text-slate-700 font-medium">Produk</li>
+                    </ol>
+                </nav>
+            </div>
+            <button onclick="openCreateModal()"
+                class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition flex items-center gap-2 text-sm font-semibold">
+                <i class="fa-solid fa-plus"></i> Tambah Produk
+            </button>
+        </div>
+
+        {{-- FILTER BAR --}}
+        <div class="filter-bar flex flex-wrap items-center gap-3 mb-4 p-4 bg-emerald-50/60 rounded-xl border border-emerald-100">
+            <div class="flex items-center gap-2 text-sm font-semibold text-emerald-700">
+                <i class="fa-solid fa-filter"></i> Filter:
+            </div>
+
+            <select id="filterKategori">
+                <option value="">Semua Kategori</option>
+                @foreach ($kategori as $kat)
+                    <option value="{{ $kat->nama }}">{{ $kat->nama }}</option>
+                @endforeach
+            </select>
+
+            <select id="filterSupplier">
+                <option value="">Semua Supplier</option>
+                @foreach ($supplier as $sup)
+                    <option value="{{ $sup->nama }}">{{ $sup->nama }}</option>
+                @endforeach
+            </select>
+
+            <select id="filterStatus">
+                <option value="">Semua Status</option>
+                <option value="Aktif">Aktif</option>
+                <option value="Non-aktif">Non-aktif</option>
+            </select>
+
+            <button onclick="resetFilter()"
+                class="px-3 py-1.5 text-xs font-semibold text-slate-500 hover:text-red-500 border border-slate-200 rounded-lg hover:border-red-300 transition bg-white">
+                <i class="fa-solid fa-xmark mr-1"></i> Reset
+            </button>
+        </div>
+
+        {{-- TABLE --}}
+        <div class="bg-white rounded-xl shadow border overflow-x-auto px-4 py-5">
+            <table id="datatable" class="w-full text-sm">
+                <thead class="bg-slate-100 text-slate-700">
+                    <tr>
+                        <th class="px-4 py-3 text-left w-10">No</th>
+                        <th class="px-4 py-3 text-left">Kode</th>
+                        <th class="px-4 py-3 text-left">Nama Produk</th>
+                        <th class="px-4 py-3 text-left">Kategori</th>
+                        <th class="px-4 py-3 text-left">Supplier</th>
+                        <th class="px-4 py-3 text-left">Satuan</th>
+                        <th class="px-4 py-3 text-right">Harga Jual</th>
+                        <th class="px-4 py-3 text-center">Stok</th>
+                        <th class="px-4 py-3 text-center">Status</th>
+                        <th class="px-4 py-3 text-center">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($produk as $i => $item)
+                        <tr class="border-t hover:bg-slate-50 transition">
+                            <td class="px-4 py-3 text-slate-400 text-xs">{{ $i + 1 }}</td>
+
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                <span class="font-mono text-xs bg-slate-100 px-2 py-1 rounded">{{ $item->kode }}</span>
+                            </td>
+
+                            <td class="px-4 py-3 font-medium text-slate-800">
+                                <div class="flex items-center gap-2">
+                                    @if ($item->foto)
+                                        <img src="{{ asset('storage/' . $item->foto) }}" alt="{{ $item->nama }}"
+                                            class="w-8 h-8 rounded object-cover border flex-shrink-0">
+                                    @else
+                                        <div class="w-8 h-8 rounded bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                                            <i class="fa-solid fa-seedling text-emerald-400 text-xs"></i>
+                                        </div>
+                                    @endif
+                                    {{ $item->nama }}
+                                </div>
+                            </td>
+
+                            <td class="px-4 py-3">
+                                <span class="px-2 py-1 text-xs rounded-full bg-blue-50 text-blue-700 font-medium">
+                                    {{ $item->kategori->nama ?? '-' }}
+                                </span>
+                            </td>
+
+                            <td class="px-4 py-3 text-slate-500 text-xs">{{ $item->supplier->nama ?? '-' }}</td>
+
+                            <td class="px-4 py-3 text-slate-500">{{ $item->satuan }}</td>
+
+                            <td class="px-4 py-3 text-right font-semibold text-slate-800">
+                                Rp {{ number_format($item->harga_jual, 0, ',', '.') }}
+                            </td>
+
+                            <td class="px-4 py-3 text-center">
+                                @php $rendah = $item->stok_saat_ini <= $item->stok_minimum; @endphp
+                                <span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full
+                                    {{ $rendah ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700' }}">
+                                    @if ($rendah)
+                                        <i class="fa-solid fa-triangle-exclamation text-[10px]"></i>
+                                    @endif
+                                    {{ $item->stok_saat_ini }} {{ $item->satuan }}
+                                </span>
+                            </td>
+
+                            <td class="px-4 py-3 text-center" data-status="{{ $item->is_aktif ? 'Aktif' : 'Non-aktif' }}">
+                                @if ($item->is_aktif)
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">Aktif</span>
+                                @else
+                                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-slate-200 text-slate-500">Non-aktif</span>
+                                @endif
+                            </td>
+
+                            <td class="px-4 py-3 text-center">
+                                <div class="flex items-center justify-center gap-1">
+                                    <button onclick='openEditModal(@json($item))'
+                                        class="px-3 py-1.5 bg-amber-400 hover:bg-amber-500 rounded-lg transition text-xs font-semibold"
+                                        title="Edit">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </button>
+                                    <button onclick="deleteProduk({{ $item->id }}, '{{ addslashes($item->nama) }}')"
+                                        class="px-3 py-1.5 bg-red-500 text-white hover:bg-red-600 rounded-lg transition text-xs font-semibold"
+                                        title="Hapus">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {{-- ═══════════════════════════════ MODAL ═══════════════════════════════ --}}
+    <div id="produkModal"
+        class="fixed inset-0 hidden bg-black/40 modal-blur-overlay flex items-center justify-center z-50 p-4">
+        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl max-h-[92vh] flex flex-col">
+
+            {{-- MODAL HEADER --}}
+            <div class="flex items-center justify-between px-6 py-4 border-b flex-shrink-0">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                        <i class="fa-solid fa-seedling"></i>
+                    </div>
+                    <div>
+                        <h2 id="modalTitle" class="text-base font-bold text-slate-800">Tambah Produk</h2>
+                        <p id="modalSubtitle" class="text-xs text-slate-400">Isi semua informasi produk dengan lengkap</p>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 transition p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            {{-- MODAL BODY --}}
+            <form id="produkForm" method="POST" enctype="multipart/form-data" class="overflow-y-auto flex-1">
+                @csrf
+                <input type="hidden" name="_method" id="methodField">
+
+                <div class="p-6 space-y-5">
+
+                    {{-- ── SEKSI: INFO DASAR ── --}}
+                    <div class="section-divider"><span><i class="fa-solid fa-box mr-1"></i> Informasi Dasar</span></div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        {{-- NAMA --}}
+                        <div class="md:col-span-2">
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wide block mb-1">
+                                Nama Produk <span class="text-red-500">*</span>
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="fa-solid fa-box-open"></i>
+                                <input type="text" name="nama" id="inputNama" required
+                                    placeholder="Contoh: Pupuk Urea 50kg"
+                                    class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
+                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                            </div>
+                        </div>
+
+                        {{-- KATEGORI --}}
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wide block mb-1">
+                                Kategori <span class="text-red-500">*</span>
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="fa-solid fa-layer-group"></i>
+                                <select name="kategori_id" id="inputKategori" required
+                                    class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
+                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none bg-white">
+                                    <option value="">-- Pilih Kategori --</option>
+                                    @foreach ($kategori as $kat)
+                                        <option value="{{ $kat->id }}">{{ $kat->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        {{-- SUPPLIER --}}
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wide block mb-1">
+                                Supplier
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="fa-solid fa-truck-field"></i>
+                                <select name="supplier_id" id="inputSupplier"
+                                    class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
+                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none bg-white">
+                                    <option value="">-- Tidak Ada --</option>
+                                    @foreach ($supplier as $sup)
+                                        <option value="{{ $sup->id }}">{{ $sup->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        {{-- SATUAN --}}
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wide block mb-1">
+                                Satuan <span class="text-red-500">*</span>
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="fa-solid fa-ruler"></i>
+                                <input type="text" name="satuan" id="inputSatuan" required
+                                    placeholder="kg, liter, botol, karung..."
+                                    class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
+                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                            </div>
+                        </div>
+
+                        {{-- HARGA JUAL --}}
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wide block mb-1">
+                                Harga Jual <span class="text-red-500">*</span>
+                            </label>
+                            <div class="input-icon-wrap prefix-rp">
+                                <span>Rp</span>
+                                <input type="number" name="harga_jual" id="inputHarga" required min="0"
+                                    placeholder="0"
+                                    class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
+                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- ── SEKSI: STOK ── --}}
+                    <div class="section-divider"><span><i class="fa-solid fa-cubes mr-1"></i> Pengaturan Stok</span></div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                        {{-- STOK MINIMUM --}}
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wide block mb-1">
+                                Stok Minimum <span class="text-red-500">*</span>
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="fa-solid fa-arrow-down-to-line text-amber-500"></i>
+                                <input type="number" name="stok_minimum" id="inputStokMin" required min="0" value="5"
+                                    class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
+                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1">
+                                <i class="fa-solid fa-circle-info mr-1"></i>
+                                Sistem akan memberi peringatan jika stok di bawah angka ini.
+                            </p>
+                        </div>
+
+                        {{-- STOK AWAL (hanya saat tambah) --}}
+                        <div id="stokAwalField">
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wide block mb-1">
+                                Stok Awal
+                                <span class="stok-awal-badge ml-2">
+                                    <i class="fa-solid fa-bolt"></i> Input Sekali
+                                </span>
+                            </label>
+                            <div class="input-icon-wrap">
+                                <i class="fa-solid fa-warehouse text-emerald-500"></i>
+                                <input type="number" name="stok_awal" id="inputStokAwal" min="0" value="0"
+                                    class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
+                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1">
+                                <i class="fa-solid fa-circle-info mr-1"></i>
+                                Jumlah stok yang sudah ada sebelum sistem digunakan. Setelah disimpan, tambah stok lewat menu <strong>Barang Masuk</strong>.
+                            </p>
+                        </div>
+
+                        {{-- HARGA MODAL AWAL (hanya saat tambah) --}}
+                        <div id="hargaModalAwalField" class="md:col-span-2">
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wide block mb-1">
+                                Harga Modal Stok Awal
+                            </label>
+                            <div class="input-icon-wrap prefix-rp">
+                                <span>Rp</span>
+                                <input type="number" name="harga_modal_awal" id="inputHargaModalAwal" min="0" value="0"
+                                    class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
+                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1">
+                                <i class="fa-solid fa-circle-info mr-1"></i>
+                                Estimasi harga beli per satuan untuk stok awal ini. Digunakan untuk perhitungan HPP (FIFO).
+                            </p>
+                        </div>
+
+                        {{-- STATUS (hanya saat edit) --}}
+                        <div id="statusField" class="hidden">
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wide block mb-1">Status</label>
+                            <div class="input-icon-wrap">
+                                <i class="fa-solid fa-toggle-on text-emerald-500"></i>
+                                <select name="is_aktif" id="inputStatus"
+                                    class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
+                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none bg-white">
+                                    <option value="1">Aktif</option>
+                                    <option value="0">Non-aktif</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- ── SEKSI: FOTO & CATATAN ── --}}
+                    <div class="section-divider"><span><i class="fa-solid fa-image mr-1"></i> Foto & Catatan</span></div>
+
+                    <div class="grid grid-cols-1 gap-4">
+                        {{-- FOTO --}}
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wide block mb-1">
+                                Foto Produk
+                                <span class="text-slate-400 font-normal normal-case tracking-normal ml-1">(jpg, png, webp · maks 2MB)</span>
+                            </label>
+                            <div class="flex items-center gap-4">
+                                <div id="fotoWrapper" class="hidden w-16 h-16 rounded-xl border-2 border-emerald-200 overflow-hidden flex-shrink-0">
+                                    <img id="fotoPreview" src="" alt="" class="w-full h-full object-cover">
+                                </div>
+                                <div class="flex-1 border-2 border-dashed border-slate-200 rounded-xl p-3 hover:border-emerald-400 transition">
+                                    <input type="file" name="foto" id="inputFoto"
+                                        accept="image/jpg,image/jpeg,image/png,image/webp"
+                                        class="text-sm text-slate-500 w-full
+                                               file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0
+                                               file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700
+                                               hover:file:bg-emerald-100 cursor-pointer">
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- CATATAN --}}
+                        <div>
+                            <label class="text-xs font-bold text-slate-600 uppercase tracking-wide block mb-1">Catatan</label>
+                            <div class="relative">
+                                <i class="fa-solid fa-note-sticky absolute left-3 top-3 text-slate-400 text-xs"></i>
+                                <textarea name="catatan" id="inputCatatan" rows="2"
+                                    placeholder="Keterangan tambahan tentang produk ini (opsional)..."
+                                    class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm
+                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none resize-none"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- MODAL FOOTER --}}
+                <div class="px-6 py-4 border-t bg-slate-50/80 rounded-b-2xl flex justify-end gap-2 flex-shrink-0">
+                    <button type="button" onclick="closeModal()"
+                        class="px-5 py-2.5 rounded-xl border border-slate-300 text-sm font-semibold text-slate-600 hover:bg-slate-100 transition">
+                        <i class="fa-solid fa-xmark mr-1"></i> Batal
+                    </button>
+                    <button type="submit" id="submitBtn"
+                        class="px-6 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-bold hover:bg-emerald-700 transition flex items-center gap-2">
+                        <i class="fa-solid fa-floppy-disk"></i> Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    @push('scripts')
+        <script>
+        $(document).ready(function () {
+
+            // ── DataTable ──────────────────────────────────────────────────
+            const table = $('#datatable').DataTable({
+                language: {
+                    search: 'Cari:',
+                    lengthMenu: 'Tampilkan _MENU_ data',
+                    info: 'Menampilkan _START_–_END_ dari _TOTAL_ data',
+                    paginate: { previous: 'Sebelumnya', next: 'Selanjutnya' },
+                    zeroRecords: 'Data tidak ditemukan',
+                },
+                columnDefs: [
+                    { orderable: false, targets: [0, 9] }
+                ]
+            })
+
+            // ── Filter Kategori (kolom 3) ──────────────────────────────────
+            $('#filterKategori').on('change', function () {
+                table.column(3).search(this.value).draw()
+            })
+
+            // ── Filter Supplier (kolom 4) ──────────────────────────────────
+            $('#filterSupplier').on('change', function () {
+                table.column(4).search(this.value).draw()
+            })
+
+            // ── Filter Status (kolom 8) ────────────────────────────────────
+            $.fn.dataTable.ext.search.push(function (settings, data) {
+                const val = $('#filterStatus').val()
+                if (!val) return true
+                return data[8].trim().includes(val)
+            })
+            $('#filterStatus').on('change', function () { table.draw() })
+
+            window.resetFilter = function () {
+                $('#filterKategori, #filterSupplier, #filterStatus').val('')
+                table.column(3).search('').column(4).search('').draw()
+            }
+
+            // ── Modal helpers ──────────────────────────────────────────────
+            const modal         = $('#produkModal')
+            const form          = $('#produkForm')
+            const title         = $('#modalTitle')
+            const subtitle      = $('#modalSubtitle')
+            const method        = $('#methodField')
+            const btn           = $('#submitBtn')
+            const statusField   = $('#statusField')
+            const stokAwalField = $('#stokAwalField')
+            const hargaModalField = $('#hargaModalAwalField')
+            const fotoWrapper   = $('#fotoWrapper')
+            const fotoPreview   = $('#fotoPreview')
+
+            window.openCreateModal = function () {
+                title.text('Tambah Produk')
+                subtitle.text('Isi semua informasi produk dengan lengkap')
+                form.attr('action', '/produk')
+                method.val('')
+                form[0].reset()
+                fotoWrapper.addClass('hidden')
+                fotoPreview.attr('src', '')
+                statusField.addClass('hidden')
+                stokAwalField.removeClass('hidden')
+                hargaModalField.removeClass('hidden')
+                modal.removeClass('hidden')
+                $('#inputNama').focus()
+            }
+
+            window.openEditModal = function (data) {
+                title.text('Edit Produk')
+                subtitle.text('Kode: ' + data.kode)
+                form.attr('action', `/produk/${data.id}`)
+                method.val('PUT')
+                form[0].reset()
+
+                $('#inputNama').val(data.nama)
+                $('#inputKategori').val(data.kategori_id)
+                $('#inputSupplier').val(data.supplier_id ?? '')
+                $('#inputSatuan').val(data.satuan)
+                $('#inputHarga').val(data.harga_jual)
+                $('#inputStokMin').val(data.stok_minimum)
+                $('#inputStatus').val(data.is_aktif ? '1' : '0')
+                $('#inputCatatan').val(data.catatan ?? '')
+
+                if (data.foto) {
+                    fotoPreview.attr('src', '/storage/' + data.foto)
+                    fotoWrapper.removeClass('hidden')
+                } else {
+                    fotoWrapper.addClass('hidden')
+                }
+
+                // Sembunyikan field stok awal saat edit
+                stokAwalField.addClass('hidden')
+                hargaModalField.addClass('hidden')
+                statusField.removeClass('hidden')
+                modal.removeClass('hidden')
+                $('#inputNama').focus()
+            }
+
+            window.closeModal = function () {
+                modal.addClass('hidden')
+            }
+
+            // Preview foto
+            $('#inputFoto').on('change', function () {
+                const file = this.files[0]
+                if (file) {
+                    const reader = new FileReader()
+                    reader.onload = e => {
+                        fotoPreview.attr('src', e.target.result)
+                        fotoWrapper.removeClass('hidden')
+                    }
+                    reader.readAsDataURL(file)
+                }
+            })
+
+            // Tutup modal saat klik backdrop
+            modal.on('click', function (e) {
+                if ($(e.target).is(modal)) closeModal()
+            })
+
+            form.on('submit', function () {
+                btn.prop('disabled', true).html('<i class="fa-solid fa-spinner fa-spin mr-1"></i> Menyimpan...')
+            })
+
+            // ── Delete ─────────────────────────────────────────────────────
+            window.deleteProduk = function (id, nama) {
+                Swal.fire({
+                    title: 'Hapus Produk?',
+                    html: `Produk <strong>${nama}</strong> akan dihapus permanen.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc2626',
+                    cancelButtonText: 'Batal',
+                    confirmButtonText: 'Ya, hapus',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const f = document.createElement('form')
+                        f.method = 'POST'
+                        f.action = `/produk/${id}`
+                        f.innerHTML = `
+                            <input type="hidden" name="_token" value="${$('meta[name=csrf-token]').attr('content')}">
+                            <input type="hidden" name="_method" value="DELETE">
+                        `
+                        document.body.appendChild(f)
+                        f.submit()
+                    }
+                })
+            }
+        })
+        </script>
+    @endpush
+@endsection

@@ -7,160 +7,84 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\ModalController;
 use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PenjualController;
+use App\Http\Controllers\PiutangController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\StockInController;
+use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [CatalogController::class, 'index']);
-Route::get('/data/catalog', [CatalogController::class, 'data'])->name('catalog.data');
 
 Auth::routes();
 
-Route::middleware(['auth', 'role:admin,super_admin'])->group(function () {
-
-    // Dashboard
+Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('/dashboard/inventory', [HomeController::class, 'inventoryList'])->name('dashboard.inventory');
 
-    // Profile
-    Route::prefix('profile')->group(function () {
-        Route::get('/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::put('/update', [ProfileController::class, 'update'])->name('profile.update');
+    // ── Master: Kategori ───────────────────────────────────────────
+    Route::prefix('kategori')->controller(KategoriController::class)->group(function () {
+        Route::get('/',        'index')->name('kategori.index');
+        Route::post('/',       'store')->name('kategori.store');
+        Route::put('/{id}',    'update')->name('kategori.update');
+        Route::delete('/{id}', 'destroy')->name('kategori.destroy');
     });
 
-    // Penjualan / Transaksi
-    Route::prefix('sales')->controller(SaleController::class)->group(function () {
-        Route::get('/', 'index')->name('sales.index');
-        Route::get('/create', 'create')->name('sales.create');
-        Route::post('/', 'store')->name('sales.store');
-        Route::get('/{id}/detail', 'detail');
-        Route::get('/{id}/invoice-pdf', 'invoicePdf')->name('sales.invoice.pdf');
-        Route::delete('/{id}', 'destroy')->name('sales.destroy');
+    // ── Master: Supplier ───────────────────────────────────────────
+    Route::prefix('supplier')->controller(SupplierController::class)->group(function () {
+        Route::get('/',        'index')->name('supplier.index');
+        Route::post('/',       'store')->name('supplier.store');
+        Route::put('/{id}',    'update')->name('supplier.update');
+        Route::delete('/{id}', 'destroy')->name('supplier.destroy');
     });
 
-    // Laporan
-    Route::prefix('reports')->group(function () {
-        Route::get('/', [ReportController::class, 'index'])->name('reports.index');
-        Route::get('/pdf', [ReportController::class, 'pdf'])->name('reports.pdf');
-        Route::get('/excel', [ReportController::class, 'excel'])->name('reports.excel');
+    Route::prefix('produk')->controller(ProdukController::class)->group(function () {
+        Route::get('/',        'index')->name('produk.index');
+        Route::post('/',       'store')->name('produk.store');
+        Route::put('/{id}',    'update')->name('produk.update');
+        Route::delete('/{id}', 'destroy')->name('produk.destroy');
     });
 
-    Route::prefix('services')->controller(ServiceController::class)->group(function () {
-        Route::get('/', 'index')->name('services.index');
-        Route::post('/', 'store')->name('services.store');
-        Route::post('/{id}/estimate', 'estimate')->name('services.estimate');
-        Route::post('/{id}/confirm', 'confirm')->name('services.confirm');
-        Route::post('/{id}/done', 'done')->name('services.done');
-        Route::post('/{id}/taken', 'taken')->name('services.taken');
-        Route::get('/{id}/print-receive', 'printReceive')->name('services.print-receive');
-        Route::get('/{id}/print-pickup', 'printPickup')->name('services.print-pickup');
-        Route::delete('/{id}', 'destroy')->name('services.destroy');
-    });
-});
-
-Route::middleware(['auth', 'role:super_admin'])->group(function () {
-
-    // Kategori
-    Route::prefix('categories')->controller(CategoryController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::post('/', 'store');
-        Route::put('/{id}', 'update');
-        Route::delete('/{id}', 'destroy');
+    Route::prefix('stock-in')->controller(StockInController::class)->group(function () {
+        Route::get('/',        'index')->name('stock-in.index');
+        Route::post('/',       'store')->name('stock-in.store');
+        Route::delete('/{id}', 'destroy')->name('stock-in.destroy');
     });
 
-    // Kontak / WhatsApp
-    Route::prefix('contacts')->controller(ContactController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::post('/', 'store');
-        Route::put('/{id}', 'update');
-        Route::delete('/{id}', 'destroy');
+    Route::prefix('pelanggan')->controller(PelangganController::class)->group(function () {
+        Route::get('/',        'index')->name('pelanggan.index');
+        Route::post('/',       'store')->name('pelanggan.store');
+        Route::put('/{id}',    'update')->name('pelanggan.update');
+        Route::delete('/{id}', 'destroy')->name('pelanggan.destroy');
     });
 
-    // Sales Person (Penjual)
-    Route::prefix('penjuals')->controller(PenjualController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::post('/', 'store');
-        Route::post('/{id}/promote', 'promoteToEmployee')->name('penjuals.promote');
-        Route::put('/{id}', 'update');
-        Route::delete('/{id}', 'destroy');
+    Route::prefix('transactions')->controller(TransaksiController::class)->group(function () {
+        Route::get('/',        'index')->name('transactions.index');
+        Route::get('/pos',     'pos')->name('transactions.pos');
+        Route::post('/',       'store')->name('transactions.store');
+        Route::get('/{id}',       'show')->name('transactions.show');
+        Route::get('/{id}/struk', 'struk')->name('transactions.struk');
     });
 
-    // Pengeluaran
-    Route::prefix('expenses')->controller(ExpenseController::class)->group(function () {
-        Route::get('/export-pdf', 'exportPdf')->name('expenses.export-pdf');
-        Route::get('/', 'index')->name('expenses.index');
-        Route::post('/', 'store');
-        Route::put('/{id}', 'update');
-        Route::delete('/{id}', 'destroy');
-    });
+    Route::prefix('piutang')->name('piutang.')->group(function () {
+        Route::get('/', [PiutangController::class, 'index'])->name('index');
+        Route::get('/{id}', [PiutangController::class, 'show'])->name('show');
 
-    // Setting Toko
-    Route::prefix('settings')->controller(SettingController::class)->group(function () {
-        Route::get('/', 'index')->name('settings.index');
-        Route::post('/', 'update')->name('settings.update');
-    });
+        Route::post('/{id}/bayar', [PiutangController::class, 'bayar'])
+            ->name('bayar');
 
-    // Brand
-    Route::prefix('brands')->controller(BrandController::class)->group(function () {
-        Route::get('/', 'index');
-        Route::post('/', 'store');
-        Route::put('/{id}', 'update');
-        Route::delete('/{id}', 'destroy');
-    });
-
-    // Produk
-    Route::prefix('products')->controller(ProductController::class)->group(function () {
-        Route::get('/template', 'template')->name('products.template');
-        Route::post('/import', 'import')->name('products.import');
-        Route::get('/', 'index')->name('products.index');
-        Route::post('/', 'store');
-        Route::put('/{id}', 'update');
-        Route::delete('/{id}', 'destroy');
-    });
-
-    // Modal / Hutang
-    Route::prefix('modals')->controller(ModalController::class)->group(function () {
-        Route::get('/', 'index')->name('modals.index');
-        Route::post('/', 'store')->name('modals.store');
-        Route::get('/{id}', 'show')->name('modals.show');
-        Route::put('/{id}', 'update')->name('modals.update');
-        Route::delete('/{id}', 'destroy')->name('modals.destroy');
-        Route::post('/{id}/bayar-cicilan', 'bayarCicilan')->name('modals.bayar-cicilan');
-        Route::post('/kalkulasi', 'kalkulasi')->name('modals.kalkulasi');
-    });
-
-    // Karyawan
-    Route::prefix('employees')->controller(EmployeeController::class)->group(function () {
-        Route::get('/', 'index')->name('employees.index');
-        Route::post('/', 'store')->name('employees.store');
-        Route::put('/{id}', 'update')->name('employees.update');
-        Route::delete('/{id}', 'destroy')->name('employees.destroy');
-    });
-
-    // Penggajian
-    Route::prefix('payrolls')->controller(PayrollController::class)->group(function () {
-        Route::get('/', 'index')->name('payrolls.index');
-        Route::get('/create', 'create')->name('payrolls.create');
-        Route::post('/calculate', 'calculate')->name('payrolls.calculate');
-        Route::post('/', 'store')->name('payrolls.store');
-        Route::post('/{id}/release', 'release')->name('payrolls.release');
-        Route::get('/{payrollId}/slip/{employeeId}', 'printSlip')->name('payrolls.slip');
-        Route::delete('/{id}', 'destroy')->name('payrolls.destroy');
-    });
-
-    Route::prefix('users')->controller(UserController::class)->group(function () {
-        Route::get('/', 'index')->name('users.index');
-        Route::post('/', 'store')->name('users.store');
-        Route::put('/{id}', 'update')->name('users.update');
-        Route::delete('/{id}', 'destroy')->name('users.destroy');
+        Route::get('/{id}/cetak', [PiutangController::class, 'cetak'])
+            ->name('cetak');
     });
 });
