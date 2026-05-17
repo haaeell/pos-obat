@@ -48,7 +48,7 @@ return new class extends Migration
             $table->string('logo')->nullable();               // path file logo
             $table->text('header_struk')->nullable();
             $table->text('footer_struk')->nullable();
-            $table->integer('stok_minimum_default')->default(5);
+            $table->integer('stok_minimum_default')->nullable()->default(5);
             $table->timestamps();
         });
 
@@ -244,40 +244,42 @@ return new class extends Migration
         // 7. MODAL & HUTANG TOKO
         // ============================================================
 
-        Schema::create('modal_hutang', function (Blueprint $table) {
+        Schema::create('modals', function (Blueprint $table) {
             $table->id();
-            $table->string('nomor')->unique();                // MOD-001 / HUT-001
-            $table->enum('jenis', ['modal_sendiri', 'pinjaman']);
-            $table->string('nama_sumber');                    // "Modal Awal", "Bank BRI", "Koperasi X"
-            $table->string('nama_kreditur')->nullable();      // khusus pinjaman
-            $table->string('telepon_kreditur', 20)->nullable();
-            $table->decimal('jumlah_total', 15, 2);
-            $table->date('tanggal_diterima');
-            // --- khusus pinjaman ---
-            $table->integer('jangka_bulan')->nullable();      // durasi pinjaman dalam bulan
-            $table->decimal('bunga_persen', 5, 2)->nullable()->default(0); // % per tahun
-            $table->decimal('cicilan_per_bulan', 15, 2)->nullable()->default(0);
-            $table->date('tanggal_jatuh_tempo')->nullable();
-            // --- rekapitulasi (khusus pinjaman) ---
-            $table->decimal('sudah_dibayar', 15, 2)->default(0);
-            $table->decimal('sisa_hutang', 15, 2)->default(0);
-            $table->enum('status', ['aktif', 'lunas'])->default('aktif');
-            $table->timestamp('dilunasi_pada')->nullable();
-            $table->text('catatan')->nullable();
-            $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
+            $table->string('kode_pinjaman')->unique();
+            $table->string('nama_pemberi_pinjaman');
+            $table->enum('jenis_pinjaman', ['bank', 'koperasi', 'perorangan', 'lembaga_keuangan', 'lainnya']);
+            $table->decimal('jumlah_pinjaman', 18, 2);      // Nominal ajuan pinjaman
+            $table->decimal('nominal_pencairan', 18, 2);    // Nominal yang benar-benar cair
+            $table->integer('tenor');                        // Jumlah cicilan
+            $table->enum('satuan_tenor', ['hari', 'minggu', 'bulan', 'tahun']);
+            $table->decimal('total_bunga', 18, 2);          // Total bunga keseluruhan
+            $table->decimal('total_kewajiban', 18, 2);      // Total yang harus dibayar (pokok + bunga)
+            $table->decimal('cicilan_per_periode', 18, 2);  // Nominal cicilan per periode
+            $table->date('tanggal_pinjaman');
+            $table->date('tanggal_pencairan');
+            $table->date('tanggal_jatuh_tempo');
+            $table->integer('cicilan_ke')->default(0);       // Progress cicilan
+            $table->decimal('total_terbayar', 18, 2)->default(0);
+            $table->decimal('sisa_kewajiban', 18, 2);
+            $table->enum('status', ['aktif', 'lunas', 'macet', 'restrukturisasi'])->default('aktif');
+            $table->text('keterangan')->nullable();
+            $table->boolean('sudah_dicairkan')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });
 
-        Schema::create('modal_hutang_cicilan', function (Blueprint $table) {
+        Schema::create('modal_cicilans', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('modal_hutang_id')->constrained('modal_hutang')->restrictOnDelete();
-            $table->foreignId('user_id')->constrained('users')->restrictOnDelete();
-            $table->date('tanggal');
-            $table->decimal('jumlah', 15, 2);
-            $table->string('metode_bayar', 50)->default('tunai');
-            $table->string('referensi')->nullable();
-            $table->text('catatan')->nullable();
+            $table->foreignId('modal_id')->constrained('modals')->onDelete('cascade');
+            $table->integer('cicilan_ke');
+            $table->date('tanggal_jatuh_tempo');
+            $table->date('tanggal_bayar')->nullable();
+            $table->decimal('nominal_cicilan', 18, 2);      // pokok + bunga
+            $table->decimal('denda', 18, 2)->default(0);
+            $table->decimal('total_bayar', 18, 2)->default(0);
+            $table->enum('status', ['belum_bayar', 'sudah_bayar', 'terlambat', 'sebagian'])->default('belum_bayar');
+            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
 

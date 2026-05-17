@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Kasir POS')
-@section('page-title', 'Kasir POS')
+@section('title', ' POS')
+@section('page-title', ' POS')
 
 @push('styles')
     <style>
@@ -989,14 +989,13 @@
         <div class="pos-topbar flex items-center justify-between">
             <div>
                 <h1 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-cash-register text-emerald-600"></i> Kasir POS
+                    <i class="fa-solid fa-cash-register text-emerald-600"></i>  POS
                 </h1>
                 <nav class="text-xs text-slate-400 flex items-center gap-1">
                     <a href="{{ route('home') }}" class="hover:text-emerald-600">Dashboard</a>
                     <span>/</span>
                     <a href="{{ route('transactions.index') }}" class="hover:text-emerald-600">Penjualan</a>
                     <span>/</span>
-                    <span class="text-slate-700 font-medium">Kasir</span>
                 </nav>
             </div>
             <div class="flex items-center gap-2 text-xs text-slate-500">

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Login - Pos Kios Tani</title>
+    <title>Login - Pos </title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://fonts.bunny.net/css?family=Plus+Jakarta+Sans:300,400,500,600,700,800" rel="stylesheet">
@@ -133,11 +133,11 @@
             style="animation-delay: 1s"></div>
     </div>
 
-    <div class="w-full max-w-6xl relative z-10">
+    <div class="w-full max-w-5xl relative z-10">
 
-        <div class="grid lg:grid-cols-2 gap-0 glass-card rounded-3xl overflow-hidden shadow-2xl">
+        <div class="grid lg:grid-cols-[0.95fr_1.05fr] glass-card rounded-2xl overflow-hidden shadow-xl">
 
-            <div class="p-10 lg:p-14 bg-white/95 backdrop-blur-sm order-2 lg:order-1">
+            <div class="p-7 lg:p-9 bg-white/95 backdrop-blur-sm order-2 lg:order-1">
 
                 <div class="mb-8">
                     <div class="inline-block px-4 py-2 bg-green-50 rounded-full mb-4">
@@ -145,7 +145,7 @@
                             <i class="fa-solid fa-shield-halved mr-1"></i>Portal Admin
                         </span>
                     </div>
-                    <h2 class="text-3xl font-black text-gray-900 mb-2">Masuk Akun</h2>
+                    <h2 class="text-2xl font-black text-gray-900 mb-1">Masuk Akun</h2>
                     <p class="text-gray-600 font-medium">Silakan login untuk melanjutkan</p>
                 </div>
 
@@ -189,7 +189,7 @@
                             </div>
                             <input type="email" name="email" value="{{ old('email') }}" required
                                 class="input-glow w-full pl-12 pr-4 py-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:bg-white transition-all outline-none text-gray-900 font-medium placeholder:text-gray-400"
-                                placeholder="admin@kiostani.com">
+                                placeholder="admin@gmail.com">
                         </div>
                     </div>
 
@@ -222,7 +222,7 @@
 
                 <div class="mt-8 pt-6 border-t border-gray-200 text-center">
                     <p class="text-xs text-gray-500 font-medium">
-                        © 2025 Pos Kios Tani. All rights reserved.
+                        © 2025 Pos. All rights reserved.
                     </p>
                 </div>
             </div>
@@ -239,26 +239,7 @@
                         </div>
                     </div>
 
-                    <h3 class="text-4xl font-black mb-4 drop-shadow-lg">Kelola Usaha Tani</h3>
-                    <p class="text-green-50 text-lg mb-8 max-w-md mx-auto font-medium leading-relaxed">
-                        Platform digital untuk kemudahan pengelolaan stok, penjualan, dan laporan keuangan usaha tani
-                        Anda
-                    </p>
 
-                    <div class="grid grid-cols-3 gap-4 max-w-md mx-auto">
-                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
-                            <div class="text-3xl font-black mb-1">500+</div>
-                            <div class="text-xs text-green-100 font-semibold">Transaksi</div>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
-                            <div class="text-3xl font-black mb-1">98%</div>
-                            <div class="text-xs text-green-100 font-semibold">Akurasi</div>
-                        </div>
-                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
-                            <div class="text-3xl font-black mb-1">24/7</div>
-                            <div class="text-xs text-green-100 font-semibold">Support</div>
-                        </div>
-                    </div>
 
                 </div>
 

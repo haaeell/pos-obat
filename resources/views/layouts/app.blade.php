@@ -101,15 +101,22 @@
         shadow-xl transform -translate-x-full lg:translate-x-0
         transition-transform duration-300 flex flex-col">
 
-            <div
-                class="h-20 flex items-center gap-3 px-6 border-b border-emerald-100 bg-gradient-to-r from-emerald-50 to-green-50">
-                <div
-                    class="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center shadow-lg">
-                    <i class="fa-solid fa-leaf text-white text-xl"></i>
+            <div class="h-20 flex items-center gap-3 px-6 border-b ">
+                @php $toko = App\Models\PengaturanToko::instance(); @endphp
+
+                <div class="w-12 h-12 rounded-xl overflow-hidden shadow-lg flex-shrink-0">
+                    @if ($toko->logo)
+                        <img src="{{ asset('storage/' . $toko->logo) }}" alt="Logo" class="w-full h-full object-cover">
+                    @else
+                        <div
+                            class="w-full h-full bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center">
+                            <i class="fa-solid fa-leaf text-white text-xl"></i>
+                        </div>
+                    @endif
                 </div>
+
                 <div>
-                    <div class="font-bold text-lg text-gray-800">Pos Kios Tani</div>
-                    <div class="text-xs text-emerald-600 font-medium">Agribisnis System</div>
+                    <div class="font-bold text-lg text-gray-800">{{ $toko->nama_toko ?? 'Pos Kios Tani' }}</div>
                 </div>
             </div>
 
@@ -173,14 +180,14 @@
                     Keuangan
                 </div>
 
-                <a href="/capital-debt"
-                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('capital-debt*') }}">
+                <a href="/modals"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('modals*') }}">
                     <i class="fa-solid fa-hand-holding-dollar w-5"></i>
                     Modal & Hutang Toko
                 </a>
 
-                <a href="/receivables"
-                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('receivables*') }}">
+                <a href="/piutang"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('piutang*') }}">
                     <i class="fa-solid fa-money-bill-transfer w-5"></i>
                     Kelola Piutang
                 </a>
@@ -189,8 +196,8 @@
                     Laporan
                 </div>
 
-                <a href="/reports"
-                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('reports*') }}">
+                <a href="/laporan"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('laporan*') }}">
                     <i class="fa-solid fa-chart-bar w-5"></i>
                     Laporan
                 </a>
@@ -204,12 +211,12 @@
                     <i class="fa-solid fa-sliders w-5"></i>
                     Konfigurasi Toko
                 </a>
-
+                {{--
                 <a href="/users"
                     class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('users*') }}">
                     <i class="fa-solid fa-users-gear w-5"></i>
                     User & Preferensi
-                </a>
+                </a> --}}
 
             </nav>
 
@@ -254,11 +261,11 @@
                     <div id="userMenu" class="absolute right-0 mt-3 w-52 bg-white border border-emerald-100 rounded-xl shadow-2xl
                                opacity-0 invisible transition-all z-50 overflow-hidden">
 
-                        <a href="#"
+                        {{-- <a href="#"
                             class="flex items-center gap-3 px-5 py-3 text-sm text-gray-700 hover:bg-emerald-50 transition">
                             <i class="fa-solid fa-user-circle text-emerald-600"></i>
                             Profil Saya
-                        </a>
+                        </a> --}}
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf

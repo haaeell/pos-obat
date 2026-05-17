@@ -1,34 +1,24 @@
 <?php
 
-use App\Http\Controllers\BrandController;
-use App\Http\Controllers\CatalogController;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\ContactController;
-use App\Http\Controllers\EmployeeController;
-use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\ModalController;
-use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\PelangganController;
-use App\Http\Controllers\PenjualController;
+use App\Http\Controllers\PengaturanTokoController;
 use App\Http\Controllers\PiutangController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProdukController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ReportController;
-use App\Http\Controllers\SaleController;
-use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StockInController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TransaksiController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 
 Auth::routes();
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -87,4 +77,23 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{id}/cetak', [PiutangController::class, 'cetak'])
             ->name('cetak');
     });
+
+    Route::prefix('modals')->controller(ModalController::class)->group(function () {
+        Route::get('/', 'index')->name('modals.index');
+        Route::post('/', 'store')->name('modals.store');
+        Route::get('/{id}', 'show')->name('modals.show');
+        Route::put('/{id}', 'update')->name('modals.update');
+        Route::delete('/{id}', 'destroy')->name('modals.destroy');
+        Route::post('/{id}/bayar-cicilan', 'bayarCicilan')->name('modals.bayar-cicilan');
+        Route::post('/kalkulasi', 'kalkulasi')->name('modals.kalkulasi');
+    });
+
+    Route::prefix('settings')->name('settings.')->group(function () {
+        Route::get('/',        [PengaturanTokoController::class, 'index'])->name('index');
+        Route::put('/',        [PengaturanTokoController::class, 'update'])->name('update');
+        Route::delete('/logo', [PengaturanTokoController::class, 'deleteLogo'])->name('delete-logo');
+    });
+
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/export', [LaporanController::class, 'export'])->name('laporan.export');
 });
