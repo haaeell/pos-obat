@@ -3,131 +3,183 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Login - Barokah Computer</title>
+    <title>Login - Pos Kios Tani</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="https://fonts.bunny.net/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.bunny.net/css?family=Inter:300,400,500,600,700,800" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
         body {
-            background-color: #f0f4ff;
-            /* Motif Topography Soft */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 86c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm66-3c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zm-46-45c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm58 41c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM32 5c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm54 23c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM16 38c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm56 0c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM9 55c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm64 48c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM82 7c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-1 88c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm20-32c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm0-18c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM2 95c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm98-4c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM48 7c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-31 9c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm24 38c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-8 25c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm43-20c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-5-48c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm31 2c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-21 4c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM4 39c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm31 15c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm27 34c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm29-8c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM28 63c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm7-30c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm33-7c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM71 57c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-35 12c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm2-58c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm14 10c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-7 31c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-28 37c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm28-17c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm19-6c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-11 44c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-12-14c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm30-6c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-26-20c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm31 2c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-33-5c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm35-5c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM9 19c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm81 42c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM59 91c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-22-1c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm58-45c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM6 18c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm88 45c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM8 73c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm61 5c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM4 2c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm43 78c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm29 18c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm28-14c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-49-1c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-43-5c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM28 10c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm75 51c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM59 21c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm33 31c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM48 92c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zM21 24c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm0 35c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm99-13c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-79-7c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1zm-1-18c.552 0 1-.448 1-1s-.448-1-1-1-1 .448-1 1 .448 1 1 1y' fill='%236366f1' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 50%, #a7f3d0 100%);
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(5, 150, 105, 0.1) 0%, transparent 50%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2310b981' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .leaf-float {
+            animation: leafFloat 20s ease-in-out infinite;
+        }
+
+        @keyframes leafFloat {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
     </style>
 </head>
 
-<body class="min-h-screen flex items-center justify-center font-['Poppins'] p-4">
+<body class="min-h-screen flex items-center justify-center p-4">
 
     <div
-        class="w-full max-w-4xl bg-white rounded-3xl shadow-2xl border border-indigo-100 overflow-hidden flex flex-col md:flex-row min-h-[550px]">
+        class="w-full max-w-5xl bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-emerald-200 overflow-hidden flex flex-col lg:flex-row min-h-[600px]">
 
         <div
-            class="w-full md:w-1/2 bg-gradient-to-br from-indigo-700 to-blue-800 p-10 flex flex-col justify-center items-center text-center text-white">
-            <div class="bg-white/20 p-6 rounded-3xl backdrop-blur-md mb-6 ring-1 ring-white/30 shadow-xl">
-                <i class="fa-solid fa-laptop text-6xl text-white"></i>
+            class="w-full lg:w-[45%] bg-gradient-to-br from-emerald-600 via-green-600 to-teal-700 p-12 flex flex-col justify-center items-center text-center text-white relative overflow-hidden">
+
+            <div class="absolute top-0 left-0 w-full h-full opacity-10">
+                <div class="absolute top-10 left-10 w-32 h-32 bg-white/20 rounded-full blur-3xl"></div>
+                <div class="absolute bottom-10 right-10 w-40 h-40 bg-white/20 rounded-full blur-3xl"></div>
             </div>
 
-            <h1 class="text-3xl font-bold tracking-tight mb-2">
-                Barokah Computer
-            </h1>
+            <div class="relative z-10">
+                <div
+                    class="bg-white/25 p-8 rounded-3xl backdrop-blur-md mb-6 ring-2 ring-white/40 shadow-2xl leaf-float inline-block">
+                    <i class="fa-solid fa-leaf text-7xl text-white drop-shadow-lg"></i>
+                </div>
 
-            <p class="text-indigo-100 text-sm max-w-[280px] leading-relaxed">
-                @php
-                    $description = App\Models\Setting::where('key', 'deskripsi')->first();
-                   @endphp
-                {{ $description->value ?? '' }}
-            </p>
+                <h1 class="text-4xl font-extrabold tracking-tight mb-3 drop-shadow-md">
+                    Pos Kios Tani
+                </h1>
 
-            <div class="mt-12 flex gap-3 text-[10px] uppercase font-bold tracking-widest">
-                <div class="bg-white/10 px-4 py-2 rounded-full border border-white/20">Original</div>
-                <div class="bg-white/10 px-4 py-2 rounded-full border border-white/20">Bergaransi</div>
+                <div class="w-20 h-1 bg-white/60 mx-auto rounded-full mb-4"></div>
+
+                <p class="text-emerald-50 text-sm max-w-[300px] mx-auto leading-relaxed font-medium">
+                    @php
+                        $description = App\Models\Setting::where('key', 'deskripsi')->first();
+                    @endphp
+                    {{ $description->value ?? 'Sistem Manajemen Agribisnis Terpadu untuk Kemudahan Pengelolaan Usaha Tani Anda' }}
+                </p>
+
+                <div class="mt-14 flex flex-wrap justify-center gap-3 text-[10px] uppercase font-bold tracking-widest">
+                    <div class="bg-white/15 px-5 py-2.5 rounded-full border-2 border-white/30 backdrop-blur-sm">
+                        <i class="fa-solid fa-shield-halved mr-1.5"></i>Terpercaya
+                    </div>
+                    <div class="bg-white/15 px-5 py-2.5 rounded-full border-2 border-white/30 backdrop-blur-sm">
+                        <i class="fa-solid fa-bolt mr-1.5"></i>Efisien
+                    </div>
+                    <div class="bg-white/15 px-5 py-2.5 rounded-full border-2 border-white/30 backdrop-blur-sm">
+                        <i class="fa-solid fa-chart-line mr-1.5"></i>Akurat
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-            <div class="mb-8">
-                <h2 class="text-2xl font-bold text-gray-800">Login Admin</h2>
-                <p class="text-gray-500 text-sm mt-1">Gunakan akun terdaftar Anda untuk akses panel.</p>
+        <div class="w-full lg:w-[55%] p-8 lg:p-14 flex flex-col justify-center">
+            <div class="mb-10">
+                <h2 class="text-3xl font-extrabold gradient-text mb-2">Selamat Datang</h2>
+                <p class="text-gray-600 text-sm font-medium">Masuk menggunakan akun terdaftar untuk mengakses sistem</p>
             </div>
 
-            {{-- Alert Error Container --}}
             @if ($errors->any() || session('error'))
-                <div class="mb-6 overflow-hidden rounded-xl border border-red-200 bg-white shadow-sm flex" role="alert">
-                    {{-- Accent Bar --}}
-                    <div class="w-1.5 bg-red-500"></div>
+                <div class="mb-7 overflow-hidden rounded-2xl border-2 border-red-200 bg-gradient-to-r from-red-50 to-rose-50 shadow-sm flex"
+                    role="alert">
+                    <div class="w-2 bg-gradient-to-b from-red-500 to-rose-600"></div>
 
-                    <div class="p-4 flex flex-grow items-start">
-                        {{-- Icon Section --}}
+                    <div class="p-5 flex flex-grow items-start">
                         <div class="flex-shrink-0">
-                            <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
+                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                                <i class="fas fa-exclamation-circle text-red-600 text-lg"></i>
+                            </div>
                         </div>
 
-                        {{-- Content Section --}}
                         <div class="ml-4 flex-grow">
-                            <h3 class="text-sm font-semibold text-red-800 uppercase tracking-wide">
-                                Terjadi Kesalahan
+                            <h3 class="text-sm font-bold text-red-900 uppercase tracking-wide">
+                                Gagal Login
                             </h3>
 
-                            <div class="mt-1 text-sm text-red-700 leading-relaxed">
+                            <div class="mt-2 text-sm text-red-700 leading-relaxed">
                                 @if ($errors->any())
-                                    <ul class="list-disc list-inside space-y-1">
+                                    <ul class="list-disc list-inside space-y-1.5">
                                         @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
+                                            <li class="font-medium">{{ $error }}</li>
                                         @endforeach
                                     </ul>
                                 @else
-                                    <p>{{ session('error') }}</p>
+                                    <p class="font-medium">{{ session('error') }}</p>
                                 @endif
                             </div>
                         </div>
 
                         <button type="button" onclick="this.parentElement.parentElement.remove()"
-                            class="ml-auto text-red-400 hover:text-red-600 transition-colors">
-                            <i class="fas fa-times"></i>
+                            class="ml-auto text-red-400 hover:text-red-600 transition-colors p-1">
+                            <i class="fas fa-times text-lg"></i>
                         </button>
                     </div>
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('login') }}" class="space-y-5">
+            <form method="POST" action="{{ route('login') }}" class="space-y-6">
                 @csrf
 
                 <div>
-                    <label class="text-xs font-bold uppercase tracking-wider text-gray-600 ml-1">Email Address</label>
-                    <div class="relative mt-1">
-                        <span class="absolute inset-y-0 left-4 flex items-center text-indigo-500">
-                            <i class="fa-regular fa-envelope"></i>
+                    <label class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 ml-1 mb-2 block">
+                        <i class="fa-regular fa-envelope mr-1"></i>Alamat Email
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-5 flex items-center text-emerald-500">
+                            <i class="fa-regular fa-user text-lg"></i>
                         </span>
                         <input type="email" name="email" value="{{ old('email') }}" required
-                            class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none @error('email') border-red-400 @enderror"
-                            placeholder="nama@email.com">
+                            class="w-full pl-14 pr-5 py-4 rounded-xl border-2 border-emerald-200 focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 transition-all outline-none bg-white/80 font-medium @error('email') border-red-400 @enderror"
+                            placeholder="masukkan@email.com">
                     </div>
                 </div>
 
                 <div>
-                    <label class="text-xs font-bold uppercase tracking-wider text-gray-600 ml-1">Password</label>
-                    <div class="relative mt-1">
-                        <span class="absolute inset-y-0 left-4 flex items-center text-indigo-500">
-                            <i class="fa-solid fa-lock"></i>
+                    <label class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 ml-1 mb-2 block">
+                        <i class="fa-solid fa-lock mr-1"></i>Kata Sandi
+                    </label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-5 flex items-center text-emerald-500">
+                            <i class="fa-solid fa-key text-lg"></i>
                         </span>
                         <input type="password" id="password" name="password" required
-                            class="w-full pl-11 pr-12 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition outline-none @error('password') border-red-400 @enderror"
-                            placeholder="••••••••">
+                            class="w-full pl-14 pr-14 py-4 rounded-xl border-2 border-emerald-200 focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 transition-all outline-none bg-white/80 font-medium @error('password') border-red-400 @enderror"
+                            placeholder="••••••••••">
 
                         <button type="button" id="togglePassword"
-                            class="absolute inset-y-0 right-4 flex items-center text-gray-400 hover:text-indigo-600 transition">
-                            <i class="fa-regular fa-eye"></i>
+                            class="absolute inset-y-0 right-5 flex items-center text-gray-400 hover:text-emerald-600 transition-colors">
+                            <i class="fa-regular fa-eye text-lg"></i>
                         </button>
                     </div>
                 </div>
 
-
                 <button type="submit" id="loginBtn"
-                    class="w-full mt-2 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold shadow-xl shadow-indigo-100 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-                    <span id="btnText">Masuk ke Dashboard</span>
+                    class="w-full mt-4 py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold text-base shadow-xl shadow-emerald-200 active:scale-[0.98] transition-all flex items-center justify-center gap-3 group">
+                    <span id="btnText">
+                        <i class="fa-solid fa-right-to-bracket mr-2 group-hover:translate-x-1 transition-transform"></i>
+                        Masuk ke Sistem
+                    </span>
                     <svg id="btnLoader" class="hidden w-5 h-5 animate-spin text-white"
                         xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
@@ -137,9 +189,12 @@
                 </button>
             </form>
 
-            <p class="text-center text-gray-400 text-xs mt-8">
-                &copy; 2026 Barokah Computer.
-            </p>
+            <div class="mt-10 pt-8 border-t border-emerald-100">
+                <p class="text-center text-gray-500 text-xs font-semibold flex items-center justify-center gap-2">
+                    <i class="fa-regular fa-copyright"></i>
+                    2025 Pos Kios Tani - Sistem Agribisnis Digital
+                </p>
+            </div>
         </div>
     </div>
 
@@ -161,8 +216,8 @@
 
         form.addEventListener("submit", function () {
             btn.disabled = true;
-            btn.classList.add("opacity-80");
-            btnText.textContent = "Mengautentikasi...";
+            btn.classList.add("opacity-80", "cursor-not-allowed");
+            btnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Memproses Autentikasi...';
             btnLoader.classList.remove("hidden");
         });
     </script>
