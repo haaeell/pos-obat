@@ -167,13 +167,13 @@ transition-transform duration-300 flex flex-col">
                 </div>
 
                 <a href="/transactions/pos"
-                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('sales') }}">
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('transactions/pos') }}">
                     <i class="fa-solid fa-cart-shopping w-5"></i>
                     Tambah Transaksi
                 </a>
 
                 <a href="/transactions"
-                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('sales') }}">
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('transactions') }}">
                     <i class="fa-solid fa-history w-5"></i>
                     Riwayat Transaksi
                 </a>
