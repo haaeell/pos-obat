@@ -97,11 +97,13 @@
         @endphp
 
         <aside id="nav-sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-72
-        bg-white/95 backdrop-blur-sm border-r border-emerald-100
-        shadow-xl transform -translate-x-full lg:translate-x-0
-        transition-transform duration-300 flex flex-col">
+bg-white/95 backdrop-blur-sm border-r border-emerald-100
+shadow-xl transform -translate-x-full lg:translate-x-0
+transition-transform duration-300 flex flex-col">
 
-            <div class="h-20 flex items-center gap-3 px-6 border-b ">
+            {{-- LOGO: sticky, tidak ikut scroll --}}
+            <div
+                class="sticky top-0 z-10 h-20 flex items-center gap-3 px-6 border-b bg-white/95 backdrop-blur-sm flex-shrink-0">
                 @php $toko = App\Models\PengaturanToko::instance(); @endphp
 
                 <div class="w-12 h-12 rounded-xl overflow-hidden shadow-lg flex-shrink-0">
@@ -220,9 +222,10 @@
 
             </nav>
 
-            <div class="p-4 border-t border-emerald-100 bg-gradient-to-r from-emerald-50 to-green-50">
+
+            <div class="p-4 border-t border-emerald-100 bg-gradient-to-r from-emerald-50 to-green-50 flex-shrink-0">
                 <div class="text-xs text-center text-emerald-700 font-medium">
-                    © 2025 Pos Kios Tani
+                    © 2025 Pos
                 </div>
             </div>
 
