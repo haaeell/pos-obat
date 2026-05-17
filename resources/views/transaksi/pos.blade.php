@@ -1668,9 +1668,9 @@
                 }).join('');
 
                 const headerToko = `
-                    ${TOKO.logo ? `<div style="text-align:center;margin-bottom:4px;">
+                    ${TOKO.logo ? `<div style="display:flex;justify-content:center;margin-bottom:4px;">
                         <img src="/storage/${TOKO.logo}" alt="Logo"
-                            style="max-width:80px;max-height:60px;object-fit:contain;">
+                            style="max-width:80px;max-height:60px;object-fit:contain;display:block;">
                     </div>` : ''}
                     <div class="sk-center sk-bold" style="font-size:13px;">${TOKO.nama}</div>
                     ${TOKO.alamat  ? `<div class="sk-center sk-muted" style="font-size:9px;">${TOKO.alamat}</div>`  : ''}
