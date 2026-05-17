@@ -67,10 +67,16 @@
                     </ol>
                 </nav>
             </div>
+           <div class="flex items-center gap-2">
+            <button onclick="hapusSemua()"
+            class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition flex items-center gap-2 text-sm font-semibold">
+            <i class="fa-solid fa-trash-can"></i> Hapus Semua
+            </button>
             <button onclick="openCreateModal()"
                 class="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition flex items-center gap-2 text-sm font-semibold">
                 <i class="fa-solid fa-plus"></i> Tambah Produk
             </button>
+           </div>
         </div>
 
         {{-- FILTER BAR --}}
@@ -180,6 +186,11 @@
 
                             <td class="px-4 py-3 text-center">
                                 <div class="flex items-center justify-center gap-1">
+                                    <button onclick="printBarcode({{ $item->id }})"
+                                        class="px-3 py-1.5 bg-slate-600 text-white hover:bg-slate-700 rounded-lg transition text-xs font-semibold"
+                                        title="Cetak Barcode">
+                                        <i class="fa-solid fa-barcode"></i>
+                                    </button>
                                     <button onclick='openEditModal(@json($item))'
                                         class="px-3 py-1.5 bg-amber-400 hover:bg-amber-500 rounded-lg transition text-xs font-semibold"
                                         title="Edit">
@@ -439,7 +450,52 @@
         </div>
     </div>
 
+    <div id="barcodeModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black/60 backdrop-blur-sm">
+        <div class="bg-white rounded-2xl shadow-xl border w-full max-w-sm">
+    
+            <div class="bg-slate-700 px-5 py-3 rounded-t-2xl flex justify-between items-center text-white">
+                <h3 class="font-bold flex items-center gap-2">
+                    <i class="fa-solid fa-barcode"></i> Cetak Label Barcode
+                </h3>
+                <button onclick="closeBarcodeModal()" class="hover:rotate-90 transition-transform">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+    
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <label class="text-xs font-semibold text-slate-600">Jumlah Cetak:</label>
+                    <input type="number" id="printQty" value="1" min="1" max="99"
+                        class="w-20 border border-slate-300 rounded-lg px-3 py-1.5 text-sm text-center">
+                </div>
+    
+                <div class="border-2 border-dashed border-slate-200 rounded-xl p-4 bg-slate-50 flex justify-center">
+                    <div id="barcodePreview" class="text-center"></div>
+                </div>
+    
+                <div class="flex gap-2 mt-4">
+                    <button onclick="closeBarcodeModal()"
+                        class="flex-1 py-2 border border-slate-300 rounded-xl text-sm font-semibold hover:bg-slate-100">
+                        Batal
+                    </button>
+                    <button onclick="doPrint()"
+                        class="flex-1 py-2 bg-slate-700 text-white rounded-xl text-sm font-semibold hover:bg-slate-800 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-print"></i> Cetak
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @push('scripts')
+    <script>
+        var productData = {
+            @foreach ($produk as $item)
+                {{ $item->id }}: @json($item),
+            @endforeach
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
         <script>
         $(document).ready(function () {
 
@@ -478,6 +534,30 @@
             window.resetFilter = function () {
                 $('#filterKategori, #filterSupplier, #filterStatus').val('')
                 table.column(3).search('').column(4).search('').draw()
+            }
+
+            window.hapusSemua = function () {
+                Swal.fire({
+                    title: 'Hapus Semua Produk?',
+                    html: `<span class="text-red-600 font-semibold">Semua produk, stok batch, dan barang masuk akan dihapus permanen.</span><br><small class="text-slate-500">Aksi ini tidak dapat dibatalkan.</small>`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#dc2626',
+                    cancelButtonText: 'Batal',
+                    confirmButtonText: 'Ya, hapus semua',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const f = document.createElement('form')
+                        f.method = 'POST'
+                        f.action = `/produk/hapus-semua`
+                        f.innerHTML = `
+                            <input type="hidden" name="_token" value="${$('meta[name=csrf-token]').attr('content')}">
+                            <input type="hidden" name="_method" value="DELETE">
+                        `
+                        document.body.appendChild(f)
+                        f.submit()
+                    }
+                })
             }
 
             // ── Modal helpers ──────────────────────────────────────────────
@@ -589,6 +669,86 @@
                     }
                 })
             }
+
+            let currentBarcodeProduct = null;
+
+window.printBarcode = function (id) {
+    const p = productData[id];
+    currentBarcodeProduct = p;
+
+    const preview = document.getElementById('barcodePreview');
+    preview.innerHTML = '';
+
+    document.getElementById('barcodeModal').classList.remove('hidden');
+
+    const svg = document.createElement('svg');
+    svg.id = 'svgPreview';
+    svg.style.width = '100%';
+    svg.style.display = 'block';
+    svg.style.margin = '0 auto';
+    preview.appendChild(svg);
+
+    preview.insertAdjacentHTML('beforeend',
+        '<p style="font-size:11px;font-weight:bold;margin-top:4px;">' + p.kode + '</p>' +
+        '<p style="font-size:11px;margin-top:2px;">' + p.nama + '</p>' +
+        '<p style="font-size:12px;font-weight:bol;margin-top:4px;">Rp ' +
+            new Intl.NumberFormat('id-ID').format(p.harga_jual) +
+        '</p>'
+    );
+
+    setTimeout(function () {
+        JsBarcode(document.getElementById('svgPreview'), p.kode, {
+            format: "CODE128",
+            width: 1,
+            height: 40,
+            displayValue: false,
+            margin: 2
+        });
+    }, 100);
+};
+
+window.closeBarcodeModal = function () {
+    document.getElementById('barcodeModal').classList.add('hidden');
+    currentBarcodeProduct = null;
+};
+
+window.doPrint = function () {
+    const qty = parseInt(document.getElementById('printQty').value) || 1;
+    const p   = currentBarcodeProduct;
+
+    const tmpSvg = document.createElement('svg');
+    JsBarcode(tmpSvg, p.kode, {
+        format: "CODE128", width: 1, height: 45,
+        displayValue: false, margin: 2
+    });
+
+    const labelHtml =
+        '<div class="label">' +
+        tmpSvg.outerHTML +
+        '<div class="code">' + p.kode + '</div>' +
+        '<div class="name">' + p.nama + '</div>' +
+        '<div class="price">Rp ' + new Intl.NumberFormat('id-ID').format(p.harga_jual) + '</div>' +
+        '</div>';
+
+    const win = window.open('', '_blank');
+    win.document.write(
+        '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Label Barcode</title>' +
+        '<style>' +
+        '* { margin:0; padding:0; box-sizing:border-box; }' +
+        '@page { size: 58mm auto; margin: 2mm; }' +
+        'body { font-family: Arial, sans-serif; width: 54mm; }' +
+        '.label { width:54mm; padding:1mm; text-align:center; page-break-after:always; }' +
+        'svg { width:50mm; height:auto; display:block; margin:4px auto 0; }' +
+        '.code  { font-size:8pt; font-weight:bold; margin-top:1mm; letter-spacing:1px; }' +
+        '.name  { font-size:8pt; font-weight:bold; margin-top:1mm; }' +
+        '.price { font-size:10pt; font-weight:bold; margin-top:1mm; }' +
+        '</style></head><body>' +
+        labelHtml.repeat(qty) +
+        '<script>window.onload=function(){ window.print(); window.close(); }<\/script>' +
+        '</body></html>'
+    );
+    win.document.close();
+};
         })
         </script>
     @endpush

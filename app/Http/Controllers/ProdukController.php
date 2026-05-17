@@ -2,11 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\BarangMasuk;
-use App\Models\Produk;
+use App\Models\BarangMasukDetail;
 use App\Models\Kategori;
+use App\Models\Piutang;
+use App\Models\PiutangPembayaran;
+use App\Models\Produk;
 use App\Models\StokBatch;
 use App\Models\Supplier;
+use App\Models\Transaksi;
+use App\Models\TransaksiDetail;
+use App\Models\TransaksiFifoLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -159,5 +166,24 @@ class ProdukController extends Controller
         $produk->delete();
 
         return redirect()->back()->with('success', 'Produk berhasil dihapus.');
+    }
+
+    public function destroyAll()
+    {
+        Produk::whereNotNull('foto')->get()->each(function ($p) {
+            Storage::disk('public')->delete($p->foto);
+        });
+
+        TransaksiFifoLog::query()->delete();
+        TransaksiDetail::query()->delete();
+        Transaksi::query()->delete();
+        StokBatch::query()->delete();
+        BarangMasukDetail::query()->delete();
+        BarangMasuk::query()->delete();
+        PiutangPembayaran::query()->delete();
+        Piutang::query()->delete();
+        Produk::query()->delete();
+
+        return redirect()->back()->with('success', 'Semua produk berhasil dihapus.');
     }
 }

@@ -40,10 +40,11 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('produk')->controller(ProdukController::class)->group(function () {
-        Route::get('/',        'index')->name('produk.index');
-        Route::post('/',       'store')->name('produk.store');
-        Route::put('/{id}',    'update')->name('produk.update');
-        Route::delete('/{id}', 'destroy')->name('produk.destroy');
+        Route::get('/',              'index')->name('produk.index');
+        Route::post('/',             'store')->name('produk.store');
+        Route::put('/{id}',          'update')->name('produk.update');
+        Route::delete('/hapus-semua', 'destroyAll')->name('produk.destroy-all');
+        Route::delete('/{id}',       'destroy')->name('produk.destroy');
     });
 
     Route::prefix('stock-in')->controller(StockInController::class)->group(function () {
@@ -94,6 +95,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/logo', [PengaturanTokoController::class, 'deleteLogo'])->name('delete-logo');
     });
 
-    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan',        [LaporanController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/cetak',  [LaporanController::class, 'cetak'])->name('laporan.cetak');
     Route::get('/laporan/export', [LaporanController::class, 'export'])->name('laporan.export');
 });
