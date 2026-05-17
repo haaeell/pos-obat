@@ -37,7 +37,7 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             [
                 'nama'       => 'Budi Santoso',
-                'email'      => 'owner@gmail.com',
+                'email'      => 'admin@gmail.com',
                 'password'   => Hash::make('password'),
                 'role'       => 'owner',
                 'is_aktif'   => true,
