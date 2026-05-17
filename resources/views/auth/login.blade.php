@@ -6,195 +6,276 @@
     <title>Login - Pos Kios Tani</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="https://fonts.bunny.net/css?family=Inter:300,400,500,600,700,800" rel="stylesheet">
+    <link href="https://fonts.bunny.net/css?family=Plus+Jakarta+Sans:300,400,500,600,700,800" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
         * {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 50%, #a7f3d0 100%);
-            background-image:
-                radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(5, 150, 105, 0.1) 0%, transparent 50%),
-                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2310b981' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            position: relative;
+            overflow: hidden;
         }
 
-        .leaf-float {
-            animation: leafFloat 20s ease-in-out infinite;
+        body::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background:
+                radial-gradient(circle at 30% 20%, rgba(34, 197, 94, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+            animation: bgMove 15s ease-in-out infinite;
         }
 
-        @keyframes leafFloat {
+        @keyframes bgMove {
 
             0%,
             100% {
-                transform: translateY(0px) rotate(0deg);
+                transform: translate(0, 0);
             }
 
             50% {
-                transform: translateY(-20px) rotate(5deg);
+                transform: translate(-50px, -50px);
             }
         }
 
-        .gradient-text {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .input-glow:focus {
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        }
+
+        .login-illustration {
+            background: linear-gradient(135deg, #22c55e 0%, #10b981 50%, #059669 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-illustration::before {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -100px;
+            right: -100px;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.3;
+            }
+        }
+
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .shine {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shine::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+
+        .shine:hover::after {
+            left: 100%;
         }
     </style>
 </head>
 
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="min-h-screen flex items-center justify-center p-6 relative">
 
-    <div
-        class="w-full max-w-5xl bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-emerald-200 overflow-hidden flex flex-col lg:flex-row min-h-[600px]">
+    <div class="absolute top-0 left-0 w-full h-full pointer-events-none">
+        <div class="absolute top-20 left-20 w-2 h-2 bg-green-400 rounded-full animate-ping"></div>
+        <div class="absolute top-40 right-32 w-1 h-1 bg-emerald-400 rounded-full animate-ping"
+            style="animation-delay: 0.5s"></div>
+        <div class="absolute bottom-32 left-40 w-1.5 h-1.5 bg-green-300 rounded-full animate-ping"
+            style="animation-delay: 1s"></div>
+    </div>
 
-        <div
-            class="w-full lg:w-[45%] bg-gradient-to-br from-emerald-600 via-green-600 to-teal-700 p-12 flex flex-col justify-center items-center text-center text-white relative overflow-hidden">
+    <div class="w-full max-w-6xl relative z-10">
 
-            <div class="absolute top-0 left-0 w-full h-full opacity-10">
-                <div class="absolute top-10 left-10 w-32 h-32 bg-white/20 rounded-full blur-3xl"></div>
-                <div class="absolute bottom-10 right-10 w-40 h-40 bg-white/20 rounded-full blur-3xl"></div>
-            </div>
+        <div class="grid lg:grid-cols-2 gap-0 glass-card rounded-3xl overflow-hidden shadow-2xl">
 
-            <div class="relative z-10">
-                <div
-                    class="bg-white/25 p-8 rounded-3xl backdrop-blur-md mb-6 ring-2 ring-white/40 shadow-2xl leaf-float inline-block">
-                    <i class="fa-solid fa-leaf text-7xl text-white drop-shadow-lg"></i>
+            <div class="p-10 lg:p-14 bg-white/95 backdrop-blur-sm order-2 lg:order-1">
+
+                <div class="mb-8">
+                    <div class="inline-block px-4 py-2 bg-green-50 rounded-full mb-4">
+                        <span class="text-green-700 text-xs font-bold uppercase tracking-wider">
+                            <i class="fa-solid fa-shield-halved mr-1"></i>Portal Admin
+                        </span>
+                    </div>
+                    <h2 class="text-3xl font-black text-gray-900 mb-2">Masuk Akun</h2>
+                    <p class="text-gray-600 font-medium">Silakan login untuk melanjutkan</p>
                 </div>
 
-                <h1 class="text-4xl font-extrabold tracking-tight mb-3 drop-shadow-md">
-                    Pos Kios Tani
-                </h1>
+                @if ($errors->any() || session('error'))
+                    <div class="mb-6 rounded-2xl bg-red-50 border-l-4 border-red-500 p-5" role="alert">
+                        <div class="flex items-start gap-3">
+                            <div class="flex-shrink-0 w-8 h-8 bg-red-500 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-exclamation text-white text-sm"></i>
+                            </div>
 
-                <div class="w-20 h-1 bg-white/60 mx-auto rounded-full mb-4"></div>
+                            <div class="flex-1">
+                                <h3 class="text-red-900 font-bold text-sm mb-1">Login Gagal</h3>
+                                <div class="text-red-700 text-sm">
+                                    @if ($errors->any())
+                                        @foreach ($errors->all() as $error)
+                                            <p>{{ $error }}</p>
+                                        @endforeach
+                                    @else
+                                        <p>{{ session('error') }}</p>
+                                    @endif
+                                </div>
+                            </div>
 
-                <p class="text-emerald-50 text-sm max-w-[300px] mx-auto leading-relaxed font-medium">
-                    @php
-                        $description = App\Models\Setting::where('key', 'deskripsi')->first();
-                    @endphp
-                    {{ $description->value ?? 'Sistem Manajemen Agribisnis Terpadu untuk Kemudahan Pengelolaan Usaha Tani Anda' }}
-                </p>
+                            <button type="button" onclick="this.closest('div[role=alert]').remove()"
+                                class="text-red-400 hover:text-red-600">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                @endif
 
-                <div class="mt-14 flex flex-wrap justify-center gap-3 text-[10px] uppercase font-bold tracking-widest">
-                    <div class="bg-white/15 px-5 py-2.5 rounded-full border-2 border-white/30 backdrop-blur-sm">
-                        <i class="fa-solid fa-shield-halved mr-1.5"></i>Terpercaya
+                <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                    @csrf
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Email</label>
+                        <div class="relative group">
+                            <div
+                                class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-600 transition">
+                                <i class="fa-solid fa-at"></i>
+                            </div>
+                            <input type="email" name="email" value="{{ old('email') }}" required
+                                class="input-glow w-full pl-12 pr-4 py-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:bg-white transition-all outline-none text-gray-900 font-medium placeholder:text-gray-400"
+                                placeholder="admin@kiostani.com">
+                        </div>
                     </div>
-                    <div class="bg-white/15 px-5 py-2.5 rounded-full border-2 border-white/30 backdrop-blur-sm">
-                        <i class="fa-solid fa-bolt mr-1.5"></i>Efisien
+
+                    <div>
+                        <label class="block text-sm font-bold text-gray-700 mb-2">Password</label>
+                        <div class="relative group">
+                            <div
+                                class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-green-600 transition">
+                                <i class="fa-solid fa-lock"></i>
+                            </div>
+                            <input type="password" id="password" name="password" required
+                                class="input-glow w-full pl-12 pr-12 py-3.5 bg-gray-50 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:bg-white transition-all outline-none text-gray-900 font-medium placeholder:text-gray-400"
+                                placeholder="Masukkan password">
+                            <button type="button" id="togglePassword"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-green-600 transition">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
-                    <div class="bg-white/15 px-5 py-2.5 rounded-full border-2 border-white/30 backdrop-blur-sm">
-                        <i class="fa-solid fa-chart-line mr-1.5"></i>Akurat
-                    </div>
+
+                    <button type="submit" id="loginBtn"
+                        class="shine w-full mt-6 py-4 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold rounded-xl shadow-lg shadow-green-500/30 transition-all duration-300 active:scale-95">
+                        <span id="btnText">
+                            <i class="fa-solid fa-arrow-right-to-bracket mr-2"></i>
+                            Login Sekarang
+                        </span>
+                        <i id="btnLoader" class="hidden fa-solid fa-circle-notch fa-spin"></i>
+                    </button>
+                </form>
+
+                <div class="mt-8 pt-6 border-t border-gray-200 text-center">
+                    <p class="text-xs text-gray-500 font-medium">
+                        © 2025 Pos Kios Tani. All rights reserved.
+                    </p>
                 </div>
             </div>
+
+            <div
+                class="login-illustration p-12 lg:p-16 flex flex-col justify-center items-center text-white relative order-1 lg:order-2 min-h-[400px] lg:min-h-full">
+
+                <div class="relative z-10 text-center">
+
+                    <div class="mb-8 floating">
+                        <div
+                            class="w-32 h-32 mx-auto bg-white/20 rounded-3xl backdrop-blur-md flex items-center justify-center border-4 border-white/30 shadow-2xl rotate-6">
+                            <i class="fa-solid fa-seedling text-7xl drop-shadow-lg"></i>
+                        </div>
+                    </div>
+
+                    <h3 class="text-4xl font-black mb-4 drop-shadow-lg">Kelola Usaha Tani</h3>
+                    <p class="text-green-50 text-lg mb-8 max-w-md mx-auto font-medium leading-relaxed">
+                        Platform digital untuk kemudahan pengelolaan stok, penjualan, dan laporan keuangan usaha tani
+                        Anda
+                    </p>
+
+                    <div class="grid grid-cols-3 gap-4 max-w-md mx-auto">
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
+                            <div class="text-3xl font-black mb-1">500+</div>
+                            <div class="text-xs text-green-100 font-semibold">Transaksi</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
+                            <div class="text-3xl font-black mb-1">98%</div>
+                            <div class="text-xs text-green-100 font-semibold">Akurasi</div>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
+                            <div class="text-3xl font-black mb-1">24/7</div>
+                            <div class="text-xs text-green-100 font-semibold">Support</div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="absolute bottom-8 left-8 right-8 flex justify-center gap-2 z-10">
+                    <div class="w-2 h-2 bg-white rounded-full"></div>
+                    <div class="w-8 h-2 bg-white rounded-full"></div>
+                    <div class="w-2 h-2 bg-white/50 rounded-full"></div>
+                </div>
+            </div>
+
         </div>
 
-        <div class="w-full lg:w-[55%] p-8 lg:p-14 flex flex-col justify-center">
-            <div class="mb-10">
-                <h2 class="text-3xl font-extrabold gradient-text mb-2">Selamat Datang</h2>
-                <p class="text-gray-600 text-sm font-medium">Masuk menggunakan akun terdaftar untuk mengakses sistem</p>
-            </div>
-
-            @if ($errors->any() || session('error'))
-                <div class="mb-7 overflow-hidden rounded-2xl border-2 border-red-200 bg-gradient-to-r from-red-50 to-rose-50 shadow-sm flex"
-                    role="alert">
-                    <div class="w-2 bg-gradient-to-b from-red-500 to-rose-600"></div>
-
-                    <div class="p-5 flex flex-grow items-start">
-                        <div class="flex-shrink-0">
-                            <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-                                <i class="fas fa-exclamation-circle text-red-600 text-lg"></i>
-                            </div>
-                        </div>
-
-                        <div class="ml-4 flex-grow">
-                            <h3 class="text-sm font-bold text-red-900 uppercase tracking-wide">
-                                Gagal Login
-                            </h3>
-
-                            <div class="mt-2 text-sm text-red-700 leading-relaxed">
-                                @if ($errors->any())
-                                    <ul class="list-disc list-inside space-y-1.5">
-                                        @foreach ($errors->all() as $error)
-                                            <li class="font-medium">{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                @else
-                                    <p class="font-medium">{{ session('error') }}</p>
-                                @endif
-                            </div>
-                        </div>
-
-                        <button type="button" onclick="this.parentElement.parentElement.remove()"
-                            class="ml-auto text-red-400 hover:text-red-600 transition-colors p-1">
-                            <i class="fas fa-times text-lg"></i>
-                        </button>
-                    </div>
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('login') }}" class="space-y-6">
-                @csrf
-
-                <div>
-                    <label class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 ml-1 mb-2 block">
-                        <i class="fa-regular fa-envelope mr-1"></i>Alamat Email
-                    </label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-5 flex items-center text-emerald-500">
-                            <i class="fa-regular fa-user text-lg"></i>
-                        </span>
-                        <input type="email" name="email" value="{{ old('email') }}" required
-                            class="w-full pl-14 pr-5 py-4 rounded-xl border-2 border-emerald-200 focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 transition-all outline-none bg-white/80 font-medium @error('email') border-red-400 @enderror"
-                            placeholder="masukkan@email.com">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="text-xs font-extrabold uppercase tracking-wider text-emerald-800 ml-1 mb-2 block">
-                        <i class="fa-solid fa-lock mr-1"></i>Kata Sandi
-                    </label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-5 flex items-center text-emerald-500">
-                            <i class="fa-solid fa-key text-lg"></i>
-                        </span>
-                        <input type="password" id="password" name="password" required
-                            class="w-full pl-14 pr-14 py-4 rounded-xl border-2 border-emerald-200 focus:ring-4 focus:ring-emerald-100 focus:border-emerald-500 transition-all outline-none bg-white/80 font-medium @error('password') border-red-400 @enderror"
-                            placeholder="••••••••••">
-
-                        <button type="button" id="togglePassword"
-                            class="absolute inset-y-0 right-5 flex items-center text-gray-400 hover:text-emerald-600 transition-colors">
-                            <i class="fa-regular fa-eye text-lg"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <button type="submit" id="loginBtn"
-                    class="w-full mt-4 py-4 rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white font-bold text-base shadow-xl shadow-emerald-200 active:scale-[0.98] transition-all flex items-center justify-center gap-3 group">
-                    <span id="btnText">
-                        <i class="fa-solid fa-right-to-bracket mr-2 group-hover:translate-x-1 transition-transform"></i>
-                        Masuk ke Sistem
-                    </span>
-                    <svg id="btnLoader" class="hidden w-5 h-5 animate-spin text-white"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
-                        </circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-                    </svg>
-                </button>
-            </form>
-
-            <div class="mt-10 pt-8 border-t border-emerald-100">
-                <p class="text-center text-gray-500 text-xs font-semibold flex items-center justify-center gap-2">
-                    <i class="fa-regular fa-copyright"></i>
-                    2025 Pos Kios Tani - Sistem Agribisnis Digital
-                </p>
-            </div>
+        <div class="mt-6 text-center">
+            <p class="text-gray-400 text-sm font-medium">
+                <i class="fa-solid fa-headset mr-2"></i>
+                Butuh bantuan? Hubungi support kami
+            </p>
         </div>
     </div>
 
@@ -214,10 +295,9 @@
             toggleIcon.classList.toggle("fa-eye-slash");
         });
 
-        form.addEventListener("submit", function () {
+        form.addEventListener("submit", function (e) {
             btn.disabled = true;
-            btn.classList.add("opacity-80", "cursor-not-allowed");
-            btnText.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-2"></i>Memproses Autentikasi...';
+            btnText.classList.add("hidden");
             btnLoader.classList.remove("hidden");
         });
     </script>
