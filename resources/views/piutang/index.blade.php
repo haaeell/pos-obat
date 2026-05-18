@@ -74,7 +74,7 @@
 
                     <select name="status"
                         class="mt-1 w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm
-                                                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                                                                                               focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
                         <option value="">Semua Status</option>
                         <option value="belum_bayar" @selected(request('status') == 'belum_bayar')>
                             Belum Bayar
@@ -95,7 +95,7 @@
 
                     <input type="date" name="dari" value="{{ request('dari') }}"
                         class="mt-1 w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm
-                                                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                                                                                               focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
                 </div>
 
                 <div>
@@ -105,7 +105,7 @@
 
                     <input type="date" name="sampai" value="{{ request('sampai') }}"
                         class="mt-1 w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm
-                                                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                                                                                               focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
                 </div>
 
                 <div class="md:col-span-4 flex justify-end gap-2">
@@ -212,6 +212,11 @@
                                         </button>
                                     @endif
 
+                                    <a href="{{ route('piutang.print', $item->id) }}" target="_blank"
+                                        class="px-3 py-1 bg-sky-600 text-white rounded hover:bg-sky-700 transition">
+                                        <i class="fa-solid fa-print text-xs"></i>
+                                    </a>
+
                                 </div>
                             </td>
                         </tr>
@@ -274,9 +279,11 @@
                         Jumlah Bayar
                     </label>
 
-                    <input type="number" name="jumlah" min="1" required
-                        class="mt-1 w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm
-                                                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                    <input type="text" id="jumlahBayarFormat" class="mt-1 w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm
+                                    focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none"
+                        placeholder="Rp 0">
+
+                    <input type="hidden" name="jumlah" id="jumlahBayar">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
@@ -288,7 +295,7 @@
 
                         <input type="date" name="tanggal" value="{{ now()->toDateString() }}" required
                             class="mt-1 w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm
-                                                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                                                                                               focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
                     </div>
 
                     <div>
@@ -298,10 +305,9 @@
 
                         <select name="metode_bayar"
                             class="mt-1 w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm
-                                                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                                                                                               focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
                             <option value="tunai">Tunai</option>
                             <option value="transfer">Transfer</option>
-                            <option value="qris">QRIS</option>
                         </select>
                     </div>
 
@@ -314,7 +320,7 @@
 
                     <textarea name="catatan" rows="2"
                         class="mt-1 w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm
-                                                                           focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none resize-none"></textarea>
+                                                                                               focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none resize-none"></textarea>
                 </div>
 
                 <div class="flex justify-end gap-2 pt-2">
@@ -479,6 +485,25 @@
         <script>
             $(document).ready(function () {
 
+                const jumlahInput = $('#jumlahBayarFormat')
+                const jumlahHidden = $('#jumlahBayar')
+
+                jumlahInput.on('input', function () {
+
+                    let value = $(this).val().replace(/[^0-9]/g, '')
+
+                    jumlahHidden.val(value)
+
+                    if (value === '') {
+                        $(this).val('')
+                        return
+                    }
+
+                    $(this).val(
+                        'Rp ' + Number(value).toLocaleString('id-ID')
+                    )
+                })
+
                 $('#datatable').DataTable({
                     language: {
                         search: 'Cari:',
@@ -501,7 +526,8 @@
                     $('#bayarSisa').val(
                         'Rp ' + Number(data.sisa_tagihan).toLocaleString('id-ID')
                     )
-
+                    $('#jumlahBayarFormat').val('')
+                    $('#jumlahBayar').val('')
                     $('#bayarModal').removeClass('hidden')
                 }
 
@@ -550,36 +576,36 @@
                         data.pembayaran.forEach(function (item) {
 
                             rows += `
-                                                            <tr class="border-t">
-                                                                <td class="px-4 py-3">
-                                                                    ${new Date(item.tanggal).toLocaleDateString('id-ID')}
-                                                                </td>
+                                                                                                    <tr class="border-t">
+                                                                                                        <td class="px-4 py-3">
+                                                                                                            ${new Date(item.tanggal).toLocaleDateString('id-ID')}
+                                                                                                        </td>
 
-                                                                <td class="px-4 py-3 capitalize">
-                                                                    ${item.metode_bayar}
-                                                                </td>
+                                                                                                        <td class="px-4 py-3 capitalize">
+                                                                                                            ${item.metode_bayar}
+                                                                                                        </td>
 
-                                                                <td class="px-4 py-3 text-right font-semibold text-emerald-600">
-                                                                    Rp ${Number(item.jumlah).toLocaleString('id-ID')}
-                                                                </td>
+                                                                                                        <td class="px-4 py-3 text-right font-semibold text-emerald-600">
+                                                                                                            Rp ${Number(item.jumlah).toLocaleString('id-ID')}
+                                                                                                        </td>
 
-                                                                <td class="px-4 py-3">
-                                                                    ${item.user?.nama ?? '-'}
-                                                                </td>
-                                                            </tr>
-                                                            `
+                                                                                                        <td class="px-4 py-3">
+                                                                                                            ${item.user?.nama ?? '-'}
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                    `
                         })
 
                     } else {
 
                         rows = `
-                                                                <tr>
-                                                                    <td colspan="4"
-                                                                        class="px-4 py-6 text-center text-slate-500">
-                                                                        Belum ada pembayaran.
-                                                                    </td>
-                                                                </tr>
-                                                            `
+                                                                                                        <tr>
+                                                                                                            <td colspan="4"
+                                                                                                                class="px-4 py-6 text-center text-slate-500">
+                                                                                                                Belum ada pembayaran.
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                    `
                     }
 
                     $('#detailPembayaranBody').html(rows)

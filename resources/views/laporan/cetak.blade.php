@@ -67,6 +67,22 @@
             margin-bottom: 8px;
         }
 
+        .bg-emerald {
+            background: #059669;
+        }
+
+        .bg-red {
+            background: #dc2626;
+        }
+
+        .bg-orange {
+            background: #ea580c;
+        }
+
+        .bg-slate {
+            background: #475569;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -97,8 +113,20 @@
             font-weight: 700;
         }
 
+        table tr.total-red {
+            background: #fef2f2;
+        }
+
+        table tr.total-red td {
+            font-weight: 700;
+        }
+
         table tr.negative td:last-child {
             color: #ef4444;
+        }
+
+        table tr.orange td:last-child {
+            color: #ea580c;
         }
 
         .grid {
@@ -129,23 +157,33 @@
             color: #94a3b8;
         }
 
+        /* ── Stat boxes row 1 ── */
         .stat-grid {
             display: table;
             width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
 
         .stat-box {
             display: table-cell;
-            width: 33.33%;
-            border: 1px solid #d1fae5;
+            width: 20%;
+            border: 1px solid #e2e8f0;
             border-radius: 6px;
-            padding: 10px 12px;
-            background: #f0fdf4;
+            padding: 8px 10px;
+            background: #f8fafc;
         }
 
         .stat-box+.stat-box {
             border-left: none;
+        }
+
+        .stat-box.orange {
+            background: #fff7ed;
+            border-color: #fed7aa;
+        }
+
+        .stat-box.orange .stat-value {
+            color: #c2410c;
         }
 
         .stat-label {
@@ -157,7 +195,7 @@
         }
 
         .stat-value {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             color: #1e293b;
         }
@@ -175,12 +213,34 @@
         .negative {
             color: #ef4444;
         }
+
+        .orange-text {
+            color: #ea580c;
+        }
+
+        .badge-sm {
+            display: inline-block;
+            font-size: 8px;
+            font-weight: 700;
+            padding: 1px 5px;
+            border-radius: 10px;
+        }
+
+        .badge-red {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .badge-orange {
+            background: #ffedd5;
+            color: #c2410c;
+        }
     </style>
 </head>
 
 <body>
 
-    {{-- HEADER --}}
+    {{-- ── HEADER ── --}}
     <div class="header">
         <div class="header-left">
             <h1>{{ $toko->nama_toko ?? 'Laporan Keuangan' }}</h1>
@@ -188,14 +248,15 @@
             <p style="margin-top:2px; font-weight:700; color:#059669;">LAPORAN KEUANGAN</p>
         </div>
         <div class="header-right">
-            <div class="badge">{{ \Carbon\Carbon::parse($dari)->format('d M Y') }} —
+            <div class="badge">
+                {{ \Carbon\Carbon::parse($dari)->format('d M Y') }} —
                 {{ \Carbon\Carbon::parse($sampai)->format('d M Y') }}
             </div>
             <p style="margin-top:8px; color:#94a3b8;">Dicetak: {{ now()->format('d/m/Y H:i') }}</p>
         </div>
     </div>
 
-    {{-- STATISTIK UTAMA --}}
+    {{-- ── STATISTIK UTAMA (5 kotak) ── --}}
     <div class="stat-grid">
         <div class="stat-box">
             <div class="stat-label">Penjualan Periode</div>
@@ -216,14 +277,31 @@
             </div>
             <div class="stat-sub">Tunai + pencairan − pengeluaran</div>
         </div>
+        <div class="stat-box">
+            <div class="stat-label">Hutang Modal</div>
+            <div class="stat-value negative">Rp {{ number_format($saldo['hutang_modal'], 0, ',', '.') }}</div>
+            <div class="stat-sub">{{ $ringkasan['jumlah_modal_aktif'] }} pinjaman aktif</div>
+        </div>
+        {{-- BARU --}}
+        <div class="stat-box orange">
+            <div class="stat-label">Hutang Supplier</div>
+            <div class="stat-value">Rp {{ number_format($saldo['hutang_supplier'], 0, ',', '.') }}</div>
+            <div class="stat-sub">
+                {{ $saldo['jumlah_hutang_supplier'] }} transaksi
+                @if($saldo['hutang_supplier_jt'] > 0)
+                    · ⚠ {{ $saldo['hutang_supplier_jt'] }} jatuh tempo
+                @endif
+            </div>
+        </div>
     </div>
 
-    {{-- POSISI KEUANGAN --}}
+    {{-- ── POSISI KEUANGAN ── --}}
     <div class="grid">
-        {{-- ASET --}}
+
+        {{-- ASET + PENJUALAN --}}
         <div class="col">
             <div class="section">
-                <div class="section-title">Aset</div>
+                <div class="section-title bg-emerald">Aset</div>
                 <table>
                     <tr>
                         <td>Kas</td>
@@ -247,7 +325,7 @@
             </div>
 
             <div class="section">
-                <div class="section-title">Ringkasan Penjualan</div>
+                <div class="section-title bg-slate">Ringkasan Penjualan</div>
                 <table>
                     <tr>
                         <td>Total Penjualan</td>
@@ -271,22 +349,34 @@
             </div>
         </div>
 
-        {{-- KEWAJIBAN --}}
+        {{-- KEWAJIBAN & EKUITAS --}}
         <div class="col">
             <div class="section">
-                <div class="section-title">Kewajiban & Ekuitas</div>
+                <div class="section-title bg-red">Kewajiban & Ekuitas</div>
                 <table>
                     <tr class="negative">
                         <td>Sisa Hutang Modal</td>
                         <td>Rp {{ number_format($saldo['hutang_modal'], 0, ',', '.') }}</td>
                     </tr>
-                    <tr>
-                        <td>Total Pencairan Modal</td>
-                        <td>Rp {{ number_format($saldo['total_pencairan_modal'], 0, ',', '.') }}</td>
+                    {{-- BARU --}}
+                    <tr class="orange">
+                        <td>
+                            Hutang Supplier
+                            @if($saldo['hutang_supplier_jt'] > 0)
+                                <span class="badge-sm badge-red">⚠ {{ $saldo['hutang_supplier_jt'] }} jatuh tempo</span>
+                            @endif
+                        </td>
+                        <td>Rp {{ number_format($saldo['hutang_supplier'], 0, ',', '.') }}</td>
                     </tr>
                     <tr>
-                        <td>Total Cicilan Terbayar</td>
-                        <td>Rp {{ number_format($saldo['total_cicilan_terbayar'], 0, ',', '.') }}</td>
+                        <td style="color:#94a3b8; padding-left:14px;">↳ Jumlah transaksi hutang</td>
+                        <td style="color:#94a3b8;">{{ $saldo['jumlah_hutang_supplier'] }} transaksi</td>
+                    </tr>
+                    <tr class="total-red">
+                        <td>Total Kewajiban</td>
+                        <td class="negative">
+                            Rp {{ number_format($saldo['hutang_modal'] + $saldo['hutang_supplier'], 0, ',', '.') }}
+                        </td>
                     </tr>
                     <tr class="total">
                         <td>Ekuitas Bersih</td>
@@ -298,7 +388,7 @@
             </div>
 
             <div class="section">
-                <div class="section-title">Piutang & Modal</div>
+                <div class="section-title bg-slate">Piutang & Modal</div>
                 <table>
                     <tr>
                         <td>Piutang Belum Lunas</td>
@@ -312,9 +402,18 @@
                         <td>Pinjaman Aktif</td>
                         <td>{{ $ringkasan['jumlah_modal_aktif'] }} pinjaman</td>
                     </tr>
+                    <tr>
+                        <td>Total Pencairan Modal</td>
+                        <td>Rp {{ number_format($saldo['total_pencairan_modal'], 0, ',', '.') }}</td>
+                    </tr>
+                    <tr>
+                        <td>Total Cicilan Terbayar</td>
+                        <td>Rp {{ number_format($saldo['total_cicilan_terbayar'], 0, ',', '.') }}</td>
+                    </tr>
                 </table>
             </div>
         </div>
+
     </div>
 
     <div class="footer">

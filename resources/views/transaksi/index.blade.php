@@ -532,7 +532,6 @@
             </div>
             <form id="batalForm" method="POST" class="modal-body">
                 @csrf
-                @method('PATCH')
                 <p class="text-sm text-slate-600 mb-3">Stok produk akan dikembalikan secara otomatis. Tindakan ini tidak
                     dapat diurungkan.</p>
                 <label class="text-xs font-bold text-slate-600 uppercase tracking-wide block mb-1">
@@ -613,9 +612,9 @@
             function lihatDetail(id) {
                 document.getElementById('detailModal').classList.add('open')
                 document.getElementById('detailBody').innerHTML = `
-                                <div class="text-center py-10 text-slate-400">
-                                    <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i><div>Memuat data...</div>
-                                </div>`
+                                                                <div class="text-center py-10 text-slate-400">
+                                                                    <i class="fa-solid fa-spinner fa-spin text-2xl mb-2"></i><div>Memuat data...</div>
+                                                                </div>`
 
                 fetch(`/transactions/${id}`)
                     .then(r => r.json())
@@ -626,46 +625,46 @@
                         const statusMap = { lunas: 'Lunas', sebagian: 'Sebagian', belum_bayar: 'Belum Bayar' }
 
                         const rows = data.detail.map(d => `
-                                        <tr>
-                                            <td>${d.produk?.nama ?? '-'}</td>
-                                            <td class="text-right">${d.jumlah}</td>
-                                            <td class="text-right">Rp ${Number(d.harga_jual).toLocaleString('id-ID')}</td>
-                                            <td class="text-right">${d.diskon_item > 0 ? 'Rp ' + Number(d.diskon_item).toLocaleString('id-ID') : '-'}</td>
-                                            <td class="text-right font-semibold">Rp ${Number(d.subtotal).toLocaleString('id-ID')}</td>
-                                        </tr>
-                                    `).join('')
+                                                                        <tr>
+                                                                            <td>${d.produk?.nama ?? '-'}</td>
+                                                                            <td class="text-right">${d.jumlah}</td>
+                                                                            <td class="text-right">Rp ${Number(d.harga_jual).toLocaleString('id-ID')}</td>
+                                                                            <td class="text-right">${d.diskon_item > 0 ? 'Rp ' + Number(d.diskon_item).toLocaleString('id-ID') : '-'}</td>
+                                                                            <td class="text-right font-semibold">Rp ${Number(d.subtotal).toLocaleString('id-ID')}</td>
+                                                                        </tr>
+                                                                    `).join('')
 
                         document.getElementById('detailBody').innerHTML = `
-                                        <div class="space-y-1 mb-4">
-                                            <div class="modal-row"><span class="modal-label">Pelanggan</span><span class="modal-val">${data.pelanggan?.nama ?? 'Umum'}</span></div>
-                                            <div class="modal-row"><span class="modal-label">Kasir</span><span class="modal-val">${data.user?.nama ?? '-'}</span></div>
-                                            <div class="modal-row"><span class="modal-label">Status Bayar</span><span class="modal-val">${statusMap[data.status_bayar] ?? data.status_bayar}</span></div>
-                                        </div>
-                                        <table class="detail-table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Produk</th><th class="text-right">Qty</th>
-                                                    <th class="text-right">Harga</th><th class="text-right">Diskon</th>
-                                                    <th class="text-right">Subtotal</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>${rows}</tbody>
-                                        </table>
-                                        <div class="mt-4 space-y-1 pt-3 border-t border-slate-100">
-                                            <div class="modal-row"><span class="modal-label">Subtotal</span><span class="modal-val">Rp ${Number(data.subtotal).toLocaleString('id-ID')}</span></div>
-                                            ${data.diskon_nominal > 0 ? `<div class="modal-row"><span class="modal-label">Diskon</span><span class="modal-val text-red-500">- Rp ${Number(data.diskon_nominal).toLocaleString('id-ID')}</span></div>` : ''}
-                                            <div class="modal-row" style="font-size:15px;font-weight:600;"><span>Total</span><span class="text-emerald-700">Rp ${Number(data.total).toLocaleString('id-ID')}</span></div>
-                                            <div class="modal-row"><span class="modal-label">Bayar</span><span class="modal-val">Rp ${Number(data.jumlah_bayar).toLocaleString('id-ID')}</span></div>
-                                            ${data.kembalian > 0 ? `<div class="modal-row"><span class="modal-label">Kembalian</span><span class="modal-val text-emerald-600">Rp ${Number(data.kembalian).toLocaleString('id-ID')}</span></div>` : ''}
-                                            ${data.sisa_tagihan > 0 ? `<div class="modal-row"><span class="modal-label">Sisa Tagihan</span><span class="modal-val text-amber-600">Rp ${Number(data.sisa_tagihan).toLocaleString('id-ID')}</span></div>` : ''}
-                                        </div>
-                                        <div class="flex justify-end mt-4">
-                                            <a href="/transactions/${data.id}/struk" target="_blank"
-                                                class="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700">
-                                                <i class="fa-solid fa-print"></i> Cetak Struk
-                                            </a>
-                                        </div>
-                                    `
+                                                                        <div class="space-y-1 mb-4">
+                                                                            <div class="modal-row"><span class="modal-label">Pelanggan</span><span class="modal-val">${data.pelanggan?.nama ?? 'Umum'}</span></div>
+                                                                            <div class="modal-row"><span class="modal-label">Kasir</span><span class="modal-val">${data.user?.nama ?? '-'}</span></div>
+                                                                            <div class="modal-row"><span class="modal-label">Status Bayar</span><span class="modal-val">${statusMap[data.status_bayar] ?? data.status_bayar}</span></div>
+                                                                        </div>
+                                                                        <table class="detail-table">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Produk</th><th class="text-right">Qty</th>
+                                                                                    <th class="text-right">Harga</th><th class="text-right">Diskon</th>
+                                                                                    <th class="text-right">Subtotal</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>${rows}</tbody>
+                                                                        </table>
+                                                                        <div class="mt-4 space-y-1 pt-3 border-t border-slate-100">
+                                                                            <div class="modal-row"><span class="modal-label">Subtotal</span><span class="modal-val">Rp ${Number(data.subtotal).toLocaleString('id-ID')}</span></div>
+                                                                            ${data.diskon_nominal > 0 ? `<div class="modal-row"><span class="modal-label">Diskon</span><span class="modal-val text-red-500">- Rp ${Number(data.diskon_nominal).toLocaleString('id-ID')}</span></div>` : ''}
+                                                                            <div class="modal-row" style="font-size:15px;font-weight:600;"><span>Total</span><span class="text-emerald-700">Rp ${Number(data.total).toLocaleString('id-ID')}</span></div>
+                                                                            <div class="modal-row"><span class="modal-label">Bayar</span><span class="modal-val">Rp ${Number(data.jumlah_bayar).toLocaleString('id-ID')}</span></div>
+                                                                            ${data.kembalian > 0 ? `<div class="modal-row"><span class="modal-label">Kembalian</span><span class="modal-val text-emerald-600">Rp ${Number(data.kembalian).toLocaleString('id-ID')}</span></div>` : ''}
+                                                                            ${data.sisa_tagihan > 0 ? `<div class="modal-row"><span class="modal-label">Sisa Tagihan</span><span class="modal-val text-amber-600">Rp ${Number(data.sisa_tagihan).toLocaleString('id-ID')}</span></div>` : ''}
+                                                                        </div>
+                                                                        <div class="flex justify-end mt-4">
+                                                                            <a href="/transactions/${data.id}/struk" target="_blank"
+                                                                                class="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700">
+                                                                                <i class="fa-solid fa-print"></i> Cetak Struk
+                                                                            </a>
+                                                                        </div>
+                                                                    `
                     })
             }
 

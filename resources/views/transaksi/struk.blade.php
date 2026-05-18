@@ -6,183 +6,331 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Struk {{ $transaksi->nomor }}</title>
     <style>
-        /* ─── RESET ─────────────────── */
+        /* ─── RESET ───────────────────────────── */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* ─── BASE ──────────────────── */
+        /* ─── BASE (screen preview) ───────────── */
         body {
             font-family: 'Courier New', Courier, monospace;
-            font-size: 11px;
-            line-height: 1.55;
+            font-size: 12px;
+            line-height: 1.6;
             color: #000;
-            background: #f0f0f0;
+            background: #d0d0d0;
             display: flex;
-            justify-content: center;
-            padding: 20px;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
         }
 
-        /* ─── KERTAS 58mm ───────────── */
+        /* ─── KERTAS A4 CONTINUOUS FORM ────────── */
         .kertas {
-            width: 216px;
-            /* 58mm ≈ 219px; pakai 216 untuk margin printer */
+            width: 210mm;
+            min-height: 297mm;
             background: #fff;
-            padding: 10px 8px 30px;
-            border: 1px solid #ccc;
+            padding: 18mm 20mm 20mm 20mm;
+            position: relative;
+            /* Simulasi lubang sprocket di preview */
+            border-left: 12mm solid #e8e8e8;
+            border-right: 12mm solid #e8e8e8;
         }
 
-        /* ─── TEKS ──────────────────── */
-        .center {
+        /* Lubang sprocket simulasi */
+        .kertas::before,
+        .kertas::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 12mm;
+            background-image: radial-gradient(circle, #bbb 4px, transparent 4px);
+            background-size: 12mm 12mm;
+            background-repeat: repeat-y;
+            background-position: center 6mm;
+        }
+
+        .kertas::before {
+            left: 0;
+        }
+
+        .kertas::after {
+            right: 0;
+        }
+
+        /* ─── JUDUL STRUK ────────────────────── */
+        .struk-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 8px;
+        }
+
+        /* ─── HEADER INFO ─────────────────────── */
+        .header-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 20px;
+            margin-bottom: 14px;
+        }
+
+        .info-row {
+            display: flex;
+            gap: 4px;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        .info-label {
+            min-width: 120px;
+            color: #000;
+        }
+
+        .info-label::after {
+            content: ':';
+        }
+
+        .info-val {
+            font-weight: 600;
+            flex: 1;
+        }
+
+        /* ─── GARIS ───────────────────────────── */
+        .garis-solid {
+            border: none;
+            border-top: 1.5px solid #000;
+            margin: 8px 0;
+        }
+
+        .garis-dash {
+            border: none;
+            border-top: 1px dashed #555;
+            margin: 6px 0;
+        }
+
+        /* ─── TABEL PRODUK ────────────────────── */
+        .tbl-produk {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin: 10px 0;
+        }
+
+        .tbl-produk thead th {
+            background: #000;
+            color: #fff;
+            padding: 6px 8px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .tbl-produk thead th.text-right {
+            text-align: right;
+        }
+
+        .tbl-produk thead th.text-center {
             text-align: center;
         }
 
-        .bold {
-            font-weight: 700;
+        .tbl-produk tbody tr {
+            border-bottom: 1px dashed #ccc;
         }
 
-        .muted {
+        .tbl-produk tbody td {
+            padding: 6px 8px;
+            vertical-align: top;
+        }
+
+        .tbl-produk tfoot td {
+            padding: 4px 8px;
+            font-size: 12px;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .diskon-row td {
             color: #555;
+            font-size: 11px;
+            padding: 2px 8px 5px !important;
         }
 
-        .sm {
-            font-size: 10px;
+        /* ─── RINGKASAN KANAN ────────────────── */
+        .ringkasan {
+            width: 220px;
+            margin-left: auto;
+            margin-top: 8px;
         }
 
-        .lg {
+        .ringkasan-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            padding: 3px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .ringkasan-row:last-child {
+            border: none;
+        }
+
+        .ringkasan-row .lbl {
+            color: #333;
+        }
+
+        .ringkasan-row .val {
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .ringkasan-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 5px 0;
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+            margin: 4px 0;
+        }
+
+        /* ─── STATUS BAYAR ───────────────────── */
+        .status-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+
+        .status-badge-wrap {
             font-size: 13px;
         }
 
-        /* ─── BARIS ─────────────────── */
-        .row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-        }
-
-        .row .kanan {
-            text-align: right;
-            white-space: nowrap;
-            margin-left: 4px;
-        }
-
-        /* ─── GARIS PUTUS ───────────── */
-        hr {
-            border: none;
-            border-top: 1px dashed #888;
-            margin: 5px 0;
-        }
-
-        hr.solid {
-            border-top: 1px solid #000;
-        }
-
-        /* ─── TOTAL ─────────────────── */
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            font-weight: 700;
-            font-size: 12px;
-            padding-top: 3px;
-        }
-
-        /* ─── ITEM ──────────────────── */
-        .item {
+        .status-badge-wrap .badge-label {
+            font-size: 11px;
+            color: #555;
             margin-bottom: 4px;
         }
 
-        .item-nama {
-            font-weight: 700;
-            word-break: break-word;
-        }
-
-        .item-detail {
-            display: flex;
-            justify-content: space-between;
-            color: #555;
-        }
-
-        /* ─── STATUS ────────────────── */
         .status-badge {
-            text-align: center;
+            display: inline-block;
             font-weight: 700;
-            font-size: 12px;
-            letter-spacing: 1px;
-            padding: 3px 0;
+            font-size: 13px;
+            letter-spacing: 2px;
+            padding: 4px 14px;
+            border: 2px solid #000;
         }
 
         .status-lunas {
-            color: #000;
+            border-color: #000;
         }
 
         .status-sebagian {
-            color: #555;
+            border-color: #000;
         }
 
         .status-belum {
-            color: #555;
+            border-color: #000;
         }
 
-        /* ─── BARCODE SIM ───────────── */
-        .barcode {
-            font-family: 'Courier New', monospace;
-            font-size: 36px;
-            letter-spacing: -4px;
-            line-height: 1;
+        /* ─── TANDA TANGAN / CATATAN ─────────── */
+        .ttd-area {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 30px;
+            font-size: 11px;
+        }
+
+        .ttd-col {
             text-align: center;
-            margin: 5px 0 2px;
-            color: #000;
         }
 
-        .barcode-num {
+        .ttd-col .ttd-title {
+            font-weight: 700;
+            margin-bottom: 50px;
+        }
+
+        .ttd-col .ttd-line {
+            border-top: 1px solid #000;
+            padding-top: 4px;
+        }
+
+        /* ─── FOOTER ─────────────────────────── */
+        .footer-struk {
+            margin-top: 20px;
             text-align: center;
-            font-size: 9px;
-            letter-spacing: 0;
+            font-size: 11px;
             color: #555;
+            border-top: 1px dashed #aaa;
+            padding-top: 8px;
         }
 
-        /* ─── TOMBOL (screen only) ───── */
+        /* ─── TOMBOL SCREEN ──────────────────── */
         .screen-only {
             margin-top: 20px;
             display: flex;
-            gap: 10px;
+            gap: 12px;
             justify-content: center;
         }
 
         .btn-print {
-            padding: 10px 24px;
-            background: #059669;
+            padding: 10px 28px;
+            background: #000;
             color: #fff;
             border: none;
-            border-radius: 8px;
+            border-radius: 6px;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
         }
 
         .btn-back {
             padding: 10px 20px;
             background: #fff;
             color: #374151;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
+            border: 1.5px solid #999;
+            border-radius: 6px;
             font-size: 13px;
             cursor: pointer;
+            font-family: 'Courier New', monospace;
         }
 
-        /* ─── PRINT ─────────────────── */
+        /* ─── PRINT ──────────────────────────── */
         @media print {
             body {
                 background: none;
                 padding: 0;
+                display: block;
             }
 
             .kertas {
+                width: 210mm;
+                min-height: auto;
                 border: none;
-                width: 58mm;
-                padding: 0 2mm 10mm;
+                padding: 10mm 15mm 15mm 15mm;
+            }
+
+            /* Sembunyikan simulasi sprocket saat print */
+            .kertas::before,
+            .kertas::after {
+                display: none;
             }
 
             .screen-only {
@@ -190,7 +338,7 @@
             }
 
             @page {
-                size: 58mm auto;
+                size: A4 portrait;
                 margin: 0;
             }
         }
@@ -198,144 +346,216 @@
 </head>
 
 <body>
-
     <div>
-        {{-- ══════════════ KERTAS STRUK ══════════════ --}}
+        {{-- ══════════ KERTAS STRUK ══════════ --}}
         <div class="kertas" id="strukPaper">
 
-            {{-- HEADER TOKO --}}
-            @if ($toko?->logo)
-                <div class="center" style="margin-bottom:4px;">
-                    <img src="{{ asset('storage/' . $toko->logo) }}" alt="Logo"
-                        style="max-width:80px; max-height:60px; object-fit:contain;">
-                </div>
-            @endif
-            <div class="center bold lg">{{ $toko->nama_toko ?? 'TOKO TANI MAKMUR' }}</div>
-            @if ($toko?->alamat)
-                <div class="center muted sm">{{ $toko->alamat }}</div>
-            @endif
-            @if ($toko?->telepon)
-                <div class="center muted sm">Telp: {{ $toko->telepon }}</div>
-            @endif
+            {{-- JUDUL --}}
+            <div class="struk-title">Struk Penjualan</div>
 
-            <hr>
+            {{-- HEADER GRID: Info Toko kiri, Info Transaksi kanan --}}
+            <div class="header-grid">
 
-            {{-- INFO TRANSAKSI --}}
-            <div class="row">
-                <span>No</span>
-                <span class="kanan sm">{{ $transaksi->nomor }}</span>
-            </div>
-            <div class="row">
-                <span>Tgl</span>
-                <span class="kanan">{{ \Carbon\Carbon::parse($transaksi->tanggal)->format('d/m/Y') }}</span>
-            </div>
-            <div class="row">
-                <span>Pukul</span>
-                <span class="kanan">{{ $transaksi->created_at->format('H:i') }}</span>
-            </div>
-            <div class="row">
-                <span>Kasir</span>
-                <span class="kanan">{{ $transaksi->user->nama ?? '-' }}</span>
-            </div>
-            @if ($transaksi->pelanggan)
-                <div class="row">
-                    <span>Pelanggan</span>
-                    <span class="kanan">{{ $transaksi->pelanggan->nama }}</span>
-                </div>
-            @endif
+                {{-- KIRI: Info Toko & Pelanggan --}}
+                <div>
+                    @if ($toko?->logo)
+                        <div style="margin-bottom:6px;">
+                            <img src="{{ asset('storage/' . $toko->logo) }}" alt="Logo"
+                                style="max-height:45px; object-fit:contain;">
+                        </div>
+                    @endif
 
-            <hr>
-
-            {{-- ITEM --}}
-            @foreach ($transaksi->detail as $item)
-                <div class="item">
-                    <div class="item-nama">{{ $item->produk->nama }}</div>
-                    <div class="item-detail">
-                        <span>{{ $item->jumlah }} {{ $item->produk->satuan }} ×
-                            {{ number_format($item->harga_jual, 0, ',', '.') }}</span>
-                        <span>{{ number_format($item->subtotal, 0, ',', '.') }}</span>
+                    <div class="info-row">
+                        <span class="info-label">Nama Toko</span>
+                        <span class="info-val">{{ $toko->nama_toko ?? 'TOKO TANI MAKMUR' }}</span>
                     </div>
-                    @if ($item->diskon_item > 0)
-                        <div class="item-detail">
-                            <span>Diskon item</span>
-                            <span>- {{ number_format($item->diskon_item * $item->jumlah, 0, ',', '.') }}</span>
+                    @if ($toko?->alamat)
+                        <div class="info-row">
+                            <span class="info-label">Alamat</span>
+                            <span class="info-val">{{ $toko->alamat }}</span>
+                        </div>
+                    @endif
+                    @if ($toko?->telepon)
+                        <div class="info-row">
+                            <span class="info-label">Telepon</span>
+                            <span class="info-val">{{ $toko->telepon }}</span>
+                        </div>
+                    @endif
+                    @if ($transaksi->pelanggan)
+                        <div class="info-row" style="margin-top:8px;">
+                            <span class="info-label">Pelanggan</span>
+                            <span class="info-val">{{ $transaksi->pelanggan->nama }}</span>
                         </div>
                     @endif
                 </div>
-            @endforeach
 
-            <hr>
-
-            {{-- RINGKASAN PEMBAYARAN --}}
-            <div class="row">
-                <span>Subtotal</span>
-                <span class="kanan">{{ number_format($transaksi->subtotal, 0, ',', '.') }}</span>
+                {{-- KANAN: Info Nomor & Tanggal --}}
+                <div>
+                    <div class="info-row">
+                        <span class="info-label">No. Struk</span>
+                        <span class="info-val">{{ $transaksi->nomor }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Tanggal</span>
+                        <span
+                            class="info-val">{{ \Carbon\Carbon::parse($transaksi->tanggal)->translatedFormat('d F Y') }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Pukul</span>
+                        <span class="info-val">{{ $transaksi->created_at->format('H:i') }} WIB</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Kasir</span>
+                        <span class="info-val">{{ $transaksi->user->nama ?? '-' }}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Status</span>
+                        <span class="info-val">{{ strtoupper(str_replace('_', ' ', $transaksi->status_bayar)) }}</span>
+                    </div>
+                </div>
             </div>
 
-            @if ($transaksi->diskon_nominal > 0)
-                <div class="row">
-                    <span>Diskon</span>
-                    <span class="kanan">- {{ number_format($transaksi->diskon_nominal, 0, ',', '.') }}</span>
-                </div>
-            @endif
+            <hr class="garis-solid">
 
-            <hr class="solid">
-            <div class="total-row">
-                <span>TOTAL</span>
-                <span>Rp {{ number_format($transaksi->total, 0, ',', '.') }}</span>
+            {{-- TABEL PRODUK --}}
+            <table class="tbl-produk">
+                <thead>
+                    <tr>
+                        <th style="width:30px;">No</th>
+                        <th>Nama Produk</th>
+                        <th class="text-center" style="width:50px;">Qty</th>
+                        <th class="text-center" style="width:40px;">Sat</th>
+                        <th class="text-right" style="width:100px;">Harga Satuan</th>
+                        <th class="text-right" style="width:90px;">Diskon</th>
+                        <th class="text-right" style="width:110px;">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($transaksi->detail as $i => $item)
+                        <tr>
+                            <td>{{ $i + 1 }}</td>
+                            <td>{{ $item->produk->nama }}</td>
+                            <td class="text-center">{{ $item->jumlah }}</td>
+                            <td class="text-center">{{ $item->produk->satuan }}</td>
+                            <td class="text-right">{{ number_format($item->harga_jual, 0, ',', '.') }}</td>
+                            <td class="text-right">
+                                @if ($item->diskon_item > 0)
+                                    {{ number_format($item->diskon_item * $item->jumlah, 0, ',', '.') }}
+                                @else
+                                    -
+                                @endif
+                            </td>
+                            <td class="text-right">{{ number_format($item->subtotal, 0, ',', '.') }}</td>
+                        </tr>
+                    @endforeach
+
+                    {{-- Baris kosong jika item sedikit, biar tabel tidak pendek banget --}}
+                    @if ($transaksi->detail->count() < 5)
+                        @for ($e = $transaksi->detail->count(); $e < 5; $e++)
+                            <tr>
+                                <td>&nbsp;</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        @endfor
+                    @endif
+                </tbody>
+            </table>
+
+            <hr class="garis-solid">
+
+            {{-- RINGKASAN PEMBAYARAN (rata kanan) --}}
+            <div class="ringkasan">
+                <div class="ringkasan-row">
+                    <span class="lbl">Subtotal</span>
+                    <span class="val">Rp {{ number_format($transaksi->subtotal, 0, ',', '.') }}</span>
+                </div>
+                @if ($transaksi->diskon_nominal > 0)
+                    <div class="ringkasan-row">
+                        <span class="lbl">Diskon</span>
+                        <span class="val">- Rp {{ number_format($transaksi->diskon_nominal, 0, ',', '.') }}</span>
+                    </div>
+                @endif
+                <div class="ringkasan-total">
+                    <span>TOTAL</span>
+                    <span>Rp {{ number_format($transaksi->total, 0, ',', '.') }}</span>
+                </div>
+                @if ($transaksi->status_bayar !== 'belum_bayar')
+                    <div class="ringkasan-row">
+                        <span class="lbl">Jumlah Bayar</span>
+                        <span class="val">Rp {{ number_format($transaksi->jumlah_bayar, 0, ',', '.') }}</span>
+                    </div>
+                @endif
+                @if ($transaksi->status_bayar === 'lunas' && $transaksi->kembalian > 0)
+                    <div class="ringkasan-row">
+                        <span class="lbl">Kembali</span>
+                        <span class="val">Rp {{ number_format($transaksi->kembalian, 0, ',', '.') }}</span>
+                    </div>
+                @endif
+                @if ($transaksi->sisa_tagihan > 0)
+                    <div class="ringkasan-row">
+                        <span class="lbl">Sisa Tagihan</span>
+                        <span class="val">Rp {{ number_format($transaksi->sisa_tagihan, 0, ',', '.') }}</span>
+                    </div>
+                @endif
             </div>
-            <hr class="solid">
 
-            @if ($transaksi->status_bayar !== 'belum_bayar')
-                <div class="row" style="margin-top:3px;">
-                    <span>Bayar</span>
-                    <span class="kanan">{{ number_format($transaksi->jumlah_bayar, 0, ',', '.') }}</span>
+            {{-- STATUS & TANDA TANGAN --}}
+            <div class="status-area">
+                <div class="status-badge-wrap">
+                    <div class="badge-label">Status Pembayaran</div>
+                    <div
+                        class="status-badge status-{{ $transaksi->status_bayar === 'lunas' ? 'lunas' : ($transaksi->status_bayar === 'sebagian' ? 'sebagian' : 'belum') }}">
+                        ★ {{ strtoupper(str_replace('_', ' ', $transaksi->status_bayar)) }} ★
+                    </div>
                 </div>
-            @endif
-
-            @if ($transaksi->status_bayar === 'lunas' && $transaksi->kembalian > 0)
-                <div class="row bold">
-                    <span>Kembali</span>
-                    <span class="kanan">{{ number_format($transaksi->kembalian, 0, ',', '.') }}</span>
-                </div>
-            @endif
-
-            @if ($transaksi->sisa_tagihan > 0)
-                <div class="row bold">
-                    <span>Sisa Tagihan</span>
-                    <span class="kanan">{{ number_format($transaksi->sisa_tagihan, 0, ',', '.') }}</span>
-                </div>
-            @endif
-
-            <hr>
-
-            {{-- STATUS BAYAR --}}
-            <div class="status-badge status-{{ $transaksi->status_bayar === 'lunas' ? 'lunas' : 'sebagian' }}">
-                ★ {{ strtoupper(str_replace('_', ' ', $transaksi->status_bayar)) }} ★
             </div>
 
-            <hr>
+            {{-- TANDA TANGAN --}}
+            <div class="ttd-area">
+                <div class="ttd-col">
+                    <div class="ttd-title">Pelanggan</div>
+                    <div class="ttd-line">
+                        {{ $transaksi->pelanggan->nama ?? '( ........................ )' }}<br>
+                        {{ $transaksi->pelanggan->telepon ?? '' }}
+                    </div>
+                </div>
+                <div class="ttd-col">
+                    <div class="ttd-title">Mengetahui</div>
+                    <div class="ttd-line">( .................. )</div>
+                </div>
+                <div class="ttd-col">
+                    <div class="ttd-title">Kasir</div>
+                    <div class="ttd-line">{{ $transaksi->user->nama ?? '( ........................ )' }}</div>
+                </div>
+            </div>
 
-            {{-- FOOTER TOKO --}}
-            <div class="center sm" style="margin-top:3px;">Terima kasih atas kepercayaan Anda!</div>
-            @if ($toko?->footer_struk)
-                <div class="center sm">{{ $toko->footer_struk }}</div>
-            @else
-                <div class="center sm">Barang yang dibeli tidak dapat dikembalikan.</div>
-                <div class="center sm">Simpan struk ini sebagai bukti pembelian.</div>
-            @endif
+            {{-- FOOTER --}}
+            <div class="footer-struk">
+                <div>Terima kasih atas kepercayaan Anda berbelanja di {{ $toko->nama_toko ?? 'Toko Kami' }}!</div>
+                @if ($toko?->footer_struk)
+                    <div>{{ $toko->footer_struk }}</div>
+                @else
+                    <div>Barang yang dibeli tidak dapat dikembalikan &bull; Simpan struk ini sebagai bukti pembelian.</div>
+                @endif
+            </div>
 
         </div>
 
+        {{-- TOMBOL SCREEN ONLY --}}
         <div class="screen-only">
-            <button class="btn-back" onclick="history.back()">← Kembali</button>
-            <button class="btn-print" onclick="window.print()">🖨 Cetak Struk</button>
+            <button class="btn-back" onclick="history.back()">&#8592; Kembali</button>
+            <button class="btn-print" onclick="window.print()">&#128424; Cetak Struk</button>
         </div>
     </div>
-
-    <script>
-    </script>
-
 </body>
+
+<script>
+    window.print();
+</script>
 
 </html>

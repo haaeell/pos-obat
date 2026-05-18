@@ -6,6 +6,7 @@ use App\Exports\LaporanExport;
 use Illuminate\Http\Request;
 use App\Models\Transaksi;
 use App\Models\Piutang;
+use App\Models\BarangMasuk;
 use App\Models\BarangMasukDetail;
 use App\Models\Modal;
 use App\Models\ModalCicilan;
@@ -36,7 +37,7 @@ class LaporanController extends Controller
         $margin          = $totalPenjualan > 0 ? ($labaKotor / $totalPenjualan) * 100 : 0;
         $jumlahTransaksi = $aktifTrx->count();
 
-        $saldoPiutang = Piutang::whereIn('status', ['belum_bayar', 'sebagian'])->sum('sisa_tagihan');
+        $saldoPiutang  = Piutang::whereIn('status', ['belum_bayar', 'sebagian'])->sum('sisa_tagihan');
         $jumlahPiutang = Piutang::whereIn('status', ['belum_bayar', 'sebagian'])->distinct('pelanggan_id')->count('pelanggan_id');
 
         $modals = Modal::orderBy('tanggal_pinjaman', 'desc')->get();
@@ -46,11 +47,24 @@ class LaporanController extends Controller
         $totalCicilanTerbayar = $modals->sum('total_terbayar');
         $jumlahModalAktif     = $modals->where('status', 'aktif')->count();
 
+        // ── Hutang supplier ───────────────────────────────────────────────
+        $hutangSupplier = BarangMasuk::with('detail')
+            ->where('jenis', 'masuk_normal')
+            ->whereIn('status_bayar', ['hutang', 'sebagian'])
+            ->get();
+
+        $nilaiHutangSupplier   = $hutangSupplier->sum('sisa_hutang');
+        $jumlahHutangSupplier  = $hutangSupplier->count();
+        $hutangJatuhTempo      = $hutangSupplier
+            ->filter(fn($b) => $b->tanggal_jatuh_tempo && $b->tanggal_jatuh_tempo->isPast())
+            ->count();
+        // ─────────────────────────────────────────────────────────────────
+
         $totalLunas = Transaksi::where('status', 'aktif')->where('status_bayar', 'lunas')->sum('total');
         $totalPembayaranPiutang = PiutangPembayaran::sum('jumlah');
 
         $totalPencairanModal = Modal::where('tanggal_pencairan', '>=', $dari)->sum('nominal_pencairan');
-        $totalBeliBarang = BarangMasukDetail::whereHas('barangMasuk', function ($q) {
+        $totalBeliBarang     = BarangMasukDetail::whereHas('barangMasuk', function ($q) {
             $q->where('jenis', 'masuk_normal');
         })->sum('subtotal');
 
@@ -62,7 +76,9 @@ class LaporanController extends Controller
             ->value('nilai') ?? 0;
 
         $totalAset = $kas + $saldoPiutang + $nilaiStok;
-        $ekuitas   = $totalAset - $sisaHutangModal;
+        // Hutang supplier ikut mengurangi ekuitas bersama hutang modal
+        $totalHutang = $sisaHutangModal + $nilaiHutangSupplier;
+        $ekuitas     = $totalAset - $totalHutang;
 
         $ringkasan = [
             'total_penjualan'    => $totalPenjualan,
@@ -84,6 +100,11 @@ class LaporanController extends Controller
             'total_modal_masuk'      => $totalModalMasuk,
             'total_pencairan_modal'  => $totalPencairanModal,
             'total_cicilan_terbayar' => $totalCicilanTerbayar,
+            // ── baru ──
+            'hutang_supplier'          => $nilaiHutangSupplier,
+            'jumlah_hutang_supplier'   => $jumlahHutangSupplier,
+            'hutang_supplier_jt'       => $hutangJatuhTempo,
+            // ─────────
             'ekuitas'                => $ekuitas,
         ];
 
@@ -141,6 +162,19 @@ class LaporanController extends Controller
         $totalCicilanTerbayar = $modals->sum('total_terbayar');
         $jumlahModalAktif     = $modals->where('status', 'aktif')->count();
 
+        // ── Hutang supplier ───────────────────────────────────────────────
+        $hutangSupplier = BarangMasuk::with('detail')
+            ->where('jenis', 'masuk_normal')
+            ->whereIn('status_bayar', ['hutang', 'sebagian'])
+            ->get();
+
+        $nilaiHutangSupplier  = $hutangSupplier->sum('sisa_hutang');
+        $jumlahHutangSupplier = $hutangSupplier->count();
+        $hutangJatuhTempo     = $hutangSupplier
+            ->filter(fn($b) => $b->tanggal_jatuh_tempo && $b->tanggal_jatuh_tempo->isPast())
+            ->count();
+        // ─────────────────────────────────────────────────────────────────
+
         $totalLunas             = Transaksi::where('status', 'aktif')->where('status_bayar', 'lunas')->sum('total');
         $totalPembayaranPiutang = PiutangPembayaran::sum('jumlah');
         $totalPencairanModal    = Modal::where('sudah_dicairkan', true)->sum('nominal_pencairan');
@@ -150,7 +184,8 @@ class LaporanController extends Controller
         $kas       = ($totalLunas + $totalPembayaranPiutang + $totalPencairanModal) - ($totalBeliBarang + $totalCicilanDibayar);
         $nilaiStok = StokBatch::selectRaw('SUM(jumlah_tersisa * harga_modal) as nilai')->value('nilai') ?? 0;
         $totalAset = $kas + $saldoPiutang + $nilaiStok;
-        $ekuitas   = $totalAset - $sisaHutangModal;
+        $totalHutang = $sisaHutangModal + $nilaiHutangSupplier;
+        $ekuitas   = $totalAset - $totalHutang;
 
         $ringkasan = [
             'total_penjualan'    => $totalPenjualan,
@@ -172,6 +207,11 @@ class LaporanController extends Controller
             'total_modal_masuk'      => $totalModalMasuk,
             'total_pencairan_modal'  => $totalPencairanModal,
             'total_cicilan_terbayar' => $totalCicilanTerbayar,
+            // ── baru ──
+            'hutang_supplier'        => $nilaiHutangSupplier,
+            'jumlah_hutang_supplier' => $jumlahHutangSupplier,
+            'hutang_supplier_jt'     => $hutangJatuhTempo,
+            // ─────────
             'ekuitas'                => $ekuitas,
         ];
 

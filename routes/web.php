@@ -48,9 +48,11 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('stock-in')->controller(StockInController::class)->group(function () {
-        Route::get('/',        'index')->name('stock-in.index');
-        Route::post('/',       'store')->name('stock-in.store');
-        Route::delete('/{id}', 'destroy')->name('stock-in.destroy');
+        Route::get('/',                                    'index')->name('stock-in.index');
+        Route::post('/',                                   'store')->name('stock-in.store');
+        Route::delete('/{id}',                             'destroy')->name('stock-in.destroy');
+        Route::post('/{id}/bayar-cicilan',                 'bayarCicilan')->name('stock-in.bayar-cicilan');
+        Route::delete('/{barangMasukId}/cicilan/{cicilanId}', 'hapusCicilan')->name('stock-in.hapus-cicilan');
     });
 
     Route::prefix('pelanggan')->controller(PelangganController::class)->group(function () {
@@ -61,22 +63,20 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('transactions')->controller(TransaksiController::class)->group(function () {
-        Route::get('/',        'index')->name('transactions.index');
-        Route::get('/pos',     'pos')->name('transactions.pos');
-        Route::post('/',       'store')->name('transactions.store');
-        Route::get('/{id}',       'show')->name('transactions.show');
+        Route::get('/', 'index')->name('transactions.index');
+        Route::get('/pos', 'pos')->name('transactions.pos');
+        Route::post('/', 'store')->name('transactions.store');
         Route::get('/{id}/struk', 'struk')->name('transactions.struk');
+        Route::post('/{id}/batal', 'batal')->name('transactions.batal');
+        Route::get('/{id}', 'show')->whereNumber('id')->name('transactions.show');
     });
 
-    Route::prefix('piutang')->name('piutang.')->group(function () {
-        Route::get('/', [PiutangController::class, 'index'])->name('index');
-        Route::get('/{id}', [PiutangController::class, 'show'])->name('show');
-
-        Route::post('/{id}/bayar', [PiutangController::class, 'bayar'])
-            ->name('bayar');
-
-        Route::get('/{id}/cetak', [PiutangController::class, 'cetak'])
-            ->name('cetak');
+    Route::prefix('piutang')->controller(PiutangController::class)->name('piutang.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/piutang/{id}/print', 'print')->name('print');
+        Route::get('/{id}', 'show')->name('show');
+        Route::post('/{id}/bayar', 'bayar')->name('bayar');
+        Route::get('/{id}/cetak', 'cetak')->name('cetak');
     });
 
     Route::prefix('modals')->controller(ModalController::class)->group(function () {

@@ -10,7 +10,6 @@
             display: flex;
             flex-direction: column;
             height: calc(100vh - 80px);
-            /* sesuaikan 80px = tinggi navbar/header app */
             overflow: hidden;
         }
 
@@ -80,7 +79,6 @@
             background: #fff;
         }
 
-        /* Barcode */
         .barcode-bar {
             flex-shrink: 0;
             padding: 6px 12px;
@@ -117,7 +115,6 @@
             background: #fff;
         }
 
-        /* Kategori */
         .cat-scroll {
             flex-shrink: 0;
             display: flex;
@@ -169,7 +166,6 @@
             color: #059669;
         }
 
-        /* Grid produk */
         .prod-scroll {
             flex: 1;
             overflow-y: auto;
@@ -284,7 +280,6 @@
             font-weight: 700;
         }
 
-        /* Pagination produk */
         .prod-pagination {
             flex-shrink: 0;
             display: flex;
@@ -558,7 +553,6 @@
             color: #dc2626;
         }
 
-        /* Footer */
         .cart-footer {
             border-top: 1px solid #e2e8f0;
             background: #f8fafc;
@@ -781,64 +775,174 @@
             color: #0f172a;
         }
 
+        /* ═══ STRUK PAPER A4 DOT-MATRIX (di dalam modal) ═══ */
         .struk-paper {
-            width: 216px;
-            margin: 14px auto;
             font-family: 'Courier New', Courier, monospace;
-            font-size: 11px;
-            line-height: 1.55;
-            color: #111;
-            background: #fff;
-            padding: 12px 10px;
-            border: 1px dashed #bbb;
-            border-radius: 3px;
+            font-size: 11.5px;
+            line-height: 1.65;
+            color: #000;
+            background: #fffef5;
+            padding: 14px 16px 20px;
+            margin: 14px;
+            border: 1px solid #ccc;
         }
 
-        .sk-center {
+        .sk-title {
             text-align: center;
-        }
-
-        .sk-bold {
+            font-size: 15px;
             font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #000;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
         }
 
-        .sk-muted {
-            color: #555;
+        .sk-hgrid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 16px;
+            margin-bottom: 8px;
         }
 
-        .sk-row {
+        .sk-irow {
             display: flex;
-            justify-content: space-between;
+            font-size: 11px;
+            line-height: 1.75;
         }
 
-        .sk-divider {
+        .sk-lbl {
+            min-width: 80px;
+            color: #333;
+        }
+
+        .sk-lbl::after {
+            content: ':';
+        }
+
+        .sk-val {
+            font-weight: 700;
+            flex: 1;
+        }
+
+        .sk-sep {
             border: none;
-            border-top: 1px dashed #999;
-            margin: 4px 0;
+            border-top: 1px dashed #777;
+            margin: 5px 0;
         }
 
-        .sk-total {
+        .sk-sep2 {
+            border: none;
+            border-top: 2px solid #000;
+            margin: 5px 0;
+        }
+
+        .sk-tbl {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            margin: 6px 0;
+        }
+
+        .sk-tbl thead th {
+            background: #000;
+            color: #fff;
+            padding: 4px 6px;
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .sk-tbl thead th.tr {
+            text-align: right;
+        }
+
+        .sk-tbl tbody tr {
+            border-bottom: 1px dashed #ccc;
+        }
+
+        .sk-tbl tbody td {
+            padding: 4px 6px;
+        }
+
+        .sk-ring {
+            width: 180px;
+            margin-left: auto;
+            margin-top: 5px;
+        }
+
+        .sk-rrow {
             display: flex;
             justify-content: space-between;
+            font-size: 11px;
+            padding: 2px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .sk-rrow .lbl {
+            color: #444;
+        }
+
+        .sk-rrow .val {
+            font-weight: 600;
+        }
+
+        .sk-rtotal {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 4px 0;
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+            margin: 3px 0 4px;
+        }
+
+        .sk-status {
+            margin-top: 12px;
+        }
+
+        .sk-status .lbl {
+            font-size: 10px;
+            color: #555;
+            margin-bottom: 3px;
+        }
+
+        .sk-badge {
+            display: inline-block;
             font-weight: 700;
             font-size: 12px;
-            border-top: 1px solid #000;
-            padding-top: 3px;
-            margin-top: 2px;
+            letter-spacing: 2px;
+            padding: 3px 12px;
+            border: 2px solid #000;
         }
 
-        .sk-barcode {
-            font-size: 26px;
-            letter-spacing: -3px;
+        .sk-ttd {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-top: 22px;
+            font-size: 10px;
             text-align: center;
-            margin: 3px 0;
-            line-height: 1;
+        }
+
+        .sk-ttd-title {
+            font-weight: 700;
+            margin-bottom: 36px;
+        }
+
+        .sk-ttd-line {
+            border-top: 1px solid #000;
+            padding-top: 3px;
         }
 
         .sk-footer {
+            margin-top: 12px;
             text-align: center;
             font-size: 10px;
-            color: #666;
+            color: #555;
+            border-top: 1px dashed #aaa;
+            padding-top: 6px;
         }
 
         .modal-actions {
@@ -879,7 +983,6 @@
             background: #f8fafc;
         }
 
-        /* Konfirmasi */
         .confirm-box {
             background: #fff;
             border-radius: 16px;
@@ -900,7 +1003,6 @@
             margin: 0 auto 12px;
         }
 
-        /* Form pelanggan */
         .form-group {
             margin-bottom: 11px;
         }
@@ -989,7 +1091,7 @@
         <div class="pos-topbar flex items-center justify-between">
             <div>
                 <h1 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                    <i class="fa-solid fa-cash-register text-emerald-600"></i>  POS
+                    <i class="fa-solid fa-cash-register text-emerald-600"></i> POS
                 </h1>
                 <nav class="text-xs text-slate-400 flex items-center gap-1">
                     <a href="{{ route('home') }}" class="hover:text-emerald-600">Dashboard</a>
@@ -1009,8 +1111,6 @@
 
             {{-- ══ KIRI: PRODUK ══ --}}
             <div class="pos-left">
-
-                {{-- Search --}}
                 <div class="pos-left-bar">
                     <div class="pos-search-wrap">
                         <i class="fa-solid fa-search"></i>
@@ -1020,7 +1120,6 @@
                     <span class="text-xs text-slate-400 whitespace-nowrap" id="produkCount"></span>
                 </div>
 
-                {{-- Barcode --}}
                 <div class="barcode-bar">
                     <div class="barcode-wrap">
                         <i class="fa-solid fa-barcode"></i>
@@ -1029,10 +1128,8 @@
                     </div>
                 </div>
 
-                {{-- Kategori --}}
                 <div class="cat-scroll" id="catContainer"></div>
 
-                {{-- Grid --}}
                 <div class="prod-scroll">
                     <div class="prod-grid" id="produkGrid"></div>
                     <div id="produkEmpty" class="hidden text-center py-10 text-slate-400 text-sm">
@@ -1041,7 +1138,6 @@
                     </div>
                 </div>
 
-                {{-- Pagination --}}
                 <div class="prod-pagination" id="prodPagination">
                     <span class="pag-info" id="pagInfo"></span>
                     <div class="pag-btns">
@@ -1066,29 +1162,21 @@
                     </span>
                 </div>
 
-                {{-- Pelanggan --}}
                 <div class="pel-wrap">
-                    <div class="pel-label">
-                        <i class="fa-solid fa-user"></i> Pelanggan
-                    </div>
-
+                    <div class="pel-label"><i class="fa-solid fa-user"></i> Pelanggan</div>
                     <div class="pel-row">
                         <select class="pel-select select2-pelanggan" id="pelangganSel">
                             <option value="">— Umum / Tanpa Pelanggan —</option>
-
                             @foreach ($pelanggan as $p)
-                                <option value="{{ $p->id }}">
-                                    {{ $p->nama }}{{ $p->telepon ? ' · ' . $p->telepon : '' }}
-                                </option>
+                                <option value="{{ $p->id }}">{{ $p->nama }}{{ $p->telepon ? ' · ' . $p->telepon : '' }}</option>
                             @endforeach
                         </select>
-
                         <button class="btn-add-pel" onclick="bukaModalPelanggan()">
                             <i class="fa-solid fa-plus"></i> Baru
                         </button>
                     </div>
                 </div>
-                {{-- Items --}}
+
                 <div class="cart-items" id="cartItems">
                     <div class="cart-empty" id="cartEmpty">
                         <i class="fa-solid fa-cart-arrow-down" style="font-size:32px;opacity:.2;"></i>
@@ -1097,7 +1185,6 @@
                     </div>
                 </div>
 
-                {{-- Footer --}}
                 <div class="cart-footer">
                     <div class="footer-top">
                         <div class="f-row"><span>Subtotal</span><span id="fSubtotal">Rp 0</span></div>
@@ -1171,14 +1258,14 @@
 
     {{-- ══ MODAL STRUK ══ --}}
     <div class="modal-overlay" id="strukOverlay">
-        <div class="modal-box">
+        <div class="modal-box" style="width:600px;max-width:95vw;">
             <div class="modal-head">
                 <div class="modal-head-title"><i class="fa-solid fa-receipt text-emerald-500 mr-2"></i>Transaksi Berhasil
                 </div>
                 <button onclick="tutupStruk()" class="text-slate-400 hover:text-slate-600 text-xl"><i
                         class="fa-solid fa-xmark"></i></button>
             </div>
-            <div style="padding:0 18px;" id="strukWrapper"></div>
+            <div id="strukWrapper"></div>
             <div class="modal-actions">
                 <button class="btn-modal-cancel" onclick="tutupStruk()">Tutup</button>
                 <button class="btn-print" onclick="cetakStruk()"><i class="fa-solid fa-print mr-1"></i> Cetak Struk</button>
@@ -1221,7 +1308,6 @@
 
     @push('scripts')
         <script>
-
             $(document).ready(function () {
                 $('#pelangganSel').select2({
                     placeholder: '— Umum / Tanpa Pelanggan —',
@@ -1229,7 +1315,8 @@
                     dropdownAutoWidth: true
                 });
             });
-            /* ─── DATA ─────────────────────────────────────────────────── */
+
+            /* ─── DATA ─────────────────────────────────────────────── */
             const PRODUK_DATA = {!! json_encode(
             $produk->map(fn($p) => [
                 'id' => $p->id,
@@ -1246,25 +1333,33 @@
 
             const CSRF = '{{ csrf_token() }}';
             const KASIR = '{{ auth()->user()->nama }}';
-            const PER_PAGE = 20;   // produk per halaman
+            const PER_PAGE = 20;
 
-            /* ─── STATE ─────────────────────────────────────────────────── */
+            const TOKO = {
+                nama: "{{ $toko->nama_toko ?? 'TOKO' }}",
+                logo: "{{ $toko->logo ?? '' }}",
+                alamat: "{{ $toko->alamat ?? '' }}",
+                telepon: "{{ $toko->telepon ?? '' }}",
+                footer: `{{ $toko->footer_struk ?? '' }}`,
+            };
+
+            /* ─── STATE ─────────────────────────────────────────────── */
             let cart = {};
             let statusBayar = 'lunas';
             let activeCat = 'Semua';
             let lastTrxId = null;
             let currentPage = 1;
-            let filteredList = [];   // hasil filter saat ini
+            let filteredList = [];
             let barcodeBuffer = '', barcodeTimer = null;
 
-            /* ─── JAM ───────────────────────────────────────────────────── */
+            /* ─── JAM ───────────────────────────────────────────────── */
             (function tick() {
                 const el = document.getElementById('jamSekarang');
                 if (el) el.textContent = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                 setTimeout(tick, 1000);
             })();
 
-            /* ─── FORMAT ─────────────────────────────────────────────────── */
+            /* ─── FORMAT ────────────────────────────────────────────── */
             function fmt(n) { return Number(n).toLocaleString('id-ID'); }
             function parseRp(s) { return parseInt(String(s).replace(/\./g, '')) || 0; }
             function formatRpInput(el) {
@@ -1274,24 +1369,19 @@
             function onDiskonInput(el) { formatRpInput(el); updateFooter(); }
             function onBayarInput(el) { formatRpInput(el); updateKembalian(); }
 
-            /* ─── KATEGORI ───────────────────────────────────────────────── */
+            /* ─── KATEGORI ──────────────────────────────────────────── */
             function buildKategori() {
                 const cats = ['Semua', ...new Set(PRODUK_DATA.map(p => p.kat))];
                 document.getElementById('catContainer').innerHTML = cats.map(c =>
                     `<div class="cat-pill${c === activeCat ? ' active' : ''}" onclick="setCat('${c.replace(/'/g, "\\'")}')">
-                                    ${c}
-                                 </div>`
+                                        ${c}
+                                    </div>`
                 ).join('');
             }
 
-            function setCat(c) {
-                activeCat = c;
-                currentPage = 1;
-                buildKategori();
-                applyFilter();
-            }
+            function setCat(c) { activeCat = c; currentPage = 1; buildKategori(); applyFilter(); }
 
-            /* ─── DRAG SCROLL KATEGORI ───────────────────────────────────── */
+            /* ─── DRAG SCROLL ───────────────────────────────────────── */
             (function () {
                 const el = document.getElementById('catContainer');
                 let down = false, startX, scrollLeft;
@@ -1308,7 +1398,7 @@
                 });
             })();
 
-            /* ─── BARCODE ────────────────────────────────────────────────── */
+            /* ─── BARCODE ───────────────────────────────────────────── */
             document.getElementById('barcodeInput').addEventListener('keydown', function (e) {
                 if (e.key === 'Enter') {
                     const kode = this.value.trim();
@@ -1318,7 +1408,6 @@
                 }
             });
 
-            /* Global hardware scanner */
             document.addEventListener('keydown', function (e) {
                 const active = document.activeElement;
                 if (['INPUT', 'TEXTAREA', 'SELECT'].includes(active.tagName) && active.id !== 'barcodeInput') return;
@@ -1342,11 +1431,8 @@
                 showToast(p.nama + ' ditambahkan', 'success');
             }
 
-            /* ─── FILTER + PAGINATION ────────────────────────────────────── */
-            function onSearch() {
-                currentPage = 1;
-                applyFilter();
-            }
+            /* ─── FILTER + PAGINATION ───────────────────────────────── */
+            function onSearch() { currentPage = 1; applyFilter(); }
 
             function applyFilter() {
                 const q = document.getElementById('produkSearch').value.toLowerCase();
@@ -1361,14 +1447,12 @@
                 const total = filteredList.length;
                 const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
                 currentPage = Math.min(currentPage, totalPages);
-
                 const start = (currentPage - 1) * PER_PAGE;
                 const end = Math.min(start + PER_PAGE, total);
                 const page = filteredList.slice(start, end);
 
                 document.getElementById('produkCount').textContent = total + ' produk';
 
-                /* Empty state */
                 if (!total) {
                     document.getElementById('produkGrid').innerHTML = '';
                     document.getElementById('produkEmpty').classList.remove('hidden');
@@ -1377,42 +1461,35 @@
                 }
                 document.getElementById('produkEmpty').classList.add('hidden');
 
-                /* Render kartu */
                 document.getElementById('produkGrid').innerHTML = page.map(p => {
                     const inCart = cart[p.id] ? cart[p.id].qty : 0;
                     const noStok = p.stok === 0;
                     const lowStok = p.stok > 0 && p.stok <= p.min;
                     const imgEl = p.foto ? `<img src="/storage/${p.foto}" alt="${p.nama}">` : `<span style="font-size:18px;">🌿</span>`;
                     return `
-                                <div class="prod-card${noStok ? ' no-stok' : ''}"
-                                     onclick="${noStok ? '' : 'addToCart(' + p.id + ')'}"
-                                     title="${p.nama}">
-                                    ${inCart > 0 ? `<div class="cart-qty-badge">${inCart}</div>` : ''}
-                                    <div class="prod-img">${imgEl}</div>
-                                    <div class="prod-name">${p.nama}</div>
-                                    <div class="prod-sat">${p.satuan}</div>
-                                    <div class="prod-price">Rp ${fmt(p.harga)}</div>
-                                    <div class="prod-stok${noStok ? ' low' : lowStok ? ' low' : ''}">
-                                        ${noStok ? '✗ Stok habis' : lowStok ? '⚠ Sisa ' + p.stok + ' ' + p.satuan : 'Stok: ' + p.stok + ' ' + p.satuan}
-                                    </div>
-                                </div>`;
+                                        <div class="prod-card${noStok ? ' no-stok' : ''}"
+                                             onclick="${noStok ? '' : 'addToCart(' + p.id + ')'}"
+                                             title="${p.nama}">
+                                            ${inCart > 0 ? `<div class="cart-qty-badge">${inCart}</div>` : ''}
+                                            <div class="prod-img">${imgEl}</div>
+                                            <div class="prod-name">${p.nama}</div>
+                                            <div class="prod-sat">${p.satuan}</div>
+                                            <div class="prod-price">Rp ${fmt(p.harga)}</div>
+                                            <div class="prod-stok${noStok ? ' low' : lowStok ? ' low' : ''}">
+                                                ${noStok ? '✗ Stok habis' : lowStok ? '⚠ Sisa ' + p.stok + ' ' + p.satuan : 'Stok: ' + p.stok + ' ' + p.satuan}
+                                            </div>
+                                        </div>`;
                 }).join('');
 
-                /* Pagination bar */
                 const pag = document.getElementById('prodPagination');
-                if (totalPages <= 1) {
-                    pag.style.display = 'none';
-                    return;
-                }
+                if (totalPages <= 1) { pag.style.display = 'none'; return; }
                 pag.style.display = 'flex';
-                document.getElementById('pagInfo').textContent =
-                    `${start + 1}–${end} dari ${total} produk`;
+                document.getElementById('pagInfo').textContent = `${start + 1}–${end} dari ${total} produk`;
                 document.getElementById('pagPrev').disabled = currentPage === 1;
                 document.getElementById('pagNext').disabled = currentPage === totalPages;
-
-                /* Nomor halaman (max 5 tampil) */
-                let pages = [], lo = Math.max(1, currentPage - 2), hi = Math.min(totalPages, lo + 4);
+                let lo = Math.max(1, currentPage - 2), hi = Math.min(totalPages, lo + 4);
                 lo = Math.max(1, hi - 4);
+                let pages = [];
                 for (let i = lo; i <= hi; i++) pages.push(i);
                 document.getElementById('pagPages').innerHTML = pages.map(i =>
                     `<button class="pag-btn${i === currentPage ? ' active' : ''}" onclick="changePage(${i})">${i}</button>`
@@ -1420,15 +1497,14 @@
             }
 
             function changePage(p) {
-                const total = filteredList.length;
-                const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
+                const totalPages = Math.max(1, Math.ceil(filteredList.length / PER_PAGE));
                 if (p < 1 || p > totalPages) return;
                 currentPage = p;
                 renderPage();
                 document.getElementById('produkGrid').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
 
-            /* ─── KERANJANG ──────────────────────────────────────────────── */
+            /* ─── KERANJANG ─────────────────────────────────────────── */
             function addToCart(id) {
                 const p = PRODUK_DATA.find(x => x.id === id);
                 if (!p || p.stok === 0) return;
@@ -1438,8 +1514,7 @@
                 } else {
                     cart[id] = { ...p, qty: 1 };
                 }
-                renderCart();
-                renderPage(); /* refresh badge di kartu */
+                renderCart(); renderPage();
             }
 
             function changeQty(id, delta) {
@@ -1458,14 +1533,10 @@
                 renderCart(); renderPage();
             }
 
-            function removeFromCart(id) {
-                delete cart[id];
-                renderCart(); renderPage();
-            }
+            function removeFromCart(id) { delete cart[id]; renderCart(); renderPage(); }
 
             function clearCart() {
-                cart = {};
-                renderCart(); renderPage();
+                cart = {}; renderCart(); renderPage();
                 document.getElementById('diskonInput').value = '';
                 document.getElementById('bayarInput').value = '';
                 updateFooter();
@@ -1476,11 +1547,11 @@
                 const cartEl = document.getElementById('cartItems');
                 const emptyEl = document.getElementById('cartEmpty');
                 const badge = document.getElementById('cartBadge');
-                const btnBayar = document.getElementById('btnBayar');
+                const btn = document.getElementById('btnBayar');
                 const totalQty = items.reduce((s, c) => s + c.qty, 0);
 
-                if (totalQty) { badge.textContent = totalQty; badge.classList.remove('hidden'); btnBayar.disabled = false; }
-                else { badge.classList.add('hidden'); btnBayar.disabled = true; }
+                if (totalQty) { badge.textContent = totalQty; badge.classList.remove('hidden'); btn.disabled = false; }
+                else { badge.classList.add('hidden'); btn.disabled = true; }
 
                 if (!items.length) {
                     cartEl.innerHTML = ''; cartEl.appendChild(emptyEl); emptyEl.style.display = 'flex';
@@ -1489,27 +1560,27 @@
                 emptyEl.style.display = 'none';
 
                 cartEl.innerHTML = items.map(c => `
-                                <div class="cart-item">
-                                    <div class="ci-thumb">
-                                        ${c.foto ? `<img src="/storage/${c.foto}" style="width:28px;height:28px;object-fit:cover;border-radius:6px;" alt="">` : '🌿'}
-                                    </div>
-                                    <div class="ci-info">
-                                        <div class="ci-name" title="${c.nama}">${c.nama}</div>
-                                        <div class="ci-qty-row">
-                                            <button class="qty-btn" onclick="changeQty(${c.id},-1)">−</button>
-                                            <input type="number" value="${c.qty}" min="1" max="${c.stok}"
-                                                style="width:34px;border:1.5px solid #e2e8f0;border-radius:5px;text-align:center;font-size:12px;font-weight:700;outline:none;padding:0;"
-                                                onchange="setQty(${c.id},this.value)" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-                                            <button class="qty-btn" onclick="changeQty(${c.id},1)">+</button>
-                                            <span style="font-size:10px;color:#94a3b8;">/${c.satuan}</span>
+                                    <div class="cart-item">
+                                        <div class="ci-thumb">
+                                            ${c.foto ? `<img src="/storage/${c.foto}" style="width:28px;height:28px;object-fit:cover;border-radius:6px;" alt="">` : '🌿'}
                                         </div>
-                                    </div>
-                                    <div class="ci-price-col">
-                                        <div class="ci-subtotal">Rp ${fmt(c.harga * c.qty)}</div>
-                                        <div class="ci-harga">@ Rp ${fmt(c.harga)}</div>
-                                    </div>
-                                    <button class="ci-del" onclick="removeFromCart(${c.id})"><i class="fa-solid fa-xmark"></i></button>
-                                </div>`).join('');
+                                        <div class="ci-info">
+                                            <div class="ci-name" title="${c.nama}">${c.nama}</div>
+                                            <div class="ci-qty-row">
+                                                <button class="qty-btn" onclick="changeQty(${c.id},-1)">−</button>
+                                                <input type="number" value="${c.qty}" min="1" max="${c.stok}"
+                                                    style="width:34px;border:1.5px solid #e2e8f0;border-radius:5px;text-align:center;font-size:12px;font-weight:700;outline:none;padding:0;"
+                                                    onchange="setQty(${c.id},this.value)" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                                                <button class="qty-btn" onclick="changeQty(${c.id},1)">+</button>
+                                                <span style="font-size:10px;color:#94a3b8;">/${c.satuan}</span>
+                                            </div>
+                                        </div>
+                                        <div class="ci-price-col">
+                                            <div class="ci-subtotal">Rp ${fmt(c.harga * c.qty)}</div>
+                                            <div class="ci-harga">@ Rp ${fmt(c.harga)}</div>
+                                        </div>
+                                        <button class="ci-del" onclick="removeFromCart(${c.id})"><i class="fa-solid fa-xmark"></i></button>
+                                    </div>`).join('');
                 cartEl.appendChild(emptyEl);
                 updateFooter();
             }
@@ -1538,7 +1609,7 @@
                 el.className = 'kem-val' + (kem < 0 ? ' kurang' : '');
             }
 
-            /* ─── STATUS BAYAR ───────────────────────────────────────────── */
+            /* ─── STATUS BAYAR ──────────────────────────────────────── */
             function setStatusBayar(el, val) {
                 statusBayar = val;
                 document.querySelectorAll('.sb-pill').forEach(p => p.classList.remove('active'));
@@ -1546,36 +1617,26 @@
                 document.getElementById('bayarSection').style.display = val === 'belum_bayar' ? 'none' : 'block';
             }
 
-            /* ─── KONFIRMASI ─────────────────────────────────────────────── */
+            /* ─── KONFIRMASI ────────────────────────────────────────── */
             function bukaKonfirmasi() {
                 if (!Object.keys(cart).length) return;
-                const {sub,dis,total}=getTotal();
-                const bayar=statusBayar==='belum_bayar'?0:(parseRp(document.getElementById('bayarInput').value)||total);
-
+                const { sub, dis, total } = getTotal();
+                const bayar = statusBayar === 'belum_bayar' ? 0 : (parseRp(document.getElementById('bayarInput').value) || total);
                 const pelangganId = document.getElementById('pelangganSel').value;
 
-                if (
-                    (statusBayar === 'sebagian' || statusBayar === 'belum_bayar') &&
-                    !pelangganId
-                ) {
-                    showToast('Pelanggan wajib dipilih untuk transaksi piutang.', 'error');
-                    return;
+                if ((statusBayar === 'sebagian' || statusBayar === 'belum_bayar') && !pelangganId) {
+                    showToast('Pelanggan wajib dipilih untuk transaksi piutang.', 'error'); return;
                 }
-
                 if (statusBayar === 'lunas' && bayar < total) {
-                    showToast('Jumlah bayar kurang dari total transaksi.', 'error');
-                    return;
+                    showToast('Jumlah bayar kurang dari total transaksi.', 'error'); return;
                 }
-
                 if (statusBayar === 'sebagian' && bayar <= 0) {
-                    showToast('Pembayaran sebagian harus lebih dari 0.', 'error');
-                    return;
+                    showToast('Pembayaran sebagian harus lebih dari 0.', 'error'); return;
+                }
+                if (statusBayar === 'belum_bayar' && bayar > 0) {
+                    showToast('Status belum bayar tidak boleh memiliki pembayaran.', 'error'); return;
                 }
 
-                if (statusBayar === 'belum_bayar' && bayar > 0) {
-                    showToast('Status belum bayar tidak boleh memiliki pembayaran.', 'error');
-                    return;
-                }
                 const kem = Math.max(0, bayar - total);
                 const sbLabel = { lunas: 'LUNAS', sebagian: 'SEBAGIAN', belum_bayar: 'BELUM DIBAYAR' };
                 const sbColor = { lunas: '#059669', sebagian: '#d97706', belum_bayar: '#dc2626' };
@@ -1598,7 +1659,7 @@
 
             function tutupKonfirmasi() { document.getElementById('konfirmasiOverlay').classList.remove('open'); }
 
-            /* ─── PROSES BAYAR ───────────────────────────────────────────── */
+            /* ─── PROSES BAYAR ──────────────────────────────────────── */
             function prosesBayar() {
                 tutupKonfirmasi();
                 const items = Object.values(cart);
@@ -1642,68 +1703,110 @@
                     });
             }
 
-            const TOKO = {
-                nama: "{{ $toko->nama_toko ?? 'TOKO' }}",
-                 logo: "{{ $toko->logo ?? '' }}",
-                alamat: "{{ $toko->alamat ?? '' }}",
-                telepon: "{{ $toko->telepon ?? '' }}",
-                header: `{{ $toko->header_struk ?? '' }}`,
-                footer: `{{ $toko->footer_struk ?? '' }}`,
-            };
-
-            /* ─── STRUK ──────────────────────────────────────────────────── */
+            /* ══════════════════════════════════════════════════════════
+             *  STRUK A4 DOT-MATRIX
+             * ══════════════════════════════════════════════════════════ */
             function tampilkanStruk(data, items, sub, dis, total, bayar) {
                 const kem = Math.max(0, bayar - total);
                 const now = new Date();
                 const tgl = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
                 const jam = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
                 const sbLabel = { lunas: 'LUNAS', sebagian: 'SEBAGIAN', belum_bayar: 'BELUM DIBAYAR' };
+                const pelNama = document.getElementById('pelangganSel').selectedOptions[0]?.text ?? 'Umum';
 
-                const baris = items.map(c => {
-                    const nama = c.nama.length > 18 ? c.nama.slice(0, 18) + '…' : c.nama;
-                    return `<div style="margin-bottom:3px;">
-                                <div style="font-weight:700;">${nama}</div>
-                                <div class="sk-row"><span class="sk-muted">${c.qty} x ${fmt(c.harga)}</span><span>${fmt(c.harga * c.qty)}</span></div>
-                            </div>`;
-                }).join('');
+                /* Baris produk di tabel */
+                const barisItems = items.map((c, i) => `
+                                    <tr>
+                                        <td>${i + 1}</td>
+                                        <td>${c.nama}</td>
+                                        <td style="text-align:center;">${c.qty}</td>
+                                        <td style="text-align:center;">${c.satuan}</td>
+                                        <td style="text-align:right;">${fmt(c.harga)}</td>
+                                        <td style="text-align:right;">${fmt(c.harga * c.qty)}</td>
+                                    </tr>`).join('');
 
-                const headerToko = `
-                    ${TOKO.logo ? `<div style="display:flex;justify-content:center;margin-bottom:4px;">
-                        <img src="/storage/${TOKO.logo}" alt="Logo"
-                            style="max-width:80px;max-height:60px;object-fit:contain;display:block;">
-                    </div>` : ''}
-                    <div class="sk-center sk-bold" style="font-size:13px;">${TOKO.nama}</div>
-                    ${TOKO.alamat  ? `<div class="sk-center sk-muted" style="font-size:9px;">${TOKO.alamat}</div>`  : ''}
-                    ${TOKO.telepon ? `<div class="sk-center sk-muted" style="font-size:9px;">Telp: ${TOKO.telepon}</div>` : ''}
-                `;
+                /* Baris kosong pelengkap (min 4 baris) */
+                const emptyRows = items.length < 4
+                    ? Array(4 - items.length).fill(`<tr>${'<td>&nbsp;</td>'.repeat(6)}</tr>`).join('')
+                    : '';
 
-                const footerToko = TOKO.footer
-                    ? TOKO.footer.split('\n').map(l => `<div class="sk-footer">${l}</div>`).join('')
-                    : `<div class="sk-footer">Barang yg dibeli tidak dpt dikembalikan</div>`;
+                const logoHtml = TOKO.logo
+                    ? `<div style="margin-bottom:5px;"><img src="/storage/${TOKO.logo}" alt="Logo" style="max-height:40px;object-fit:contain;"></div>`
+                    : '';
+
+                const footerTeks = TOKO.footer
+                    ? TOKO.footer
+                    : 'Barang yang dibeli tidak dapat dikembalikan.';
 
                 document.getElementById('strukWrapper').innerHTML = `
-                    <div class="struk-paper" id="strukPaper">
-                        ${headerToko}
-                        <hr class="sk-divider">
-                        <div class="sk-row"><span>Tgl:</span><span>${tgl}</span></div>
-                        <div class="sk-row"><span>Pukul:</span><span>${jam}</span></div>
-                        <div class="sk-row"><span>Kasir:</span><span>${KASIR}</span></div>
-                        <div style="font-size:9px;">${data.nomor}</div>
-                        <hr class="sk-divider">
-                        ${baris}
-                        <hr class="sk-divider">
-                        <div class="sk-row"><span>Subtotal</span><span>${fmt(sub)}</span></div>
-                        ${dis > 0 ? `<div class="sk-row"><span>Diskon</span><span>- ${fmt(dis)}</span></div>` : ''}
-                        <div class="sk-total"><span>TOTAL</span><span>${fmt(total)}</span></div>
-                        ${statusBayar !== 'belum_bayar' ? `<div class="sk-row"><span>Bayar</span><span>${fmt(bayar)}</span></div>` : ''}
-                        ${statusBayar === 'lunas' && kem > 0 ? `<div class="sk-row sk-bold"><span>Kembali</span><span>${fmt(kem)}</span></div>` : ''}
-                        <hr class="sk-divider">
-                        <div class="sk-center sk-bold" style="letter-spacing:1px;">${sbLabel[statusBayar]}</div>
-                        <hr class="sk-divider">
-                        <div class="sk-footer">Terima kasih atas kepercayaan Anda!</div>
-                        ${footerToko}
-                        <div style="height:12px;"></div>
-                    </div>`;
+                                    <div class="struk-paper" id="strukPaper">
+
+                                        <div class="sk-title">Struk Penjualan</div>
+
+                                        <div class="sk-hgrid">
+                                            <div>
+                                                ${logoHtml}
+                                                <div class="sk-irow"><span class="sk-lbl">Nama Toko</span><span class="sk-val">${TOKO.nama}</span></div>
+                                                ${TOKO.alamat ? `<div class="sk-irow"><span class="sk-lbl">Alamat</span><span class="sk-val">${TOKO.alamat}</span></div>` : ''}
+                                                ${TOKO.telepon ? `<div class="sk-irow"><span class="sk-lbl">Telepon</span><span class="sk-val">${TOKO.telepon}</span></div>` : ''}
+                                                ${pelNama !== 'Umum' && pelNama !== '— Umum / Tanpa Pelanggan —'
+                        ? `<div class="sk-irow" style="margin-top:5px;"><span class="sk-lbl">Pelanggan</span><span class="sk-val">${pelNama}</span></div>`
+                        : ''}
+                                            </div>
+                                            <div>
+                                                <div class="sk-irow"><span class="sk-lbl">No. Struk</span><span class="sk-val">${data.nomor}</span></div>
+                                                <div class="sk-irow"><span class="sk-lbl">Tanggal</span><span class="sk-val">${tgl}</span></div>
+                                                <div class="sk-irow"><span class="sk-lbl">Pukul</span><span class="sk-val">${jam} WIB</span></div>
+                                                <div class="sk-irow"><span class="sk-lbl">Kasir</span><span class="sk-val">${KASIR}</span></div>
+                                                <div class="sk-irow"><span class="sk-lbl">Status</span><span class="sk-val">${sbLabel[statusBayar]}</span></div>
+                                            </div>
+                                        </div>
+
+                                        <hr class="sk-sep2">
+
+                                        <table class="sk-tbl">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:22px;">No</th>
+                                                    <th>Nama Produk</th>
+                                                    <th class="tr" style="width:32px;">Qty</th>
+                                                    <th class="tr" style="width:32px;">Sat</th>
+                                                    <th class="tr" style="width:85px;">Harga</th>
+                                                    <th class="tr" style="width:90px;">Subtotal</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${barisItems}
+                                                ${emptyRows}
+                                            </tbody>
+                                        </table>
+
+                                        <hr class="sk-sep2">
+
+                                        <div class="sk-ring">
+                                            <div class="sk-rrow"><span class="lbl">Subtotal</span><span class="val">Rp ${fmt(sub)}</span></div>
+                                            ${dis > 0 ? `<div class="sk-rrow"><span class="lbl">Diskon</span><span class="val">- Rp ${fmt(dis)}</span></div>` : ''}
+                                            <div class="sk-rtotal"><span>TOTAL</span><span>Rp ${fmt(total)}</span></div>
+                                            ${statusBayar !== 'belum_bayar' ? `<div class="sk-rrow"><span class="lbl">Jumlah Bayar</span><span class="val">Rp ${fmt(bayar)}</span></div>` : ''}
+                                            ${statusBayar === 'lunas' && kem > 0 ? `<div class="sk-rrow" style="border:none;"><span class="lbl">Kembali</span><span class="val">Rp ${fmt(kem)}</span></div>` : ''}
+                                        </div>
+
+                                        <div class="sk-status">
+                                            <div class="lbl">Status Pembayaran</div>
+                                            <div class="sk-badge">&#9733; ${sbLabel[statusBayar]} &#9733;</div>
+                                        </div>
+
+                                        <div class="sk-ttd">
+                                            <div><div class="sk-ttd-title">Pelanggan</div><div class="sk-ttd-line">${pelNama !== 'Umum' && pelNama !== '— Umum / Tanpa Pelanggan —' ? pelNama : '( ........................ )'}</div></div>
+                                            <div><div class="sk-ttd-title">Mengetahui</div><div class="sk-ttd-line">( .................. )</div></div>
+                                            <div><div class="sk-ttd-title">Kasir</div><div class="sk-ttd-line">${KASIR}</div></div>
+                                        </div>
+
+                                        <div class="sk-footer">
+                                            <div>Terima kasih atas kepercayaan Anda berbelanja di ${TOKO.nama}!</div>
+                                            <div>${footerTeks}</div>
+                                        </div>
+                                    </div>`;
 
                 document.getElementById('strukOverlay').classList.add('open');
             }
@@ -1714,27 +1817,63 @@
                 document.getElementById('btnBayarText').textContent = 'Proses Pembayaran';
             }
 
+            /* ══ CETAK STRUK — buka jendela baru, print A4 ══ */
             function cetakStruk() {
                 const paper = document.getElementById('strukPaper');
                 if (!paper) return;
-                const w = window.open('', '_blank', 'width=320,height=720');
-                w.document.write(`<!DOCTYPE html><html><head><title>Struk</title>
-                            <style>
-                                *{margin:0;padding:0;box-sizing:border-box;}
-                                body{font-family:'Courier New',monospace;font-size:11px;width:58mm;margin:0 auto;padding:2mm;}
-                                .sk-center{text-align:center;} .sk-bold{font-weight:700;} .sk-muted{color:#555;}
-                                .sk-row{display:flex;justify-content:space-between;}
-                                .sk-divider{border:none;border-top:1px dashed #999;margin:4px 0;}
-                                .sk-total{display:flex;justify-content:space-between;font-weight:700;font-size:12px;border-top:1px solid #000;padding-top:3px;margin-top:2px;}
-                                .sk-barcode{font-size:26px;letter-spacing:-3px;text-align:center;margin:3px 0;line-height:1;}
-                                .sk-footer{text-align:center;font-size:10px;color:#666;}
-                                @media print{body{width:58mm;}@page{size:58mm auto;margin:0;}}
-                            </style></head><body>${paper.outerHTML}</body></html>`);
+                const w = window.open('', '_blank', 'width=800,height=900');
+                w.document.write(`<!DOCTYPE html>
+                <html><head><title>Struk</title>
+                <style>
+                    * { margin:0; padding:0; box-sizing:border-box; }
+                    body {
+                        font-family: 'Courier New', Courier, monospace;
+                        font-size: 12px;
+                        line-height: 1.65;
+                        color: #000;
+                        padding: 10mm 15mm 15mm;
+                    }
+                    .sk-title {
+                        text-align: center; font-size: 16px; font-weight: 700;
+                        letter-spacing: 3px; text-transform: uppercase;
+                        border-bottom: 2px solid #000; padding-bottom: 7px; margin-bottom: 12px;
+                    }
+                    .sk-hgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; margin-bottom: 10px; }
+                    .sk-irow  { display: flex; font-size: 11px; line-height: 1.8; }
+                    .sk-lbl   { min-width: 90px; color: #333; }
+                    .sk-lbl::after { content: ':'; }
+                    .sk-val   { font-weight: 700; flex: 1; }
+                    .sk-sep   { border: none; border-top: 1px dashed #777; margin: 5px 0; }
+                    .sk-sep2  { border: none; border-top: 2px solid #000; margin: 5px 0; }
+                    .sk-tbl   { width: 100%; border-collapse: collapse; font-size: 11px; margin: 6px 0; }
+                    .sk-tbl thead th { background: #000; color: #fff; padding: 5px 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+                    .sk-tbl thead th.tr { text-align: right; }
+                    .sk-tbl tbody tr  { border-bottom: 1px dashed #ccc; }
+                    .sk-tbl tbody td  { padding: 4px 6px; }
+                    .sk-ring  { width: 200px; margin-left: auto; margin-top: 6px; }
+                    .sk-rrow  { display: flex; justify-content: space-between; font-size: 11px; padding: 2px 0; border-bottom: 1px dashed #ddd; }
+                    .sk-rrow .lbl { color: #444; }
+                    .sk-rrow .val { font-weight: 600; }
+                    .sk-rtotal { display: flex; justify-content: space-between; font-size: 13px; font-weight: 700; padding: 4px 0; border-top: 2px solid #000; border-bottom: 2px solid #000; margin: 3px 0 4px; }
+                    .sk-status { margin-top: 14px; }
+                    .sk-status .lbl { font-size: 10px; color: #555; margin-bottom: 3px; }
+                    .sk-badge { display: inline-block; font-weight: 700; font-size: 12px; letter-spacing: 2px; padding: 3px 12px; border: 2px solid #000; }
+                    .sk-ttd   { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 24px; font-size: 10px; text-align: center; }
+                    .sk-ttd-title { font-weight: 700; margin-bottom: 36px; }
+                    .sk-ttd-line  { border-top: 1px solid #000; padding-top: 3px; }
+                    .sk-footer { margin-top: 14px; text-align: center; font-size: 10px; color: #555; border-top: 1px dashed #aaa; padding-top: 6px; }
+                    @media print {
+                        body { padding: 8mm 12mm 12mm; }
+                        @page { size: A4 portrait; margin: 0; }
+                    }
+                </style>
+                </head>
+                <body>${paper.outerHTML}</body></html>`);
                 w.document.close();
-                setTimeout(() => { w.print(); }, 400);
+                setTimeout(() => { w.focus(); w.print(); }, 400);
             }
 
-            /* ─── TAMBAH PELANGGAN ───────────────────────────────────────── */
+            /* ─── TAMBAH PELANGGAN ──────────────────────────────────── */
             function bukaModalPelanggan() {
                 document.getElementById('pelNama').value = '';
                 document.getElementById('pelTelepon').value = '';
@@ -1743,6 +1882,7 @@
                 document.getElementById('pelangganOverlay').classList.add('open');
                 setTimeout(() => document.getElementById('pelNama').focus(), 100);
             }
+
             function tutupModalPelanggan() { document.getElementById('pelangganOverlay').classList.remove('open'); }
 
             function simpanPelanggan() {
@@ -1755,50 +1895,50 @@
                 const btn = document.getElementById('btnSimpanPel');
                 btn.disabled = true; btn.textContent = 'Menyimpan...';
 
-                fetch('{{ route('pelanggan.store') }}  ' ,{
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
-                            body: JSON.stringify({ nama, telepon, alamat }),
-                        })
-                            .then(r => r.json())
-                            .then(data => {
-                                if (data.success || data.id) {
-                                    const sel = document.getElementById('pelangganSel');
-                                    const opt = new Option(data.nama + (data.telepon ? ' · ' + data.telepon : ''), data.id, true, true);
-                                    sel.appendChild(opt); sel.value = data.id;
-                                    tutupModalPelanggan();
-                                    showToast('Pelanggan ' + data.nama + ' ditambahkan', 'success');
-                                } else {
-                                    errEl.textContent = data.message || 'Gagal menyimpan.'; errEl.classList.remove('hidden');
-                                }
-                            })
-                            .catch(() => { errEl.textContent = 'Koneksi gagal.'; errEl.classList.remove('hidden'); })
-                            .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-save mr-1"></i> Simpan'; });
-                    }
+                fetch('{{ route('pelanggan.store') }}', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': CSRF, 'Accept': 'application/json' },
+                    body: JSON.stringify({ nama, telepon, alamat }),
+                })
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.success || data.id) {
+                            const sel = document.getElementById('pelangganSel');
+                            const opt = new Option(data.nama + (data.telepon ? ' · ' + data.telepon : ''), data.id, true, true);
+                            sel.appendChild(opt); sel.value = data.id;
+                            tutupModalPelanggan();
+                            showToast('Pelanggan ' + data.nama + ' ditambahkan', 'success');
+                        } else {
+                            errEl.textContent = data.message || 'Gagal menyimpan.'; errEl.classList.remove('hidden');
+                        }
+                    })
+                    .catch(() => { errEl.textContent = 'Koneksi gagal.'; errEl.classList.remove('hidden'); })
+                    .finally(() => { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-save mr-1"></i> Simpan'; });
+            }
 
-                    /* ─── TOAST ──────────────────────────────────────────────────── */
-                    function showToast(msg, type = 'success') {
-                        const t = document.createElement('div');
-                        t.style.cssText = `position:fixed;top:20px;right:20px;z-index:9999;
-                                padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;
-                                box-shadow:0 4px 20px rgba(0,0,0,.15);
-                                background:${type === 'success' ? '#059669' : '#dc2626'};color:#fff;max-width:280px;`;
-                        t.textContent = msg;
-                        document.body.appendChild(t);
-                        setTimeout(() => t.remove(), 3200);
-                    }
+            /* ─── TOAST ─────────────────────────────────────────────── */
+            function showToast(msg, type = 'success') {
+                const t = document.createElement('div');
+                t.style.cssText = `position:fixed;top:20px;right:20px;z-index:9999;
+                                    padding:10px 16px;border-radius:10px;font-size:13px;font-weight:600;
+                                    box-shadow:0 4px 20px rgba(0,0,0,.15);
+                                    background:${type === 'success' ? '#059669' : '#dc2626'};color:#fff;max-width:280px;`;
+                t.textContent = msg;
+                document.body.appendChild(t);
+                setTimeout(() => t.remove(), 3200);
+            }
 
-                    /* ─── BACKDROP CLOSE ─────────────────────────────────────────── */
-                    ['strukOverlay', 'konfirmasiOverlay', 'pelangganOverlay'].forEach(id => {
-                        document.getElementById(id).addEventListener('click', function (e) {
-                            if (e.target === this) this.classList.remove('open');
-                        });
-                    });
+            /* ─── BACKDROP CLOSE ────────────────────────────────────── */
+            ['strukOverlay', 'konfirmasiOverlay', 'pelangganOverlay'].forEach(id => {
+                document.getElementById(id).addEventListener('click', function (e) {
+                    if (e.target === this) this.classList.remove('open');
+                });
+            });
 
-                    /* ─── INIT ───────────────────────────────────────────────────── */
-                    buildKategori();
-                    applyFilter();
-                    renderCart();
-                </script>
+            /* ─── INIT ──────────────────────────────────────────────── */
+            buildKategori();
+            applyFilter();
+            renderCart();
+        </script>
     @endpush
 @endsection

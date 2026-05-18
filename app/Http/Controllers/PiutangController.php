@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PengaturanToko;
 use App\Models\Piutang;
 use App\Models\PiutangPembayaran;
 use Illuminate\Http\Request;
@@ -131,5 +132,18 @@ class PiutangController extends Controller
 
             return back()->with('error', $e->getMessage());
         }
+    }
+
+    public function print($id)
+    {
+        $piutang = Piutang::with([
+            'pelanggan',
+            'transaksi',
+            'pembayaran.user'
+        ])->findOrFail($id);
+
+        $toko = PengaturanToko::first();
+
+        return view('piutang.print', compact('piutang', 'toko'));
     }
 }
