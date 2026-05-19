@@ -177,14 +177,13 @@ class ProdukController extends Controller
             Storage::disk('public')->delete($p->foto);
         });
 
+        Piutang::query()->delete();
         TransaksiFifoLog::query()->delete();
         TransaksiDetail::query()->delete();
         Transaksi::query()->delete();
         StokBatch::query()->delete();
         BarangMasukDetail::query()->delete();
         BarangMasuk::query()->delete();
-        PiutangPembayaran::query()->delete();
-        Piutang::query()->delete();
         Produk::query()->delete();
 
         return redirect()->back()->with('success', 'Semua produk berhasil dihapus.');
