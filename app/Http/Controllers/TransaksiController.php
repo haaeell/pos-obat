@@ -105,13 +105,7 @@ class TransaksiController extends Controller
 
         DB::beginTransaction();
         try {
-            // ── Generate nomor ──────────────────────────────
-            $prefix  = 'TRX-' . now()->format('Ymd') . '-';
-            $lastNo  = Transaksi::where('nomor', 'like', $prefix . '%')
-                ->orderByDesc('nomor')
-                ->value('nomor');
-            $urut    = $lastNo ? (int) substr($lastNo, -3) + 1 : 1;
-            $nomor   = $prefix . str_pad($urut, 3, '0', STR_PAD_LEFT);
+
 
             // ── Hitung subtotal ─────────────────────────────
             $subtotal = 0;
@@ -128,7 +122,7 @@ class TransaksiController extends Controller
 
             // ── Buat header transaksi ───────────────────────
             $transaksi = Transaksi::create([
-                'nomor'           => $nomor,
+                'nomor' => $this->generateNomorPiutang(),
                 'pelanggan_id'    => $request->pelanggan_id,
                 'user_id'         => Auth::user()->id,
                 'tanggal'         => now()->toDateString(),
@@ -214,7 +208,7 @@ class TransaksiController extends Controller
             return response()->json([
                 'success'  => true,
                 'message'  => 'Transaksi berhasil disimpan.',
-                'nomor'    => $nomor,
+                'nomor' => $this->generateNomorPiutang(),
                 'transaksi_id' => $transaksi->id,
                 'total'    => $total,
                 'kembalian' => $kembali,
@@ -226,6 +220,26 @@ class TransaksiController extends Controller
                 'message' => $e->getMessage(),
             ], 422);
         }
+    }
+
+    private function generateNomorPiutang()
+    {
+        $prefix = 'PIU-' . now()->format('Ymd') . '-';
+
+        do {
+            $last = Piutang::where('nomor', 'like', $prefix . '%')
+                ->lockForUpdate()
+                ->orderByDesc('nomor')
+                ->value('nomor');
+
+            $next = $last
+                ? ((int) substr($last, -3)) + 1
+                : 1;
+
+            $nomor = $prefix . str_pad($next, 3, '0', STR_PAD_LEFT);
+        } while (Piutang::where('nomor', $nomor)->exists());
+
+        return $nomor;
     }
 
     // ─────────────────────────────────────────────
