@@ -138,7 +138,7 @@ class PiutangController extends Controller
     {
         $piutang = Piutang::with([
             'pelanggan',
-            'transaksi',
+            'transaksi.detail',
             'pembayaran.user'
         ])->findOrFail($id);
 

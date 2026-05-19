@@ -40,11 +40,13 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::prefix('produk')->controller(ProdukController::class)->group(function () {
-        Route::get('/',              'index')->name('produk.index');
-        Route::post('/',             'store')->name('produk.store');
-        Route::put('/{id}',          'update')->name('produk.update');
+        Route::get('/',               'index')->name('produk.index');
+        Route::post('/',              'store')->name('produk.store');
+        Route::put('/{id}',           'update')->name('produk.update');
+        Route::get('/template',       'template')->name('produk.template');
+        Route::post('/import',        'import')->name('produk.import');
         Route::delete('/hapus-semua', 'destroyAll')->name('produk.destroy-all');
-        Route::delete('/{id}',       'destroy')->name('produk.destroy');
+        Route::delete('/{id}',        'destroy')->name('produk.destroy');
     });
 
     Route::prefix('stock-in')->controller(StockInController::class)->group(function () {

@@ -28,9 +28,10 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #059669, #10b981);
-            color: white;
+            background: #fff;
+            color: #1e293b;
             padding: 32px;
+            border-bottom: 2px solid #e2e8f0;
         }
 
         .header-top {
@@ -243,6 +244,7 @@
             display: flex;
             justify-content: space-between;
             gap: 30px;
+            page-break-inside: avoid;
         }
 
         .signature {
@@ -271,7 +273,20 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
         }
 
+        /* ===== PERBAIKAN UNTUK PRINT A4 ===== */
         @media print {
+            @page {
+                size: A4;
+            }
+
+            html,
+            body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 0;
+                background: white;
+            }
 
             body {
                 background: white;
@@ -279,13 +294,82 @@
 
             .page {
                 margin: 0;
+                padding: 0;
                 box-shadow: none;
                 max-width: 100%;
+                width: 100%;
+                min-height: auto;
+                /* Ubah dari 297mm */
                 border-radius: 0;
+            }
+
+            .content {
+                padding: 20px;
+                /* Kurangi padding */
             }
 
             .print-btn {
                 display: none;
+            }
+
+            /* Pastikan konten tidak terpotong */
+            .header {
+                page-break-inside: avoid;
+            }
+
+            .card {
+                page-break-inside: avoid;
+            }
+
+            .grid {
+                page-break-inside: avoid;
+            }
+
+            table {
+                page-break-inside: auto;
+            }
+
+            thead {
+                display: table-header-group;
+                /* Header table tetap di setiap halaman */
+            }
+
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            .summary {
+                page-break-inside: avoid;
+                margin-top: 20px;
+                /* Kurangi margin */
+            }
+
+            /* PENTING: Pastikan footer tidak terpotong */
+            .footer {
+                page-break-inside: avoid;
+                margin-top: 30px;
+                padding-bottom: 20px;
+                /* Beri ruang di bawah */
+            }
+
+            .signature .line {
+                margin-top: 60px;
+                /* Kurangi sedikit jarak TTD */
+            }
+
+            /* Hilangkan border-radius saat print */
+            .header,
+            .card,
+            .summary {
+                border-radius: 0;
+            }
+
+            /* Pastikan halaman terakhir punya ruang cukup */
+            .content::after {
+                content: "";
+                display: block;
+                height: 20mm;
             }
         }
     </style>
@@ -326,14 +410,6 @@
                                 | {{ $toko->email }}
                             @endif
                         </div>
-
-                        <div class="doc-title">
-                            DETAIL PIUTANG
-                        </div>
-
-                        <p>
-                            Dokumen rincian piutang pelanggan dan riwayat pembayaran
-                        </p>
                     </div>
 
                 </div>
@@ -482,25 +558,14 @@
                                     {{ $detail->produk->nama ?? $detail->nama_produk ?? '-' }}
                                 </div>
 
-                                <div class="product-note">
-
-                                    @if (!empty($detail->catatan))
-                                        Catatan :
-                                        {{ $detail->catatan }}
-                                    @else
-                                        Produk transaksi pelanggan
-                                    @endif
-
-                                </div>
-
                             </td>
 
                             <td class="text-right">
-                                {{ number_format($detail->qty ?? 0, 0, ',', '.') }}
+                                {{ number_format($detail->jumlah ?? 0, 0, ',', '.') }}
                             </td>
 
                             <td class="text-right">
-                                Rp {{ number_format($detail->harga ?? 0, 0, ',', '.') }}
+                                Rp {{ number_format($detail->harga_jual ?? 0, 0, ',', '.') }}
                             </td>
 
                             <td class="text-right">
@@ -604,25 +669,25 @@
 
             </div>
 
-            {{-- TTD --}}
-            <div class="footer">
+            <div style="margin-top: 40px; page-break-inside: avoid;">
+                <div class="footer">
+                    <div class="signature">
+                        Mengetahui
 
-                <div class="signature">
-                    Mengetahui
+                        <div class="line">
+                            {{ $toko->nama_toko ?? 'Nama Toko' }}
+                        </div>
+                    </div>
 
-                    <div class="line">
-                        {{ $toko->nama_toko ?? 'Nama Toko' }}
+                    <div class="signature">
+                        Pelanggan
+
+                        <div class="line">
+                            {{ $piutang->pelanggan->nama }}
+                        </div>
                     </div>
                 </div>
-
-                <div class="signature">
-                    Pelanggan
-
-                    <div class="line">
-                        {{ $piutang->pelanggan->nama }}
-                    </div>
-                </div>
-
+                <div style="height: 30px;"></div>
             </div>
 
         </div>
@@ -632,7 +697,11 @@
 </body>
 
 <script>
-    window.print();
+    window.onload = function () {
+        setTimeout(function () {
+            window.print();
+        }, 250);
+    };
 </script>
 
 </html>

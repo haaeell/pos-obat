@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TemplateProduk;
 use App\Http\Controllers\Controller;
+use App\Imports\ProdukImport;
 use App\Models\BarangMasuk;
 use App\Models\BarangMasukDetail;
 use App\Models\Kategori;
@@ -16,6 +18,7 @@ use App\Models\TransaksiDetail;
 use App\Models\TransaksiFifoLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProdukController extends Controller
 {
@@ -185,5 +188,27 @@ class ProdukController extends Controller
         Produk::query()->delete();
 
         return redirect()->back()->with('success', 'Semua produk berhasil dihapus.');
+    }
+
+    public function template()
+    {
+        return Excel::download(new TemplateProduk(), 'template_produk_laptop.xlsx');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file_import' => 'required|mimes:xlsx,xls'
+        ], [
+            'file_import.required' => 'Silahkan pilih file terlebih dahulu',
+            'file_import.mimes' => 'Format file harus .xlsx atau .xls'
+        ]);
+
+        try {
+            Excel::import(new ProdukImport(), $request->file('file_import'));
+            return redirect()->back()->with('success', 'Data produk berhasil di-import!');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Ada masalah saat import: ' . $e->getMessage());
+        }
     }
 }
