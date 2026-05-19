@@ -107,7 +107,7 @@ class TransaksiController extends Controller
         try {
             // ── Generate nomor ──────────────────────────────
             $prefix  = 'TRX-' . now()->format('Ymd') . '-';
-            $lastNo  = Transaksi::where('nomor', 'like', $prefix . '%')->orderByDesc('nomor')->value('nomor');
+            $lastNo  = Transaksi::withTrashed()->where('nomor', 'like', $prefix . '%')->orderByDesc('nomor')->value('nomor');
             $urut    = $lastNo ? (int) substr($lastNo, -3) + 1 : 1;
             $nomor   = $prefix . str_pad($urut, 3, '0', STR_PAD_LEFT);
 
@@ -227,7 +227,7 @@ class TransaksiController extends Controller
         $prefix = 'PIU-' . now()->format('Ymd') . '-';
 
         do {
-            $last = Piutang::where('nomor', 'like', $prefix . '%')
+            $last = Piutang::withTrashed()->where('nomor', 'like', $prefix . '%')
                 ->lockForUpdate()
                 ->orderByDesc('nomor')
                 ->value('nomor');
