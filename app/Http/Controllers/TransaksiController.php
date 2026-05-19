@@ -105,7 +105,11 @@ class TransaksiController extends Controller
 
         DB::beginTransaction();
         try {
-
+            // ── Generate nomor ──────────────────────────────
+            $prefix  = 'TRX-' . now()->format('Ymd') . '-';
+            $lastNo  = Transaksi::where('nomor', 'like', $prefix . '%')->orderByDesc('nomor')->value('nomor');
+            $urut    = $lastNo ? (int) substr($lastNo, -3) + 1 : 1;
+            $nomor   = $prefix . str_pad($urut, 3, '0', STR_PAD_LEFT);
 
             // ── Hitung subtotal ─────────────────────────────
             $subtotal = 0;
@@ -122,7 +126,7 @@ class TransaksiController extends Controller
 
             // ── Buat header transaksi ───────────────────────
             $transaksi = Transaksi::create([
-                'nomor' => $this->generateNomorPiutang(),
+                'nomor'           => $nomor,
                 'pelanggan_id'    => $request->pelanggan_id,
                 'user_id'         => Auth::user()->id,
                 'tanggal'         => now()->toDateString(),
@@ -186,13 +190,9 @@ class TransaksiController extends Controller
 
             // ── Buat piutang jika belum lunas ───────────────
             if ($request->status_bayar !== 'lunas') {
-                $prefixPiu = 'PIU-' . now()->format('Ymd') . '-';
-                $lastPiu   = Piutang::where('nomor', 'like', $prefixPiu . '%')
-                    ->orderByDesc('nomor')->value('nomor');
-                $urutPiu   = $lastPiu ? (int) substr($lastPiu, -3) + 1 : 1;
 
                 Piutang::create([
-                    'nomor'             => $prefixPiu . str_pad($urutPiu, 3, '0', STR_PAD_LEFT),
+                    'nomor' => $this->generateNomorPiutang(),
                     'transaksi_id'      => $transaksi->id,
                     'pelanggan_id'      => $request->pelanggan_id,
                     'total_tagihan'     => $total,
@@ -208,7 +208,7 @@ class TransaksiController extends Controller
             return response()->json([
                 'success'  => true,
                 'message'  => 'Transaksi berhasil disimpan.',
-                'nomor' => $this->generateNomorPiutang(),
+                'nomor'    => $nomor,
                 'transaksi_id' => $transaksi->id,
                 'total'    => $total,
                 'kembalian' => $kembali,
