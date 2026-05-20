@@ -233,13 +233,27 @@
                 <div class="relative z-10 text-center">
 
                     <div class="mb-8 floating">
-                        <div
-                            class="w-32 h-32 mx-auto bg-white/20 rounded-3xl backdrop-blur-md flex items-center justify-center border-4 border-white/30 shadow-2xl rotate-6">
-                            <i class="fa-solid fa-seedling text-7xl drop-shadow-lg"></i>
-                        </div>
+
+                        @if ($toko->logo)
+                            <div class="flex justify-center">
+                                <div
+                                    class="w-32 h-32 rounded-3xl bg-white shadow-xl border border-white/20 overflow-hidden p-3">
+
+                                    <img src="{{ asset('storage/' . $toko->logo) }}"
+                                        alt="Logo {{ $toko->nama_toko ?? 'Toko' }}"
+                                        class="w-full h-full object-contain rounded-2xl">
+                                </div>
+                            </div>
+                        @else
+                            <div class="flex justify-center">
+                                <div
+                                    class="w-32 h-32 rounded-3xl bg-white/20 backdrop-blur-md border border-white/30 shadow-xl flex items-center justify-center">
+
+                                    <i class="fa-solid fa-store text-5xl text-white"></i>
+                                </div>
+                            </div>
+                        @endif
                     </div>
-
-
 
                 </div>
 
