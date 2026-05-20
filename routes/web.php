@@ -41,6 +41,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::prefix('produk')->controller(ProdukController::class)->group(function () {
         Route::get('/',               'index')->name('produk.index');
+        Route::get('/datatable',      'dataTable')->name('produk.datatable');
         Route::post('/',              'store')->name('produk.store');
         Route::put('/{id}',           'update')->name('produk.update');
         Route::get('/template',       'template')->name('produk.template');

@@ -175,87 +175,7 @@
                         <th class="px-4 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach ($produk as $i => $item)
-                        <tr class="border-t hover:bg-slate-50 transition">
-                            <td class="px-4 py-3 text-slate-400 text-xs">{{ $i + 1 }}</td>
-
-                            <td class="px-4 py-3 whitespace-nowrap">
-                                <span class="font-mono text-xs bg-slate-100 px-2 py-1 rounded">{{ $item->kode }}</span>
-                            </td>
-
-                            <td class="px-4 py-3 font-medium text-slate-800">
-                                <div class="flex items-center gap-2">
-                                    @if ($item->foto)
-                                        <img src="{{ asset('storage/' . $item->foto) }}" alt="{{ $item->nama }}"
-                                            class="w-8 h-8 rounded object-cover border flex-shrink-0">
-                                    @else
-                                        <div class="w-8 h-8 rounded bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                                            <i class="fa-solid fa-seedling text-emerald-400 text-xs"></i>
-                                        </div>
-                                    @endif
-                                    {{ $item->nama }}
-                                </div>
-                            </td>
-
-                            <td class="px-4 py-3">
-                                <span class="px-2 py-1 text-xs rounded-full bg-blue-50 text-blue-700 font-medium">
-                                    {{ $item->kategori->nama ?? '-' }}
-                                </span>
-                            </td>
-
-                            <td class="px-4 py-3 text-slate-500 text-xs">{{ $item->supplier->nama ?? '-' }}</td>
-
-                            <td class="px-4 py-3 text-slate-500">{{ $item->satuan }}</td>
-
-                            <td class="px-4 py-3 text-right font-semibold text-slate-800">
-                                Rp {{ number_format($item->harga_jual, 0, ',', '.') }}
-                            </td>
-
-                            <td class="px-4 py-3 text-center">
-                                @php $rendah = $item->stok_saat_ini <= $item->stok_minimum; @endphp
-                                <span
-                                    class="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full
-                                                            {{ $rendah ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700' }}">
-                                    @if ($rendah)
-                                        <i class="fa-solid fa-triangle-exclamation text-[10px]"></i>
-                                    @endif
-                                    {{ $item->stok_saat_ini }} {{ $item->satuan }}
-                                </span>
-                            </td>
-
-                            <td class="px-4 py-3 text-center" data-status="{{ $item->is_aktif ? 'Aktif' : 'Non-aktif' }}">
-                                @if ($item->is_aktif)
-                                    <span
-                                        class="px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">Aktif</span>
-                                @else
-                                    <span
-                                        class="px-2 py-1 text-xs font-semibold rounded-full bg-slate-200 text-slate-500">Non-aktif</span>
-                                @endif
-                            </td>
-
-                            <td class="px-4 py-3 text-center">
-                                <div class="flex items-center justify-center gap-1">
-                                    <button onclick="printBarcode({{ $item->id }})"
-                                        class="px-3 py-1.5 bg-slate-600 text-white hover:bg-slate-700 rounded-lg transition text-xs font-semibold"
-                                        title="Cetak Barcode">
-                                        <i class="fa-solid fa-barcode"></i>
-                                    </button>
-                                    <button onclick='openEditModal(@json($item))'
-                                        class="px-3 py-1.5 bg-amber-400 hover:bg-amber-500 rounded-lg transition text-xs font-semibold"
-                                        title="Edit">
-                                        <i class="fa-solid fa-pen"></i>
-                                    </button>
-                                    <button onclick="deleteProduk({{ $item->id }}, '{{ addslashes($item->nama) }}')"
-                                        class="px-3 py-1.5 bg-red-500 text-white hover:bg-red-600 rounded-lg transition text-xs font-semibold"
-                                        title="Hapus">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>
@@ -302,7 +222,7 @@
                                 <i class="fa-solid fa-box-open"></i>
                                 <input type="text" name="nama" id="inputNama" required placeholder="Contoh: Pupuk Urea 50kg"
                                     class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
-                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                                                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
                             </div>
                         </div>
 
@@ -315,7 +235,7 @@
                                 <i class="fa-solid fa-layer-group"></i>
                                 <select name="kategori_id" id="inputKategori" required
                                     class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
-                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none bg-white">
+                                                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none bg-white">
                                     <option value="">-- Pilih Kategori --</option>
                                     @foreach ($kategori as $kat)
                                         <option value="{{ $kat->id }}">{{ $kat->nama }}</option>
@@ -333,7 +253,7 @@
                                 <i class="fa-solid fa-truck-field"></i>
                                 <select name="supplier_id" id="inputSupplier"
                                     class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
-                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none bg-white">
+                                                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none bg-white">
                                     <option value="">-- Tidak Ada --</option>
                                     @foreach ($supplier as $sup)
                                         <option value="{{ $sup->id }}">{{ $sup->nama }}</option>
@@ -352,7 +272,7 @@
                                 <input type="text" name="satuan" id="inputSatuan" required
                                     placeholder="kg, liter, botol, karung..."
                                     class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
-                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                                                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
                             </div>
                         </div>
 
@@ -365,7 +285,7 @@
                                 <span>Rp</span>
                                 <input type="number" name="harga_jual" id="inputHarga" required min="0" placeholder="0"
                                     class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
-                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                                                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
                             </div>
                         </div>
                     </div>
@@ -384,7 +304,7 @@
                                 <i class="fa-solid fa-arrow-down-to-line text-amber-500"></i>
                                 <input type="number" name="stok_minimum" id="inputStokMin" required min="0" value="5"
                                     class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
-                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                                                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
                             </div>
                             <p class="text-[11px] text-slate-400 mt-1">
                                 <i class="fa-solid fa-circle-info mr-1"></i>
@@ -404,7 +324,7 @@
                                 <i class="fa-solid fa-warehouse text-emerald-500"></i>
                                 <input type="number" name="stok_awal" id="inputStokAwal" min="0" value="0"
                                     class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
-                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                                                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
                             </div>
                             <p class="text-[11px] text-slate-400 mt-1">
                                 <i class="fa-solid fa-circle-info mr-1"></i>
@@ -422,7 +342,7 @@
                                 <span>Rp</span>
                                 <input type="number" name="harga_modal_awal" id="inputHargaModalAwal" min="0" value="0"
                                     class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
-                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
+                                                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none">
                             </div>
                             <p class="text-[11px] text-slate-400 mt-1">
                                 <i class="fa-solid fa-circle-info mr-1"></i>
@@ -438,7 +358,7 @@
                                 <i class="fa-solid fa-toggle-on text-emerald-500"></i>
                                 <select name="is_aktif" id="inputStatus"
                                     class="w-full py-2.5 pr-4 rounded-xl border border-slate-300 text-sm
-                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none bg-white">
+                                                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none bg-white">
                                     <option value="1">Aktif</option>
                                     <option value="0">Non-aktif</option>
                                 </select>
@@ -465,10 +385,11 @@
                                 <div
                                     class="flex-1 border-2 border-dashed border-slate-200 rounded-xl p-3 hover:border-emerald-400 transition">
                                     <input type="file" name="foto" id="inputFoto"
-                                        accept="image/jpg,image/jpeg,image/png,image/webp" class="text-sm text-slate-500 w-full
-                                                           file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0
-                                                           file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700
-                                                           hover:file:bg-emerald-100 cursor-pointer">
+                                        accept="image/jpg,image/jpeg,image/png,image/webp"
+                                        class="text-sm text-slate-500 w-full
+                                                                                           file:mr-3 file:py-1.5 file:px-4 file:rounded-lg file:border-0
+                                                                                           file:text-xs file:font-semibold file:bg-emerald-50 file:text-emerald-700
+                                                                                           hover:file:bg-emerald-100 cursor-pointer">
                                 </div>
                             </div>
                         </div>
@@ -482,7 +403,7 @@
                                 <textarea name="catatan" id="inputCatatan" rows="2"
                                     placeholder="Keterangan tambahan tentang produk ini (opsional)..."
                                     class="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm
-                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none resize-none"></textarea>
+                                                                                       focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500 outline-none resize-none"></textarea>
                             </div>
                         </div>
                     </div>
@@ -540,7 +461,6 @@
         </div>
     </div>
 
-    {{-- ═══════════════════ MODAL IMPORT ═══════════════════ --}}
     <div id="importModal"
         class="fixed inset-0 hidden bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
         <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl flex flex-col overflow-hidden">
@@ -645,59 +565,69 @@
     </div>
 
     @push('scripts')
-        <script>
-            var productData = {
-                @foreach ($produk as $item)
-                    {{ $item->id }}: @json($item),
-                @endforeach
-                                    };
-        </script>
         <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
         <script>
             $(document).ready(function () {
 
                 // ── DataTable ──────────────────────────────────────────────────
+                let productCache = {};
+
                 const table = $('#datatable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        url: '{{ route("produk.datatable") }}',
+                        data: function (d) {
+                            // kirim filter custom ke server
+                            d.kategori = $('#filterKategori').val();
+                            d.supplier = $('#filterSupplier').val();
+                            d.status = $('#filterStatus').val();
+                        }
+                    },
+                    columns: [
+                        {
+                            data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false,
+                            className: 'px-4 py-3 text-slate-400 text-xs'
+                        },
+                        {
+                            data: 'kode', name: 'kode',
+                            render: d => `<span class="font-mono text-xs bg-slate-100 px-2 py-1 rounded">${d}</span>`
+                        },
+                        { data: 'foto_nama', name: 'nama', orderable: true },
+                        { data: 'kategori_nama', name: 'kategori_nama' },
+                        { data: 'supplier_nama', name: 'supplier_nama' },
+                        { data: 'satuan', name: 'satuan' },
+                        { data: 'harga_jual_fmt', name: 'harga_jual', className: 'text-right font-semibold text-slate-800' },
+                        { data: 'stok_badge', name: 'stok_saat_ini', className: 'text-center' },
+                        { data: 'status_badge', name: 'is_aktif', className: 'text-center' },
+                        {
+                            data: 'aksi', name: 'aksi', orderable: false, searchable: false,
+                            className: 'text-center'
+                        },
+                    ],
                     language: {
                         search: 'Cari:',
                         lengthMenu: 'Tampilkan _MENU_ data',
                         info: 'Menampilkan _START_–_END_ dari _TOTAL_ data',
-                        paginate: {
-                            previous: 'Sebelumnya',
-                            next: 'Selanjutnya'
-                        },
+                        paginate: { previous: 'Sebelumnya', next: 'Selanjutnya' },
                         zeroRecords: 'Data tidak ditemukan',
+                        processing: 'Memuat...',
                     },
-                    columnDefs: [{
-                        orderable: false,
-                        targets: [0, 9]
-                    }]
-                })
+                    drawCallback: function () {
+                        this.api().rows().data().each(function (row) {
+                            productCache[row.id] = row;
+                        });
+                    }
+                });
 
-                // ── Filter Kategori (kolom 3) ──────────────────────────────────
-                $('#filterKategori').on('change', function () {
-                    table.column(3).search(this.value).draw()
-                })
-
-                // ── Filter Supplier (kolom 4) ──────────────────────────────────
-                $('#filterSupplier').on('change', function () {
-                    table.column(4).search(this.value).draw()
-                })
-
-                // ── Filter Status (kolom 8) ────────────────────────────────────
-                $.fn.dataTable.ext.search.push(function (settings, data) {
-                    const val = $('#filterStatus').val()
-                    if (!val) return true
-                    return data[8].trim().includes(val)
-                })
-                $('#filterStatus').on('change', function () {
-                    table.draw()
-                })
+                $('#filterKategori, #filterSupplier, #filterStatus').on('change', function () {
+                    table.draw();
+                });
 
                 window.resetFilter = function () {
-                    $('#filterKategori, #filterSupplier, #filterStatus').val('')
-                    table.column(3).search('').column(4).search('').draw()
-                }
+                    $('#filterKategori, #filterSupplier, #filterStatus').val('');
+                    table.draw();
+                };
 
                 window.hapusSemua = function () {
                     Swal.fire({
@@ -714,9 +644,9 @@
                             f.method = 'POST'
                             f.action = `/produk/hapus-semua`
                             f.innerHTML = `
-                                                    <input type="hidden" name="_token" value="${$('meta[name=csrf-token]').attr('content')}">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                `
+                                                                                                                    <input type="hidden" name="_token" value="${$('meta[name=csrf-token]').attr('content')}">
+                                                                                                                    <input type="hidden" name="_method" value="DELETE">
+                                                                                                                `
                             document.body.appendChild(f)
                             f.submit()
                         }
@@ -825,9 +755,9 @@
                             f.method = 'POST'
                             f.action = `/produk/${id}`
                             f.innerHTML = `
-                                                    <input type="hidden" name="_token" value="${$('meta[name=csrf-token]').attr('content')}">
-                                                    <input type="hidden" name="_method" value="DELETE">
-                                                `
+                                                                                                                    <input type="hidden" name="_token" value="${$('meta[name=csrf-token]').attr('content')}">
+                                                                                                                    <input type="hidden" name="_method" value="DELETE">
+                                                                                                                `
                             document.body.appendChild(f)
                             f.submit()
                         }

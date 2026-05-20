@@ -19,16 +19,89 @@ use App\Models\TransaksiFifoLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\Facades\DataTables;
 
 class ProdukController extends Controller
 {
     public function index()
     {
-        $produk   = Produk::with(['kategori', 'supplier'])->latest()->get();
         $kategori = Kategori::where('is_aktif', true)->orderBy('nama')->get();
         $supplier = Supplier::where('is_aktif', true)->orderBy('nama')->get();
 
-        return view('master.produk.index', compact('produk', 'kategori', 'supplier'));
+        return view('master.produk.index', compact('kategori', 'supplier'));
+    }
+
+    public function dataTable(Request $request)
+    {
+        $query = Produk::with(['kategori', 'supplier'])->latest();
+
+        if ($request->filled('kategori')) {
+            $query->whereHas('kategori', fn($q) => $q->where('nama', $request->kategori));
+        }
+        if ($request->filled('supplier')) {
+            $query->whereHas('supplier', fn($q) => $q->where('nama', $request->supplier));
+        }
+        if ($request->filled('status')) {
+            $query->where('is_aktif', $request->status === 'Aktif' ? 1 : 0);
+        }
+
+        return DataTables::of($query)
+            ->addIndexColumn()
+            ->addColumn('foto_nama', function ($item) {
+                $foto = $item->foto
+                    ? '<img src="' . asset('storage/' . $item->foto) . '" class="w-8 h-8 rounded object-cover border flex-shrink-0">'
+                    : '<div class="w-8 h-8 rounded bg-emerald-50 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-seedling text-emerald-400 text-xs"></i></div>';
+                return '<div class="flex items-center gap-2">' . $foto . '<span class="font-medium text-slate-800">' . e($item->nama) . '</span></div>';
+            })
+            ->addColumn(
+                'kategori_nama',
+                fn($item) =>
+                '<span class="px-2 py-1 text-xs rounded-full bg-blue-50 text-blue-700 font-medium">' . e($item->kategori->nama ?? '-') . '</span>'
+            )
+            ->addColumn(
+                'supplier_nama',
+                fn($item) =>
+                '<span class="text-slate-500 text-xs">' . e($item->supplier->nama ?? '-') . '</span>'
+            )
+            ->addColumn(
+                'harga_jual_fmt',
+                fn($item) =>
+                'Rp ' . number_format($item->harga_jual, 0, ',', '.')
+            )
+            ->addColumn('stok_badge', function ($item) {
+                $rendah = $item->stok_saat_ini <= $item->stok_minimum;
+                $cls    = $rendah ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700';
+                $icon   = $rendah ? '<i class="fa-solid fa-triangle-exclamation text-[10px]"></i>' : '';
+                return '<span class="inline-flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full ' . $cls . '">'
+                    . $icon . $item->stok_saat_ini . ' ' . e($item->satuan) . '</span>';
+            })
+            ->addColumn('status_badge', function ($item) {
+                return $item->is_aktif
+                    ? '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-emerald-100 text-emerald-700">Aktif</span>'
+                    : '<span class="px-2 py-1 text-xs font-semibold rounded-full bg-slate-200 text-slate-500">Non-aktif</span>';
+            })
+            ->addColumn('aksi', function ($item) {
+                return '
+                <div class="flex items-center justify-center gap-1">
+                    <button onclick="printBarcode(' . $item->id . ')"
+                        class="px-3 py-1.5 bg-slate-600 text-white hover:bg-slate-700 rounded-lg text-xs font-semibold" title="Cetak Barcode">
+                        <i class="fa-solid fa-barcode"></i>
+                    </button>
+                    <button onclick=\'openEditModal(' . json_encode($item) . ')\'
+                        class="px-3 py-1.5 bg-amber-400 hover:bg-amber-500 rounded-lg text-xs font-semibold" title="Edit">
+                        <i class="fa-solid fa-pen"></i>
+                    </button>
+                    <button onclick="deleteProduk(' . $item->id . ', \'' . addslashes($item->nama) . '\')"
+                        class="px-3 py-1.5 bg-red-500 text-white hover:bg-red-600 rounded-lg text-xs font-semibold" title="Hapus">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </div>';
+            })
+            ->filterColumn('kategori_nama', fn($q, $k) => $q->whereHas('kategori', fn($q2) => $q2->where('nama', 'like', "%$k%")))
+            ->filterColumn('supplier_nama', fn($q, $k) => $q->whereHas('supplier',  fn($q2) => $q2->where('nama', 'like', "%$k%")))
+            ->filterColumn('status_badge',  fn($q, $k) => $q->where('is_aktif', $k === 'Aktif' ? 1 : 0))
+            ->rawColumns(['foto_nama', 'kategori_nama', 'supplier_nama', 'stok_badge', 'status_badge', 'aksi'])
+            ->make(true);
     }
 
     public function store(Request $request)
@@ -191,7 +264,7 @@ class ProdukController extends Controller
 
     public function template()
     {
-        return Excel::download(new TemplateProduk(), 'template_produk_laptop.xlsx');
+        return Excel::download(new TemplateProduk(), 'template_produk.xlsx');
     }
 
     public function import(Request $request)
