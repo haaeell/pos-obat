@@ -233,7 +233,9 @@
                 <div class="relative z-10 text-center">
 
                     <div class="mb-8 floating">
-
+                        @php
+                            $toko = App\Models\PengaturanToko::instance();
+                        @endphp
                         @if ($toko->logo)
                             <div class="flex justify-center">
                                 <div
