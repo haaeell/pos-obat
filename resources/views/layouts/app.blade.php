@@ -151,6 +151,11 @@ transition-transform duration-300 flex flex-col">
                     <i class="fa-solid fa-truck-field w-5"></i>
                     Supplier
                 </a>
+                <a href="/pelanggan"
+                    class="menu-item flex items-center gap-3 px-4 py-3 rounded-lg font-medium {{ menuActive('pelanggan*') }}">
+                    <i class="fa-solid fa-user w-5"></i>
+                    Pelanggan
+                </a>
 
                 <div class="mt-8 mb-3 px-4 text-[11px] font-bold uppercase tracking-widest text-emerald-700">
                     Inventory
