@@ -254,12 +254,12 @@ class ProdukController extends Controller
             });
 
         Piutang::withTrashed()->forceDelete();
-        TransaksiFifoLog::withTrashed()->forceDelete();
-        TransaksiDetail::withTrashed()->forceDelete();
+        TransaksiFifoLog::forceDelete();
+        TransaksiDetail::forceDelete();
         Transaksi::withTrashed()->forceDelete();
-        StokBatch::withTrashed()->forceDelete();
-        BarangMasukDetail::withTrashed()->forceDelete();
-        BarangMasuk::withTrashed()->forceDelete();
+        StokBatch::forceDelete();
+        BarangMasukDetail::forceDelete();
+        BarangMasuk::forceDelete();
         Produk::withTrashed()->forceDelete();
         Kategori::onlyTrashed()->forceDelete();
         Supplier::onlyTrashed()->forceDelete();
