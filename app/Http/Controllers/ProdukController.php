@@ -17,6 +17,7 @@ use App\Models\Transaksi;
 use App\Models\TransaksiDetail;
 use App\Models\TransaksiFifoLog;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
@@ -246,20 +247,46 @@ class ProdukController extends Controller
 
     public function destroyAll()
     {
-        Produk::whereNotNull('foto')->get()->each(function ($p) {
-            Storage::disk('public')->delete($p->foto);
-        });
+        try {
+            Produk::whereNotNull('foto')
+                ->get()
+                ->each(function ($p) {
+                    Storage::disk('public')->delete($p->foto);
+                });
 
-        Piutang::query()->delete();
-        TransaksiFifoLog::query()->delete();
-        TransaksiDetail::query()->delete();
-        Transaksi::query()->delete();
-        StokBatch::query()->delete();
-        BarangMasukDetail::query()->delete();
-        BarangMasuk::query()->delete();
-        Produk::query()->delete();
+            DB::beginTransaction();
 
-        return redirect()->back()->with('success', 'Semua produk berhasil dihapus.');
+            DB::statement('SET FOREIGN_KEY_CHECKS=0');
+
+            Piutang::truncate();
+            TransaksiFifoLog::truncate();
+            TransaksiDetail::truncate();
+            Transaksi::truncate();
+            StokBatch::truncate();
+            BarangMasukDetail::truncate();
+            BarangMasuk::truncate();
+            Produk::truncate();
+
+            // hapus permanen data soft delete
+            Kategori::onlyTrashed()->forceDelete();
+            Supplier::onlyTrashed()->forceDelete();
+
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
+            DB::commit();
+
+            return redirect()
+                ->back()
+                ->with('success', 'Semua data berhasil direset.');
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
+
+            return redirect()
+                ->back()
+                ->with('error', $e->getMessage());
+        }
     }
 
     public function template()
