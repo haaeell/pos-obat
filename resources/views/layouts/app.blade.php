@@ -7,9 +7,15 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@yield('title', 'Pos Kios Tani')</title>
-    <link rel="icon" type="image/jpeg" href="{{ asset('logo.jpeg') }}">
-    <link rel="apple-touch-icon" href="{{ asset('logo.jpeg') }}">
+    @php
+        $toko = App\Models\PengaturanToko::instance();
+        $favicon = $toko->logo
+            ? asset('storage/' . $toko->logo)
+            : asset('logo.jpeg');
+    @endphp
 
+    <link rel="icon" type="image/png" href="{{ $favicon }}">
+    <link rel="apple-touch-icon" href="{{ $favicon }}">
     <link href="https://fonts.bunny.net/css?family=Inter:300,400,500,600,700,800" rel="stylesheet">
 
     <script src="https://cdn.tailwindcss.com"></script>
