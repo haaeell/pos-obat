@@ -246,22 +246,28 @@ class ProdukController extends Controller
 
     public function destroyAll()
     {
-        Produk::whereNotNull('foto')->get()->each(function ($p) {
-            Storage::disk('public')->delete($p->foto);
-        });
+        Produk::withTrashed()
+            ->whereNotNull('foto')
+            ->get()
+            ->each(function ($p) {
+                Storage::disk('public')->delete($p->foto);
+            });
 
-        Piutang::query()->delete();
-        TransaksiFifoLog::query()->delete();
-        TransaksiDetail::query()->delete();
-        Transaksi::query()->delete();
-        StokBatch::query()->delete();
-        BarangMasukDetail::query()->delete();
-        BarangMasuk::query()->delete();
-        Produk::query()->delete();
+        Piutang::withTrashed()->forceDelete();
+        TransaksiFifoLog::withTrashed()->forceDelete();
+        TransaksiDetail::withTrashed()->forceDelete();
+        Transaksi::withTrashed()->forceDelete();
+        StokBatch::withTrashed()->forceDelete();
+        BarangMasukDetail::withTrashed()->forceDelete();
+        BarangMasuk::withTrashed()->forceDelete();
+        Produk::withTrashed()->forceDelete();
+        Kategori::onlyTrashed()->forceDelete();
+        Supplier::onlyTrashed()->forceDelete();
 
-        return redirect()->back()->with('success', 'Semua produk berhasil dihapus.');
+        return redirect()
+            ->back()
+            ->with('success', 'Semua data berhasil dihapus permanen.');
     }
-
     public function template()
     {
         return Excel::download(new TemplateProduk(), 'template_produk.xlsx');
