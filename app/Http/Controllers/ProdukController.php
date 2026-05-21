@@ -254,8 +254,6 @@ class ProdukController extends Controller
                     Storage::disk('public')->delete($p->foto);
                 });
 
-            DB::beginTransaction();
-
             DB::statement('SET FOREIGN_KEY_CHECKS=0');
 
             Piutang::truncate();
@@ -267,25 +265,19 @@ class ProdukController extends Controller
             BarangMasuk::truncate();
             Produk::truncate();
 
-            // hapus permanen data soft delete
+            // hapus permanen yang soft delete
             Kategori::onlyTrashed()->forceDelete();
             Supplier::onlyTrashed()->forceDelete();
-
-            DB::statement('SET FOREIGN_KEY_CHECKS=1');
-
-            DB::commit();
 
             return redirect()
                 ->back()
                 ->with('success', 'Semua data berhasil direset.');
         } catch (\Exception $e) {
-
-            DB::rollBack();
-            DB::statement('SET FOREIGN_KEY_CHECKS=1');
-
             return redirect()
                 ->back()
                 ->with('error', $e->getMessage());
+        } finally {
+            DB::statement('SET FOREIGN_KEY_CHECKS=1');
         }
     }
 
